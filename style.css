@@ -1,0 +1,44 @@
+/* plantsim/style.css */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f0f8fc;
+  color: #333;
+}
+header {
+  background: #2c3e50;
+  padding: 1rem;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav#authBar, nav#saveBar {
+  display: flex;
+  gap: 1rem;
+}
+#controls {
+  padding: 1rem;
+  background: #ecf0f1;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+#plantCanvas {
+  display: block;
+  margin: 1rem auto;
+  background: #fff;
+  border: 1px solid #bdc3c7;
+}
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #27ae60;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
