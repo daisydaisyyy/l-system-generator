@@ -1,0 +1,37 @@
+<!-- plantsim/index.html -->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlantSim</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>PlantSim</h1>
+    <nav id="authBar">
+      <!-- LOGIN / SIGNUP forms inserted here -->
+    </nav>
+    <nav id="saveBar" style="display:none;">
+      <!-- List of saved plants + save/delete buttons -->
+    </nav>
+  </header>
+  <main>
+    <section id="controls">
+      <label>Axiom: <input id="axiomInput" value="F" /></label>
+      <label>Rules: <input id="rulesInput" value="F=F[+F]F[-F]F" /></label>
+      <label>Depth: <input id="depthInput" type="number" value="4" min="1" max="6" /></label>
+      <label>Angle: <input id="angleInput" type="number" value="25" min="0" max="90" /></label>
+      <button id="startBtn">Start</button>
+      <button id="pauseBtn">Pause</button>
+      <button id="resetBtn">Reset</button>
+      <button id="saveBtn">Save</button>
+    </section>
+    <canvas id="plantCanvas" width="800" height="600"></canvas>
+  </main>
+  <script src="l-system.js"></script>
+  <script src="compressor.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
