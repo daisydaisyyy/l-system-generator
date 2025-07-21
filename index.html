@@ -1,4 +1,3 @@
-<!-- plantsim/index.html -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -6,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PlantSim</title>
   <link rel="stylesheet" href="style.css">
+  <script src="utils/l-system.js"></script>
+  <script src="utils/compress.js"></script>
+  <script src="script.js"></script>
 </head>
 <body>
   <header>
@@ -28,10 +30,9 @@
       <button id="resetBtn">Reset</button>
       <button id="saveBtn">Save</button>
     </section>
-    <canvas id="plantCanvas" width="800" height="600"></canvas>
+    <canvas id="plantCanvas"></canvas>
   </main>
-  <script src="utils/l-system.js"></script>
-  <script src="utils/compress.js"></script>
-  <script src="script.js"></script>
+
+
 </body>
 </html>
