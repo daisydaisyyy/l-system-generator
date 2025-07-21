@@ -5,79 +5,14 @@ let currentStep = 0;
 let animationState = null;
 
 // functions 
-
 function resetCanvas(ctx) {
   ctx.save();
   ctx.reset();
   // debug, changes color at every reset
-  ctx.fillStyle = `rgb(${Math.floor(Math.random() * 256)} ${Math.floor(Math.random() * 256)} ${Math.floor(Math.random() * 256)})`;
+  ctx.fillStyle = `rgb(${Math.floor(Math.random() * 256)} ${Math.floor(Math.random() * 128)} ${Math.floor(Math.random() * 256)})`;
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   ctx.restore(); // doesn't change settings for others
   // ctx.beginPath();
-}
-
-function animateDrawing(ctx) {
-  if (!isAnimating || currentStep >= instructions.length) {
-    isAnimating = false;
-    return;
-  }
-
-  const cmd = instructions[currentStep];
-  const angle = parseInt(angleInput.value);
-  const stepSize = 10;
-
-  switch (cmd) {
-    case 'F':
-      ctx.beginPath();
-      ctx.moveTo(animationState.x, animationState.y);
-      animationState.x += Math.cos(animationState.angle * Math.PI/180) * stepSize;
-      animationState.y += Math.sin(animationState.angle * Math.PI/180) * stepSize;
-      ctx.lineTo(animationState.x, animationState.y);
-      ctx.stroke();
-      break;
-
-    case 'f':
-      animationState.x += Math.cos(animationState.angle * Math.PI/180) * stepSize;
-      animationState.y += Math.sin(animationState.angle * Math.PI/180) * stepSize;
-      break;
-
-    case '+':
-      animationState.angle += angle;
-      break;
-
-    case '-':
-      animationState.angle -= angle;
-      break;
-
-    case '[':
-      animationState.stack.push({
-        x: animationState.x,
-        y: animationState.y,
-        angle: animationState.angle
-      });
-      break;
-
-    case ']':
-      if (animationState.stack.length > 0) {
-        const saved = animationState.stack.pop();
-        animationState.x = saved.x;
-        animationState.y = saved.y;
-        animationState.angle = saved.angle;
-        ctx.beginPath();
-        ctx.moveTo(animationState.x, animationState.y);
-      }
-      break;
-
-    case '.':
-      ctx.beginPath();
-      ctx.arc(animationState.x, animationState.y, 3, 0, Math.PI*2);
-      ctx.fillStyle = '#f00';
-      ctx.fill();
-      break;
-  }
-
-  currentStep++;
-  animId = requestAnimationFrame(() => animateDrawing(ctx));
 }
 
 // Helper to parse rules
@@ -92,33 +27,19 @@ function getSessionToken() {
   return localStorage.getItem('sessionToken') || '';
 }
 
-// Keep your existing generateLSystem function
-function generateLSystem(axiom, rules, depth) {
-  let current = axiom;
-  for (let i = 0; i < depth; i++) {
-    let next = '';
-    for (const ch of current) {
-      next += rules[ch] || ch;
-    }
-    current = next;
-  }
-  return current;
-}
-
-
-
 
 // events
 document.addEventListener('DOMContentLoaded', e => {
   const canvas = document.getElementById('plantCanvas');
-  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight;
   // TODO: fix reponsive when resizing
   // responsive to resizing
-  // window.addEventListener("resize", e => {
-  //   canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-  // });
-  canvas.style.scale = 1; // optional
+  window.addEventListener("resize", e => {
+    canvas.width = canvas.clientWidth * (parseInt(depthInput.value) +1); canvas.height = canvas.clientHeight * (parseInt(depthInput.value)+1);
+  });
+ 
   const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
   const startBtn = document.getElementById('startBtn');
   const pauseBtn = document.getElementById('pauseBtn');
   const resetBtn = document.getElementById('resetBtn');
@@ -131,8 +52,18 @@ document.addEventListener('DOMContentLoaded', e => {
   const angleInput = document.getElementById('angleInput');
 
   startBtn.addEventListener('click', () => {
+    
+    if(parseInt(depthInput.value) != 0) {
+      ctx.canvas.width = ctx.canvas.clientWidth * 0.25 * (parseInt(depthInput.value));
+      ctx.canvas.height = ctx.canvas.clientHeight * 0.25 * (parseInt(depthInput.value));
+    } else {
+      ctx.canvas.width = ctx.canvas.clientWidth * 0.25 ;
+      ctx.canvas.height = ctx.canvas.clientHeight * 0.25 ;
+   
+    }
+
     resetCanvas(ctx);
-    ctx.translate(canvas.width/2, canvas.height);
+    ctx.translate(ctx.canvas.width/2, ctx.canvas.height*15/16);
     
     ctx.strokeStyle = '#0f0';
     ctx.lineWidth = 2;

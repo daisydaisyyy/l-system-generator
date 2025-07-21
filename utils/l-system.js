@@ -10,62 +10,68 @@ function generateLSystem(axiom, rules, depth) {
   }
   return current;
 }
-function drawInstructions(ctx, instructions, angle) {
-  const canvas = ctx.canvas;           // grab the actual <canvas> element
-  const stack = [];
-  let x = 0, y = 0;
-  let dir = -Math.PI/2;                // -90°
 
-  ctx.save();
-  // center origin at bottom‑center of the canvas
-  ctx.translate(canvas.width/2, canvas.height);
-  ctx.strokeStyle = '#0f0';
-  ctx.lineWidth = 2;
 
-  // OPTIONAL: clear any existing path
-  ctx.beginPath();
-
-  for (const cmd of instructions) {
-    switch (cmd) {
-      case 'F':
-        // draw a forward line
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        x += Math.cos(dir) * 10;
-        y += Math.sin(dir) * 10;
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        break;
-
-      case '+':
-        dir += angle * Math.PI/180;
-        break;
-
-      case '-':
-        dir -= angle * Math.PI/180;
-        break;
-
-      case '[':
-        stack.push({ x, y, dir });
-        break;
-
-      case ']':
-        // pop back to a branching point
-        ({ x, y, dir } = stack.pop());
-        // restart path from that point
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        break;
-
-      case 'X':
-        // structural: do nothing
-        break;
-
-      default:
-        // unknown symbol?
-        console.warn('Unhandled symbol in drawInstructions:', cmd);
-    }
+function animateDrawing(ctx) {
+  if (!isAnimating || currentStep >= instructions.length) {
+    isAnimating = false;
+    return;
   }
 
-  ctx.restore();
+  const cmd = instructions[currentStep];
+  const angle = parseInt(angleInput.value);
+  const stepSize = 10;
+
+  switch (cmd) {
+    case 'F':
+      ctx.beginPath();
+      ctx.moveTo(animationState.x, animationState.y);
+      animationState.x += Math.cos(animationState.angle * Math.PI/180) * stepSize;
+      animationState.y += Math.sin(animationState.angle * Math.PI/180) * stepSize;
+      ctx.lineTo(animationState.x, animationState.y);
+      ctx.stroke();
+      break;
+
+    case 'f':
+      animationState.x += Math.cos(animationState.angle * Math.PI/180) * stepSize;
+      animationState.y += Math.sin(animationState.angle * Math.PI/180) * stepSize;
+      break;
+
+    case '+':
+      animationState.angle += angle;
+      break;
+
+    case '-':
+      animationState.angle -= angle;
+      break;
+
+    case '[':
+      animationState.stack.push({
+        x: animationState.x,
+        y: animationState.y,
+        angle: animationState.angle
+      });
+      break;
+
+    case ']':
+      if (animationState.stack.length > 0) {
+        const saved = animationState.stack.pop();
+        animationState.x = saved.x;
+        animationState.y = saved.y;
+        animationState.angle = saved.angle;
+        ctx.beginPath();
+        ctx.moveTo(animationState.x, animationState.y);
+      }
+      break;
+
+    case '.':
+      ctx.beginPath();
+      ctx.arc(animationState.x, animationState.y, 3, 0, Math.PI*2);
+      ctx.fillStyle = '#f00';
+      ctx.fill();
+      break;
+  }
+
+  currentStep++;
+  animId = requestAnimationFrame(() => animateDrawing(ctx));
 }
