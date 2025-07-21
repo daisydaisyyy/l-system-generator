@@ -10,6 +10,7 @@
   <script src="script.js"></script>
 </head>
 <body>
+  <div>
   <header>
     <h1>PlantSim</h1>
     <nav id="authBar">
@@ -19,20 +20,21 @@
       <!-- List of saved plants + save/delete buttons -->
     </nav>
   </header>
+
   <main>
     <section id="controls">
       <label>Axiom: <input id="axiomInput" value="F" /></label>
       <label>Rules: <input id="rulesInput" value="F=F[+F]F[-F]F" /></label>
-      <label>Depth: <input id="depthInput" type="number" value="4" min="1" max="6" /></label>
+      <label>Depth: <input id="depthInput" type="number" value="4" min="0" max="6" /></label>
       <label>Angle: <input id="angleInput" type="number" value="25" min="0" max="90" /></label>
       <button id="startBtn">Start</button>
       <button id="pauseBtn">Pause</button>
       <button id="resetBtn">Reset</button>
       <button id="saveBtn">Save</button>
     </section>
-    <canvas id="plantCanvas"></canvas>
   </main>
-
+  </div>
+  <canvas id="plantCanvas"></canvas>
 
 </body>
 </html>

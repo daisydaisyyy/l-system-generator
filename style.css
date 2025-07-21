@@ -1,17 +1,21 @@
 html {
   box-sizing: border-box;
+  
 }
+
+* {margin: 0; padding: 0;} 
 
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #f0f8fc;
   color: #333;
-  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 10fr;
 }
 header {
   background: #2c3e50;
-  padding: 1rem;
+  padding: 0 1rem;
   color: #fff;
   display: flex;
   justify-content: space-between;
@@ -30,14 +34,14 @@ nav#authBar, nav#saveBar {
 }
 #plantCanvas {
   display: block;
-  margin: 1rem auto;
   background: #fff;
-  border: 1px solid #bdc3c7;
   /* responsive canvas */
   position: absolute;
   z-index: -1;
   top: 0;
   left: 0;
+  width: 100vw;
+  height: 100vh;
 }
 button {
   padding: 0.5rem 1rem;
