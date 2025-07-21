@@ -4,13 +4,15 @@ let isAnimating = false;
 let currentStep = 0;
 let animationState = null;
 
+
 // functions 
 function resetCanvas(ctx) {
   ctx.save();
   ctx.reset();
   // debug, changes color at every reset
-  ctx.fillStyle = `rgb(${Math.floor(Math.random() * 256)} ${Math.floor(Math.random() * 128)} ${Math.floor(Math.random() * 256)})`;
-  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  //ctx.fillStyle = `rgb(${Math.floor(Math.random() * 256)} ${Math.floor(Math.random() * 128)} ${Math.floor(Math.random() * 256)})`;
+  
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   ctx.restore(); // doesn't change settings for others
   // ctx.beginPath();
 }
@@ -50,20 +52,22 @@ document.addEventListener('DOMContentLoaded', e => {
   const rulesInput = document.getElementById('rulesInput');
   const depthInput = document.getElementById('depthInput');
   const angleInput = document.getElementById('angleInput');
+  const startxInput = document.querySelector('#startxInput');
+  const startyInput = document.querySelector('#startyInput');
+  const scaleInput = document.querySelector('#scaleInput');
+  
 
   startBtn.addEventListener('click', () => {
-    
-    if(parseInt(depthInput.value) != 0) {
-      ctx.canvas.width = ctx.canvas.clientWidth * 0.25 * (parseInt(depthInput.value));
-      ctx.canvas.height = ctx.canvas.clientHeight * 0.25 * (parseInt(depthInput.value));
+    if(parseInt(scaleInput.value) != 10) {
+      ctx.canvas.width = ctx.canvas.clientWidth * (10-parseInt(scaleInput.value));
+      ctx.canvas.height = ctx.canvas.clientHeight * (10-parseInt(scaleInput.value));
     } else {
-      ctx.canvas.width = ctx.canvas.clientWidth * 0.25 ;
-      ctx.canvas.height = ctx.canvas.clientHeight * 0.25 ;
-   
+      ctx.canvas.width = ctx.canvas.clientWidth * 0.85;
+      ctx.canvas.height = ctx.canvas.clientHeight * 0.85;
     }
 
     resetCanvas(ctx);
-    ctx.translate(ctx.canvas.width/2, ctx.canvas.height*15/16);
+    ctx.translate(ctx.canvas.width/2 + parseFloat(startxInput.value), ctx.canvas.height*15/16 - parseFloat(startyInput.value));
     
     ctx.strokeStyle = '#0f0';
     ctx.lineWidth = 2;

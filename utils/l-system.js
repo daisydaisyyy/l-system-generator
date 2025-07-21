@@ -12,6 +12,7 @@ function generateLSystem(axiom, rules, depth) {
 }
 
 
+// TODO: fix drawing with more than one variable!
 function animateDrawing(ctx) {
   if (!isAnimating || currentStep >= instructions.length) {
     isAnimating = false;
