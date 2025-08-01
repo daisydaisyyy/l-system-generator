@@ -88,33 +88,43 @@ function animateDrawing(ctx) {
 
 // TODO: fix rotation if not a tree but [ is in the string
 // TODO: find starting drawing coords automatically??
-function setRotation(instructions, rot) {
-  // if tree, goes until first '['
-  function treeRot(str, aDeg) {
-    const trunk = str.split('[')[0];
+function setRot(instructions, angleDeg) {
+  const MOVE_CHARS = new Set(['F','G','f','X','A','B']); // estendi se serve
+
+  // 1) helper per gli alberi (c’è almeno un '[')
+  function treeRot(s) {
+    // prendi solo il tronco (fino al primo '[')
+    const trunk = s.split('[')[0];
+    console.log("trunk: " + trunk);
     let dx = 0, dy = 0, ang = 0;
-    const aRad = aDeg * Math.PI/180;
+    const aRad = angleDeg * Math.PI/180;
+    console.log("angle: " + aRad);
     for (const cmd of trunk) {
-      if ("FGfX".includes(cmd)) {
+      if (MOVE_CHARS.has(cmd)) {
         dx += Math.cos(ang);
         dy += Math.sin(ang);
+        console.log(dy);
       } else if (cmd === '+') {
         ang += aRad;
       } else if (cmd === '-') {
         ang -= aRad;
       }
+      
     }
-    // current angle
-    const tree_res = Math.atan2(dy, dx) * 180/Math.PI;
-    
-    return (90 - tree_res);
+    // angolo del vettore tronco rispetto all'asse X
+    console.log(dy,dx);
+    const treeAng = Math.atan2(dy, dx) * 180/Math.PI;
+    console.log("tree angle: " + treeAng);
+    // vogliamo che il tronco punti verso l'alto (90°)
+    return 90 - treeAng;
   }
 
-  // general drawing helper: vectorial sum on entire string
-  function generalRot(s, aDeg) {
+  // 2) helper per frattali generali (no '[')
+  function generalRot(str) {
     let dx = 0, dy = 0, ang = 0;
-    const aRad = aDeg * Math.PI/180;
-    for (const cmd of s) {
+    const aRad = angleDeg * Math.PI/180;
+
+    for (const cmd of str) {
       if ("FGfX".includes(cmd)) {
         dx += Math.cos(ang);
         dy += Math.sin(ang);
@@ -124,19 +134,21 @@ function setRotation(instructions, rot) {
         ang -= aRad;
       }
     }
-    // align vector horizontally
-    console.log(dx,dy);
-    return Math.atan2(dy, dx) * 180/Math.PI;
+   
+    console.log(dy,dx);
+    const meanAng = Math.atan2(dy, dx) * 180/Math.PI;
+    console.log("gen angle: " + meanAng);
+   
+    return -meanAng;
   }
 
-  
-  let result = 0;
   if (instructions.includes('[')) {
     console.log("TREE");
-    return -treeRot(instructions, rot);
-  } else { 
+    return -treeRot(instructions);
+  } else {
     console.log("GENERAL");
-    return generalRot(instructions, rot);
+    //return (generalRotation(instructions));
+    let a = (generalRot(instructions) > 0) ? 180 : 0;
+    return a;
   }
-
 }

@@ -77,10 +77,10 @@ document.addEventListener('DOMContentLoaded', e => {
       instr = generateLSystem(axiomInput.value, parseRules(rulesInput.value), parseInt(depthInput.value));
       console.log(instr);
 
-      let rot = setRotation(instr, parseFloat(angleInput.value));
-      // rot = 146;
-      console.log(rot);
-      ctx.rotate(rot * Math.PI/180);
+      let rot = setRot(instr, parseFloat(angleInput.value));
+      //rot = 0;
+      console.log("rot: " + rot*Math.PI/180);
+      ctx.rotate( rot*Math.PI/180);
     
       // Reset animation state
       curStep = 0;
