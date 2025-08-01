@@ -16,7 +16,7 @@
     <nav id="authBar">
       <!-- LOGIN / SIGNUP forms inserted here -->
     </nav>
-    <nav id="saveBar" style="display:none;">
+    <nav id="saveBar">
       <!-- List of saved plants + save/delete buttons -->
     </nav>
   </header>
@@ -25,11 +25,11 @@
     <section id="controls">
       <label>Axiom: <input id="axiomInput" value="F" /></label>
       <label>Rules: <input id="rulesInput" value="F=F[+F]F[-F]F" /></label>
-      <label>Depth: <input id="depthInput" type="number" value="4" min="0" max="6" /></label>
-      <label>Angle: <input id="angleInput" type="number" value="25" min="0" max="90" /></label>
+      <label>Depth: <input id="depthInput" type="number" value="4" min="1" max="9" /></label>
+      <label>Angle: <input id="angleInput" type="number" value="0" /></label>
       <label>Start x: <input id="startxInput" type="number" value="0" /></label>
       <label>Start y: <input id="startyInput" type="number" value="0" /></label>
-      <label>Zoom: <input id="scaleInput" type="number" value="10" min="0" max="10" /></label>
+      <label>Zoom: <input id="scaleInput" type="number" value="5" min="1" max="10" /></label>
 
       <button id="startBtn">Start</button>
       <button id="pauseBtn">Pause</button>
