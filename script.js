@@ -1,8 +1,7 @@
-let instructions = '';
-let animId = null;
+let instr = '';
 let isAnimating = false;
-let currentStep = 0;
-let animationState = null;
+let curStep = 0;
+let animId = null;
 
 
 // functions 
@@ -14,6 +13,8 @@ function resetCanvas(ctx) {
   
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   ctx.restore(); // doesn't change settings for others
+  curStep = 0;
+  isAnimating = false;
   // ctx.beginPath();
 }
 
@@ -58,53 +59,64 @@ document.addEventListener('DOMContentLoaded', e => {
   
 
   startBtn.addEventListener('click', () => {
-    if(parseInt(scaleInput.value) != 10) {
-      ctx.canvas.width = ctx.canvas.clientWidth * (10-parseInt(scaleInput.value));
-      ctx.canvas.height = ctx.canvas.clientHeight * (10-parseInt(scaleInput.value));
+    const scale = parseInt(scaleInput.value);
+    if(scale != 5) {
+      ctx.canvas.width = ctx.canvas.clientWidth / (scale / 5);
+      ctx.canvas.height = ctx.canvas.clientHeight / (scale / 5);
     } else {
-      ctx.canvas.width = ctx.canvas.clientWidth * 0.85;
-      ctx.canvas.height = ctx.canvas.clientHeight * 0.85;
+      ctx.canvas.width = ctx.canvas.clientWidth;
+      ctx.canvas.height = ctx.canvas.clientHeight;
     }
 
     resetCanvas(ctx);
+
     ctx.translate(ctx.canvas.width/2 + parseFloat(startxInput.value), ctx.canvas.height*15/16 - parseFloat(startyInput.value));
-    
     ctx.strokeStyle = '#0f0';
     ctx.lineWidth = 2;
-    instructions = generateLSystem(axiomInput.value, parseRules(rulesInput.value), parseInt(depthInput.value));
-    console.log(instructions);
+    try {
+      instr = generateLSystem(axiomInput.value, parseRules(rulesInput.value), parseInt(depthInput.value));
+      console.log(instr);
+
+      let rot = setRotation(instr, parseFloat(angleInput.value));
+      // rot = 146;
+      console.log(rot);
+      ctx.rotate(rot * Math.PI/180);
     
-    // Reset animation state
-    currentStep = 0;
-    isAnimating = true;
-    animationState = {
-      x: 0,
-      y: 0,
-      angle: -90,
-      stack: []
-    };
+      // Reset animation state
+      curStep = 0;
+      isAnimating = true;
+  
+      // Start animation
+      animId = setInterval(() => animateDrawing(ctx), 0);
+  
+    } catch(e) {
+      isAnimating = false;
+      clearInterval(animId);
+      console.error(e);
+      alert("Too many instructions. Retry with a lower depth.");
+    }
     
-    // Start animation
-    animateDrawing(ctx);
   });
 
   pauseBtn.addEventListener('click', () => {
-    if (isAnimating) {
-      cancelAnimationFrame(animId);
-      isAnimating = false;
-      pauseBtn.textContent = 'Resume';
-    } else {
-      isAnimating = true;
-      pauseBtn.textContent = 'Pause';
-      animateDrawing(ctx);
+    // console.log("step: " + currentStep + "len: " + instructions.length);
+    if(curStep != 0) { // if the drawing is finished, do nothing
+      if (isAnimating) {
+        isAnimating = false;
+        pauseBtn.textContent = 'Resume';
+        clearInterval(animId);
+      } else {
+        isAnimating = true;
+        pauseBtn.textContent = 'Pause';
+        animId = setInterval(() => animateDrawing(ctx), 0);
+      }
     }
+   
   });
 
   resetBtn.addEventListener('click', () => {
-    cancelAnimationFrame(animId);
     isAnimating = false;
-    animId = null;
-    currentStep = 0;
+    curStep = 0;
     resetCanvas(ctx);
     pauseBtn.textContent = 'Pause';
   });

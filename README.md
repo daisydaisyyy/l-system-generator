@@ -1,6 +1,5 @@
-# web_project
-A simple project for my web development exam: a web application for procedurally generating and visualizing plant growth using L‑Systems.
-
+# web_l-system
+A  web application for procedurally generating and visualizing plant growth using L‑Systems.
 
 1. l-system genome generation
 a l-system is defined by:
@@ -8,14 +7,16 @@ a l-system is defined by:
 - production rules (mappings that rewrite each symbol)
 - depth
 
-2. turtle graphic renderer
+2. graphic renderer
+
 drawing commands:
+```
 F: draw forward one segment
 +: turn right by θ degrees
 -: turn left by θ degrees
 [: push current position & angle onto stack
 ]: pop position & angle from stack
-
+```
 3. genome compression and persistence: save and reload plant configurations 
 
 #### Structure:
@@ -55,6 +56,9 @@ project/
 ```
 
 references:
+```
 https://it.wikipedia.org/wiki/Sistema_di_Lindenmayer
 https://en.wikipedia.org/wiki/L-system
 https://github.com/fura2/L-system
+https://fedimser.github.io/l-systems.html
+```
