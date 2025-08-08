@@ -1,11 +1,11 @@
 // handling genome compression/decompression
-
-function compressGenome(genome) {
+// saves drawing parameters in b64
+function compressDrawing(genome) {
   const json = JSON.stringify(genome);
   return btoa(encodeURIComponent(json));
 }
 
-function decompressGenome(encoded) {
+function decompressDrawing(encoded) {
   const json = decodeURIComponent(atob(encoded));
   return JSON.parse(json);
 }

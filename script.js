@@ -4,7 +4,6 @@ let curStep = 0;
 let animId = null;
 let stepSize = 10;
 
-// functions 
 function resetCanvas(ctx) {
   ctx.save();
   ctx.reset();
@@ -15,7 +14,6 @@ function resetCanvas(ctx) {
   ctx.restore(); // doesn't change settings for others
   curStep = 0;
   isAnimating = false;
-  // ctx.beginPath();
 }
 
 // helper to parse rules
@@ -25,19 +23,17 @@ function parseRules(str) {
   }, {});
 }
 
-// Recupera token da localStorage/session
 function getSessionToken() {
   return localStorage.getItem('sessionToken') || '';
 }
-
 
 // events
 document.addEventListener('DOMContentLoaded', e => {
   const canvas = document.getElementById('plantCanvas');
   canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight;
-  // TODO: fix reponsive when resizing
   window.addEventListener("resize", e => {
     canvas.width = canvas.clientWidth * (parseInt(depthInput.value) + 1); canvas.height = canvas.clientHeight * (parseInt(depthInput.value) + 1);
+    handleReset();
   });
 
   const ctx = canvas.getContext('2d');
@@ -57,20 +53,24 @@ document.addEventListener('DOMContentLoaded', e => {
   const scaleInput = document.getElementById('scaleInput');
   const rotInput = document.getElementById('rotInput');
   const centerChx = document.getElementById('centerChx');
+  const centerSelect = document.getElementById('centerSelect');
 
   // disable/enables parameters
-  const params = [centerChx,axiomInput, rulesInput, depthInput, angleInput, scaleInput, rotInput];
+  const config_params = [...document.querySelectorAll('.config')];
   function changeEnabledState(state) {
-    params.forEach(el => el.disabled = state);
-    if(centerChx.checked) state = true;
+    config_params.map(el => el.disabled = state);
+    if (centerSelect.value !== "no") state = true;
     startyInput.disabled = state;
     startxInput.disabled = state;
   }
 
   startBtn.addEventListener('click', () => {
-    //centerListener();
+    handleReset();
     changeEnabledState(true);
+    startBtn.innerText = 'Restart';
+
     const scale = parseInt(scaleInput.value);
+    
     if (scale != 5) {
       ctx.canvas.width = ctx.canvas.clientWidth / (scale / 5);
       ctx.canvas.height = ctx.canvas.clientHeight / (scale / 5);
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', e => {
 
     resetCanvas(ctx);
 
-    ctx.translate(ctx.canvas.width / 2 + parseFloat(startxInput.value), ctx.canvas.height * 15 / 16 - parseFloat(startyInput.value));
+    ctx.translate(ctx.canvas.width / 2 + parseFloat(startxInput.value), ctx.canvas.height / 2 - parseFloat(startyInput.value));
     ctx.strokeStyle = '#0f0';
     ctx.lineWidth = 2;
     try {
@@ -92,16 +92,17 @@ document.addEventListener('DOMContentLoaded', e => {
       // console.log("rot: " + rot*Math.PI/180);
       ctx.rotate(rot * Math.PI / 180);
 
-      // Reset animation state
+      // reset animation state
       curStep = 0;
       isAnimating = true;
 
-      // Start animation
+      // start animation
       animId = setInterval(() => {
-        if(animateDrawing(ctx)) {
+        console.log("Animation");
+        if (animateDrawing(ctx)) {
           clearInterval(animId);
-          isAnimating = false;
           changeEnabledState(false);
+          startBtn.innerText = 'Start';
         }
       }, 0);
     } catch (e) {
@@ -118,38 +119,52 @@ document.addEventListener('DOMContentLoaded', e => {
     if (curStep != 0) { // if the drawing is finished, do nothing
       if (isAnimating) {
         isAnimating = false;
-        pauseBtn.textContent = 'Resume';
+        pauseBtn.innerText = 'Resume';
         clearInterval(animId);
       } else {
         isAnimating = true;
-        pauseBtn.textContent = 'Pause';
-        animId = setInterval(() => animateDrawing(ctx), 0);
+        pauseBtn.innerText = 'Pause';
+        animId = setInterval(() => {
+          console.log("Animation");
+          if (animateDrawing(ctx)) {
+            clearInterval(animId);
+
+            changeEnabledState(false);
+          }
+        }, 0);
       }
     }
 
   });
 
-  resetBtn.addEventListener('click', () => {
-    centerChx.disabled = false;
-    centerChx.checked = false;
+  const handleReset = () => {
+    centerSelect.disabled = false;
     isAnimating = false;
     curStep = 0;
     resetCanvas(ctx);
-    pauseBtn.textContent = 'Pause';
-  });
+    pauseBtn.innerText = 'Pause';
+    startBtn.innerText = 'Start';
+    changeEnabledState(false);
+  };
+
+  resetBtn.addEventListener('click', handleReset);
 
   saveBtn.addEventListener('click', () => {
-    const genome = {
+    const drawingConfig = {
       axiom: axiomInput.value,
       rules: parseRules(rulesInput.value),
       depth: parseInt(depthInput.value),
-      angle: parseInt(angleInput.value)
+      angle: parseInt(angleInput.value),
+      startx: parseInt(startxInput.value),
+      starty: parseInt(startyInput.value),
+      scale: parseInt(scaleInput.value),
+      rot: parseInt(rotInput.value)
     };
-    const compressed = compressGenome(genome);
+    const compressed = compressDrawing(drawingConfig);
     fetch('/api/save.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: getSessionToken(), genome: compressed })
+      body: JSON.stringify({ token: getSessionToken(), drawingConfig: compressed })
     }).then(res => res.json()).then(console.log);
   });
 
@@ -158,13 +173,11 @@ document.addEventListener('DOMContentLoaded', e => {
   let savedY = parseInt(startyInput.value);
 
   const centerListener = () => {
-    if (centerChx.checked && !isAnimating) {
-      //console.log("autoCenter: enabled");
+    if (centerSelect.value !== "no" && !isAnimating) {
       startxInput.disabled = true; startyInput.disabled = true;
       savedX = parseInt(startxInput.value);
       savedY = parseInt(startyInput.value);
-      let [x,y] = autoCenter(ctx);
-      // let [x, y] = [200, 200];
+      let [x, y] = autoCenter(ctx);
       console.log("autoCenter: " + x + ", " + y);
       ctx.translate(x, y);
       startxInput.value = x;
@@ -178,6 +191,6 @@ document.addEventListener('DOMContentLoaded', e => {
     }
   };
 
-  centerChx.addEventListener('change', centerListener);
+  centerSelect.addEventListener('change', centerListener);
 });
 

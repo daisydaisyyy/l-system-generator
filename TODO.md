@@ -1,0 +1,6 @@
+- [ ] fix auto-center drawing
+- [ ] optimize animateDrawing
+- [X] fix responsive canvas when resizing
+- [ ] fix compression/decompression drawing params
+- [ ] php backend (save/restore drawings, user auth, session)
+- [ ] make an examples list, the user clicks on it and it automatically sets drawing parameters (imported from db? or pre-stored in an examples folder?)

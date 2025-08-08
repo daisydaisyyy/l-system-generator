@@ -25,16 +25,28 @@
 
     <main>
       <section id="controls">
-        <label>Axiom: <input id="axiomInput" value="F" /></label>
-        <label>Rules: <input id="rulesInput" value="F=F[+F]F[-F]F" /></label>
-        <label>Depth: <input id="depthInput" type="number" value="4" min="1" max="9" /></label>
-        <label>Angle: <input id="angleInput" type="number" value="0" /></label>
-        <label>Start x: <input id="startxInput" type="number" value="0" /></label>
-        <label>Start y: <input id="startyInput" type="number" value="0" /></label>
-        <label>Zoom: <input id="scaleInput" type="number" value="5" min="1" max="10" /></label>
-        <label>Starting rotation: <input id="rotInput" type="number" value="0" min="-360" max="360" /></label>
-        <label><input id="centerChx" type="checkbox" checked="false"> Auto-center</label>
-        
+        <label for="axiomInput">Axiom: </label>
+        <input id="axiomInput" class="config" value="F" />
+        <label for="rulesInput">Rules: </label>
+        <input name="rulesInput" id="rulesInput" class="config" value="F=F[+F]F[-F]F" />
+        <label for="depthInput">Depth: </label>
+        <input name="depthInput" id="depthInput" class="config" type="number" value="4" min="1" max="10" />
+        <label for="angleInput">Angle: </label>
+        <input name="angleInput" id="angleInput" class="config" type="number" value="25" />
+        <label for="startxInput">Start x: </label>
+        <input name="startxInput" id="startxInput" class="config" type="number" value="0" />
+        <label for="startyInput">Start y: </label>
+        <input name="startyInput" id="startyInput" class="config" type="number" value="0" />
+        <label for="scaleInput">Zoom: </label>
+        <input name="scaleInput" id="scaleInput" class="config" type="number" value="5" min="1" max="10" />
+        <label for="rotInput">Starting rotation:</label>
+        <input id="rotInput" name="rotInput" class="config" type="number" value="-90" min="-360" max="360" />
+        <label for="centerSelect">Centering:</label>
+        <select name="centerSelect" title="centerSelect" class="config" id="centerSelect">
+          <option value="no" selected>No auto-centering</option>
+          <option value="auto">Auto-centering</option>
+          <option value="offset">Auto-centering + mantain current offset</option>
+        </select>
         <button id="startBtn" type="button">Start</button>
         <button id="pauseBtn" type="button">Pause</button>
         <button id="resetBtn" type="button">Reset</button>
