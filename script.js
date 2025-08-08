@@ -52,16 +52,13 @@ document.addEventListener('DOMContentLoaded', e => {
   const startyInput = document.getElementById('startyInput');
   const scaleInput = document.getElementById('scaleInput');
   const rotInput = document.getElementById('rotInput');
-  const centerChx = document.getElementById('centerChx');
   const centerSelect = document.getElementById('centerSelect');
 
   // disable/enables parameters
   const config_params = [...document.querySelectorAll('.config')];
   function changeEnabledState(state) {
     config_params.map(el => el.disabled = state);
-    if (centerSelect.value !== "no") state = true;
-    startyInput.disabled = state;
-    startxInput.disabled = state;
+   
   }
 
   startBtn.addEventListener('click', () => {
@@ -103,6 +100,7 @@ document.addEventListener('DOMContentLoaded', e => {
           clearInterval(animId);
           changeEnabledState(false);
           startBtn.innerText = 'Start';
+          centerSelect.value = 'no';
         }
       }, 0);
     } catch (e) {
@@ -174,7 +172,7 @@ document.addEventListener('DOMContentLoaded', e => {
 
   const centerListener = () => {
     if (centerSelect.value !== "no" && !isAnimating) {
-      startxInput.disabled = true; startyInput.disabled = true;
+      changeEnabledState(true);
       savedX = parseInt(startxInput.value);
       savedY = parseInt(startyInput.value);
       let [x, y] = autoCenter(ctx);
@@ -186,7 +184,7 @@ document.addEventListener('DOMContentLoaded', e => {
     else {
       startxInput.value = savedX;
       startyInput.value = savedY;
-      startxInput.disabled = false; startyInput.disabled = false;
+      changeEnabledState(false);
 
     }
   };
