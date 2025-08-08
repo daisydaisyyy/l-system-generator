@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', e => {
   const config_params = [...document.querySelectorAll('.config')];
   function changeEnabledState(state) {
     config_params.map(el => el.disabled = state);
-   
   }
 
   startBtn.addEventListener('click', () => {
@@ -67,7 +66,7 @@ document.addEventListener('DOMContentLoaded', e => {
     startBtn.innerText = 'Restart';
 
     const scale = parseInt(scaleInput.value);
-    
+
     if (scale != 5) {
       ctx.canvas.width = ctx.canvas.clientWidth / (scale / 5);
       ctx.canvas.height = ctx.canvas.clientHeight / (scale / 5);
@@ -79,6 +78,7 @@ document.addEventListener('DOMContentLoaded', e => {
     resetCanvas(ctx);
 
     ctx.translate(ctx.canvas.width / 2 + parseFloat(startxInput.value), ctx.canvas.height / 2 - parseFloat(startyInput.value));
+
     ctx.strokeStyle = '#0f0';
     ctx.lineWidth = 2;
     try {
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', e => {
       changeEnabledState(true);
       savedX = parseInt(startxInput.value);
       savedY = parseInt(startyInput.value);
-      let [x, y] = autoCenter(ctx);
+      let [x, y] = centerSelect.value === "auto" ? autoCenter(ctx) : autoCenter(ctx, parseInt(startxInput.value), parseInt(startyInput.value));
       console.log("autoCenter: " + x + ", " + y);
       ctx.translate(x, y);
       startxInput.value = x;
