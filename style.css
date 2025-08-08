@@ -1,9 +1,12 @@
 html {
   box-sizing: border-box;
-  
+
 }
 
-* {margin: 0; padding: 0;} 
+* {
+  margin: 0;
+  padding: 0;
+}
 
 body {
   margin: 0;
@@ -13,6 +16,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 10fr;
 }
+
 header {
   background: #2c3e50;
   padding: 0 1rem;
@@ -21,10 +25,13 @@ header {
   justify-content: space-between;
   align-items: center;
 }
-nav#authBar, nav#saveBar {
+
+nav#authBar,
+nav#saveBar {
   display: flex;
   gap: 1rem;
 }
+
 #controls {
   padding: 1rem;
   background: #ecf0f1;
@@ -32,6 +39,7 @@ nav#authBar, nav#saveBar {
   gap: 1rem;
   flex-wrap: wrap;
 }
+
 #plantCanvas {
   display: block;
   background: #fff;
@@ -43,15 +51,21 @@ nav#authBar, nav#saveBar {
   width: 100vw;
   height: 100vh;
 }
+
 button {
   padding: 0.5rem 1rem;
   border: none;
-  background: #27ae60;
+  background: #9127ae;
   color: #fff;
   cursor: pointer;
   border-radius: 4px;
 }
+
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+button:active {
+  opacity: 0.8;
 }

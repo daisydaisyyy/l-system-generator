@@ -2,7 +2,7 @@ let instr = '';
 let isAnimating = false;
 let curStep = 0;
 let animId = null;
-
+let stepSize = 10;
 
 // functions 
 function resetCanvas(ctx) {
@@ -10,7 +10,7 @@ function resetCanvas(ctx) {
   ctx.reset();
   // debug, changes color at every reset
   //ctx.fillStyle = `rgb(${Math.floor(Math.random() * 256)} ${Math.floor(Math.random() * 128)} ${Math.floor(Math.random() * 256)})`;
-  
+
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   ctx.restore(); // doesn't change settings for others
   curStep = 0;
@@ -18,10 +18,10 @@ function resetCanvas(ctx) {
   // ctx.beginPath();
 }
 
-// Helper to parse rules
+// helper to parse rules
 function parseRules(str) {
   return str.split(';').reduce((obj, pair) => {
-    const [k,v] = pair.split('='); if(k && v) obj[k]=v; return obj;
+    const [k, v] = pair.split('='); if (k && v) obj[k] = v; return obj;
   }, {});
 }
 
@@ -36,11 +36,10 @@ document.addEventListener('DOMContentLoaded', e => {
   const canvas = document.getElementById('plantCanvas');
   canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight;
   // TODO: fix reponsive when resizing
-  // responsive to resizing
   window.addEventListener("resize", e => {
-    canvas.width = canvas.clientWidth * (parseInt(depthInput.value) +1); canvas.height = canvas.clientHeight * (parseInt(depthInput.value)+1);
+    canvas.width = canvas.clientWidth * (parseInt(depthInput.value) + 1); canvas.height = canvas.clientHeight * (parseInt(depthInput.value) + 1);
   });
- 
+
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
   const startBtn = document.getElementById('startBtn');
@@ -53,14 +52,26 @@ document.addEventListener('DOMContentLoaded', e => {
   const rulesInput = document.getElementById('rulesInput');
   const depthInput = document.getElementById('depthInput');
   const angleInput = document.getElementById('angleInput');
-  const startxInput = document.querySelector('#startxInput');
-  const startyInput = document.querySelector('#startyInput');
-  const scaleInput = document.querySelector('#scaleInput');
+  const startxInput = document.getElementById('startxInput');
+  const startyInput = document.getElementById('startyInput');
+  const scaleInput = document.getElementById('scaleInput');
   const rotInput = document.getElementById('rotInput');
+  const centerChx = document.getElementById('centerChx');
+
+  // disable/enables parameters
+  const params = [centerChx,axiomInput, rulesInput, depthInput, angleInput, scaleInput, rotInput];
+  function changeEnabledState(state) {
+    params.forEach(el => el.disabled = state);
+    if(centerChx.checked) state = true;
+    startyInput.disabled = state;
+    startxInput.disabled = state;
+  }
 
   startBtn.addEventListener('click', () => {
+    //centerListener();
+    changeEnabledState(true);
     const scale = parseInt(scaleInput.value);
-    if(scale != 5) {
+    if (scale != 5) {
       ctx.canvas.width = ctx.canvas.clientWidth / (scale / 5);
       ctx.canvas.height = ctx.canvas.clientHeight / (scale / 5);
     } else {
@@ -70,7 +81,7 @@ document.addEventListener('DOMContentLoaded', e => {
 
     resetCanvas(ctx);
 
-    ctx.translate(ctx.canvas.width/2 + parseFloat(startxInput.value), ctx.canvas.height*15/16 - parseFloat(startyInput.value));
+    ctx.translate(ctx.canvas.width / 2 + parseFloat(startxInput.value), ctx.canvas.height * 15 / 16 - parseFloat(startyInput.value));
     ctx.strokeStyle = '#0f0';
     ctx.lineWidth = 2;
     try {
@@ -79,27 +90,32 @@ document.addEventListener('DOMContentLoaded', e => {
 
       let rot = parseInt(rotInput.value)
       // console.log("rot: " + rot*Math.PI/180);
-      ctx.rotate( rot*Math.PI/180);
-    
+      ctx.rotate(rot * Math.PI / 180);
+
       // Reset animation state
       curStep = 0;
       isAnimating = true;
-  
+
       // Start animation
-      animId = setInterval(() => animateDrawing(ctx), 0);
-  
-    } catch(e) {
+      animId = setInterval(() => {
+        if(animateDrawing(ctx)) {
+          clearInterval(animId);
+          isAnimating = false;
+          changeEnabledState(false);
+        }
+      }, 0);
+    } catch (e) {
       isAnimating = false;
       clearInterval(animId);
       console.error(e);
       alert("Too many instructions. Retry with a lower depth.");
     }
-    
+
   });
 
   pauseBtn.addEventListener('click', () => {
     // console.log("step: " + currentStep + "len: " + instructions.length);
-    if(curStep != 0) { // if the drawing is finished, do nothing
+    if (curStep != 0) { // if the drawing is finished, do nothing
       if (isAnimating) {
         isAnimating = false;
         pauseBtn.textContent = 'Resume';
@@ -110,10 +126,12 @@ document.addEventListener('DOMContentLoaded', e => {
         animId = setInterval(() => animateDrawing(ctx), 0);
       }
     }
-   
+
   });
 
   resetBtn.addEventListener('click', () => {
+    centerChx.disabled = false;
+    centerChx.checked = false;
     isAnimating = false;
     curStep = 0;
     resetCanvas(ctx);
@@ -134,5 +152,32 @@ document.addEventListener('DOMContentLoaded', e => {
       body: JSON.stringify({ token: getSessionToken(), genome: compressed })
     }).then(res => res.json()).then(console.log);
   });
+
+
+  let savedX = parseInt(startxInput.value);
+  let savedY = parseInt(startyInput.value);
+
+  const centerListener = () => {
+    if (centerChx.checked && !isAnimating) {
+      //console.log("autoCenter: enabled");
+      startxInput.disabled = true; startyInput.disabled = true;
+      savedX = parseInt(startxInput.value);
+      savedY = parseInt(startyInput.value);
+      let [x,y] = autoCenter(ctx);
+      // let [x, y] = [200, 200];
+      console.log("autoCenter: " + x + ", " + y);
+      ctx.translate(x, y);
+      startxInput.value = x;
+      startyInput.value = y;
+    }
+    else {
+      startxInput.value = savedX;
+      startyInput.value = savedY;
+      startxInput.disabled = false; startyInput.disabled = false;
+
+    }
+  };
+
+  centerChx.addEventListener('change', centerListener);
 });
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,36 +10,40 @@
   <script src="utils/compress.js"></script>
   <script src="script.js"></script>
 </head>
+
 <body>
   <div>
-  <header>
-    <h1>PlantSim</h1>
-    <nav id="authBar">
-      <!-- LOGIN / SIGNUP forms inserted here -->
-    </nav>
-    <nav id="saveBar">
-      <!-- List of saved plants + save/delete buttons -->
-    </nav>
-  </header>
+    <header>
+      <h1>PlantSim</h1>
+      <nav id="authBar">
+        <!-- LOGIN / SIGNUP forms inserted here -->
+      </nav>
+      <nav id="saveBar">
+        <!-- List of saved plants + save/delete buttons -->
+      </nav>
+    </header>
 
-  <main>
-    <section id="controls">
-      <label>Axiom: <input id="axiomInput" value="F" /></label>
-      <label>Rules: <input id="rulesInput" value="F=F[+F]F[-F]F" /></label>
-      <label>Depth: <input id="depthInput" type="number" value="4" min="1" max="9" /></label>
-      <label>Angle: <input id="angleInput" type="number" value="0" /></label>
-      <label>Start x: <input id="startxInput" type="number" value="0" /></label>
-      <label>Start y: <input id="startyInput" type="number" value="0" /></label>
-      <label>Zoom: <input id="scaleInput" type="number" value="5" min="1" max="10" /></label>
-      <label>Starting rotation: <input id="rotInput" type="number" value="0" min="-360" max="360" /></label>
-      <button id="startBtn">Start</button>
-      <button id="pauseBtn">Pause</button>
-      <button id="resetBtn">Reset</button>
-      <button id="saveBtn">Save</button>
-    </section>
-  </main>
+    <main>
+      <section id="controls">
+        <label>Axiom: <input id="axiomInput" value="F" /></label>
+        <label>Rules: <input id="rulesInput" value="F=F[+F]F[-F]F" /></label>
+        <label>Depth: <input id="depthInput" type="number" value="4" min="1" max="9" /></label>
+        <label>Angle: <input id="angleInput" type="number" value="0" /></label>
+        <label>Start x: <input id="startxInput" type="number" value="0" /></label>
+        <label>Start y: <input id="startyInput" type="number" value="0" /></label>
+        <label>Zoom: <input id="scaleInput" type="number" value="5" min="1" max="10" /></label>
+        <label>Starting rotation: <input id="rotInput" type="number" value="0" min="-360" max="360" /></label>
+        <label><input id="centerChx" type="checkbox" checked="false"> Auto-center</label>
+        
+        <button id="startBtn" type="button">Start</button>
+        <button id="pauseBtn" type="button">Pause</button>
+        <button id="resetBtn" type="button">Reset</button>
+        <button id="saveBtn" type="button">Save</button>
+      </section>
+    </main>
   </div>
   <canvas id="plantCanvas"></canvas>
 
 </body>
+
 </html>
