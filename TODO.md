@@ -1,6 +1,7 @@
 - [ ] fix auto-center drawing
 - [ ] optimize animateDrawing
 - [X] fix responsive canvas when resizing
-- [ ] fix compression/decompression drawing params
+- [ ] fix compression/decompression drawing params (-> base64)
 - [ ] php backend (save/restore drawings, user auth, session)
 - [ ] make an examples list, the user clicks on it and it automatically sets drawing parameters (imported from db? or pre-stored in an examples folder?)
+- [ ] check selection feature, current: if before starting, restores coords to previous custom value if "no centering" is selected after being on centering; else when animation ends with centering selected, it keeps centered coords
