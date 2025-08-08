@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', e => {
   const startxInput = document.querySelector('#startxInput');
   const startyInput = document.querySelector('#startyInput');
   const scaleInput = document.querySelector('#scaleInput');
-  
+  const rotInput = document.getElementById('rotInput');
 
   startBtn.addEventListener('click', () => {
     const scale = parseInt(scaleInput.value);
@@ -77,9 +77,8 @@ document.addEventListener('DOMContentLoaded', e => {
       instr = generateLSystem(axiomInput.value, parseRules(rulesInput.value), parseInt(depthInput.value));
       console.log(instr);
 
-      let rot = setRot(instr, parseFloat(angleInput.value));
-      //rot = 0;
-      console.log("rot: " + rot*Math.PI/180);
+      let rot = parseInt(rotInput.value)
+      // console.log("rot: " + rot*Math.PI/180);
       ctx.rotate( rot*Math.PI/180);
     
       // Reset animation state
