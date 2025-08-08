@@ -1,6 +1,5 @@
 html {
   box-sizing: border-box;
-
 }
 
 * {
@@ -35,9 +34,9 @@ nav#saveBar {
 #controls {
   padding: 1rem;
   background: #ecf0f1;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
-  flex-wrap: wrap;
 }
 
 #plantCanvas {

@@ -12,7 +12,6 @@ function generateLSystem(axiom, rules, depth) {
 }
 
 
-// TODO: optimize?
 function animateDrawing(ctx) {
   if (!isAnimating || curStep >= instr.length) {
     isAnimating = false;
@@ -21,7 +20,7 @@ function animateDrawing(ctx) {
   }
 
   const cmd = instr[curStep];
-  const angle = parseInt(angleInput.value) * Math.PI / 180; // in radianti
+  const angle = parseInt(angleInput.value) * Math.PI / 180;
 
   ctx.lineWidth = 2;
 
@@ -85,8 +84,6 @@ function animateDrawing(ctx) {
 }
 
 
-// TODO: implement auto-centering for the drawing
-
 function autoCenter(ctx) {
   let instr, axiom = axiomInput.value, rules = parseRules(rulesInput.value), depth = parseInt(depthInput.value);
   let angle = parseInt(angleInput.value) || 0;
@@ -145,7 +142,7 @@ function autoCenter(ctx) {
       if (xr < minX) minX = xr; if (xr > maxX) maxX = xr;
       if (yr < minY) minY = yr; if (yr > maxY) maxY = yr;
     }
-    // altri simboli ignorati
+  
   }
 
   // Se non ci sono spostamenti, niente da fare: ritorno 0,0
@@ -182,8 +179,3 @@ function autoCenter(ctx) {
 
 
 }
-
-
-
-
-// TODO: make an examples list, the user clicks on it and it automatically sets parameters
