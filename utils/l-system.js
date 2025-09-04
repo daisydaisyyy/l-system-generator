@@ -1,3 +1,5 @@
+const variables = 'fFGXY';
+
 // L-System implementation
 function generateLSystem(axiom, rules, depth) {
   let cur = axiom;
@@ -83,14 +85,13 @@ function animateDrawing(ctx) {
   curStep++;
 }
 
-
+// auto center drawing
 function autoCenter(ctx, offsetX = 0, offsetY = 0) {
   const axiom = axiomInput.value;
   const rules = parseRules(rulesInput.value);
   const depth = parseInt(depthInput.value, 10) || 0;
   const angle = parseFloat(angleInput.value) || 0;
   const rotDeg = parseFloat(rotInput.value) || 0;
-  const scale = parseFloat(scaleInput.value) || 5;
 
   let instr;
   try {
@@ -99,21 +100,16 @@ function autoCenter(ctx, offsetX = 0, offsetY = 0) {
     return [Math.round(parseInt(startxInput.value) || 0), Math.round(parseInt(startyInput.value) || 0)];
   }
 
-  if (scale !== 5) {
-    effW = ctx.canvas.clientWidth / (scale / 5);
-    effH = ctx.canvas.clientHeight / (scale / 5);
-  }
-
-  const step = scale;
+  const step = 5;
   const rot = (rotDeg * Math.PI) / 180;
 
-  let tx = offsetX, ty = offsetY, dir = 0;
+  let tx = 0, ty = 0, dir = 0;
   let minX = tx, maxX = tx, minY = ty, maxY = ty;
   const stack = [];
 
   for (let i = 0; i < instr.length; i++) {
     const c = instr[i];
-    if (c === 'F' || c === 'f') {
+    if (variables.includes(c)) {
       const dx = Math.cos(dir * Math.PI / 180) * step;
       const dy = Math.sin(dir * Math.PI / 180) * step;
       tx += dx; ty += dy;
@@ -147,10 +143,11 @@ function autoCenter(ctx, offsetX = 0, offsetY = 0) {
     return [Math.round(parseInt(startxInput.value) || 0), Math.round(parseInt(startyInput.value) || 0)];
   }
 
-  const centerX = (minX + maxX) / 2;
-  const centerY = (minY + maxY) / 2;
-  const startX = -centerX;
-  const startY = centerY;
-
+  console.log(`Bounding Box: (${Math.round(minX)}, ${Math.round(minY)}) to (${Math.round(maxX)}, ${Math.round(maxY)})`);
+  const centerX = (maxX + minX);
+  const centerY = (maxY + minY);
+  const startX = offsetX - centerX;
+  const startY = centerY + offsetY;
+  console.log(`Auto Center Offset: (${startX}, ${startY})`);
   return [Math.round(startX), Math.round(startY)];
 }
