@@ -56,24 +56,25 @@ document.addEventListener('DOMContentLoaded', e => {
 
   // disable/enables parameters
   const config_params = [...document.querySelectorAll('.config')];
-  function changeEnabledState(state) {
+  function setConfigState(state) {
     config_params.map(el => el.disabled = state);
   }
 
   startBtn.addEventListener('click', () => {
     handleReset();
-    changeEnabledState(true);
+    setConfigState(true);
     startBtn.innerText = 'Restart';
 
+    // handle zoom
     const scale = parseInt(scaleInput.value);
 
-    if (scale != 5) {
-      ctx.canvas.width = ctx.canvas.clientWidth / (scale / 5);
-      ctx.canvas.height = ctx.canvas.clientHeight / (scale / 5);
-    } else {
-      ctx.canvas.width = ctx.canvas.clientWidth;
-      ctx.canvas.height = ctx.canvas.clientHeight;
-    }
+    // if (scale != 5) {
+    //   ctx.canvas.width = ctx.canvas.clientWidth / (scale / 5);
+    //   ctx.canvas.height = ctx.canvas.clientHeight / (scale / 5);
+    // } else {
+    //   ctx.canvas.width = ctx.canvas.clientWidth;
+    //   ctx.canvas.height = ctx.canvas.clientHeight;
+    // }
 
     resetCanvas(ctx);
 
@@ -98,7 +99,7 @@ document.addEventListener('DOMContentLoaded', e => {
         console.log("Animation");
         if (animateDrawing(ctx)) {
           clearInterval(animId);
-          changeEnabledState(false);
+          setConfigState(false);
           startBtn.innerText = 'Start';
           centerSelect.value = 'no';
         }
@@ -117,6 +118,7 @@ document.addEventListener('DOMContentLoaded', e => {
     if (curStep != 0) { // if the drawing is finished, do nothing
       if (isAnimating) {
         isAnimating = false;
+        setConfigState(true); // temporarily disable config params
         pauseBtn.innerText = 'Resume';
         clearInterval(animId);
       } else {
@@ -126,8 +128,7 @@ document.addEventListener('DOMContentLoaded', e => {
           console.log("Animation");
           if (animateDrawing(ctx)) {
             clearInterval(animId);
-
-            changeEnabledState(false);
+            setConfigState(false); // re-enable config params
           }
         }, 0);
       }
@@ -142,7 +143,7 @@ document.addEventListener('DOMContentLoaded', e => {
     resetCanvas(ctx);
     pauseBtn.innerText = 'Pause';
     startBtn.innerText = 'Start';
-    changeEnabledState(false);
+    setConfigState(false);
   };
 
   resetBtn.addEventListener('click', handleReset);
@@ -172,7 +173,7 @@ document.addEventListener('DOMContentLoaded', e => {
 
   const centerListener = () => {
     if (centerSelect.value !== "no" && !isAnimating) {
-      changeEnabledState(true);
+      setConfigState(true);
       savedX = parseInt(startxInput.value);
       savedY = parseInt(startyInput.value);
       let [x, y] = centerSelect.value === "auto" ? autoCenter(ctx) : autoCenter(ctx, parseInt(startxInput.value), parseInt(startyInput.value));
@@ -184,7 +185,7 @@ document.addEventListener('DOMContentLoaded', e => {
     else {
       startxInput.value = savedX;
       startyInput.value = savedY;
-      changeEnabledState(false);
+      setConfigState(false);
 
     }
   };
