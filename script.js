@@ -13,7 +13,7 @@ function resetCanvas(ctx) {
   //ctx.fillStyle = `rgb(${Math.floor(Math.random() * 256)} ${Math.floor(Math.random() * 128)} ${Math.floor(Math.random() * 256)})`;
 
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  ctx.restore(); // doesn't change settings for others
+  ctx.restore();
   curStep = 0;
   isAnimating = false;
 }
