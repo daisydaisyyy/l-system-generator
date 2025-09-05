@@ -4,6 +4,7 @@ let curStep = 0;
 let animId = null;
 const STEP_SIZE = 10;
 const LINE_WIDTH = 1;
+let stepSize = null;
 
 function resetCanvas(ctx) {
   ctx.save();
@@ -54,6 +55,8 @@ document.addEventListener('DOMContentLoaded', e => {
   const rotInput = document.getElementById('rotInput');
   const lineWInput = document.getElementById('lineWInput');
   const scaleLineWInput = document.getElementById('scaleLineWInput');
+  const showAnimInput = document.getElementById('showAnimInput');
+
 
   // disable/enables parameters
   const config_params = [...document.querySelectorAll('.config')];
@@ -67,7 +70,7 @@ document.addEventListener('DOMContentLoaded', e => {
     startBtn.innerText = 'Restart';
 
     // handle zoom
-    let stepSize = parseFloat(scaleInput.value) * STEP_SIZE || STEP_SIZE;
+    stepSize = parseFloat(scaleInput.value) * STEP_SIZE || STEP_SIZE;
 
     resetCanvas(ctx);
 
@@ -76,14 +79,14 @@ document.addEventListener('DOMContentLoaded', e => {
     let [x, y] = autoCenter(parseFloat(scaleInput.value))
     console.log("autoCenter: " + x + ", " + y);
     ctx.translate(x, y);
-    ctx.strokeStyle = '#0f0';
+    ctx.strokeStyle = "rgba(0, 255, 76, 0.50)"; // imposta il colore e la trasparenza delle linee
 
     // handle line width, depends on zoom if the checkbox is checked
     ctx.lineWidth = (scaleLineWInput.checked ? parseFloat(scaleInput.value) : 1) * parseInt(lineWInput.value) || LINE_WIDTH;
 
     try {
       instr = generateLSystem(axiomInput.value, parseRules(rulesInput.value), parseInt(depthInput.value));
-      console.log(instr);
+      // console.log(instr);
 
       let rot = parseInt(rotInput.value)
       // console.log("rot: " + rot*Math.PI/180);
@@ -93,15 +96,25 @@ document.addEventListener('DOMContentLoaded', e => {
       curStep = 0;
       isAnimating = true;
 
-      // start animation
-      animId = setInterval(() => {
-        console.log("Animation");
-        if (animateDrawing(ctx, stepSize)) {
-          clearInterval(animId);
+      if (showAnimInput.checked) {
+        // start animation
+        animId = setInterval(() => {
+          // console.log("Animation");
+          if (animateDrawing(ctx, stepSize)) {
+            clearInterval(animId);
+            setConfigState(false);
+            startBtn.innerText = 'Start';
+          }
+        }, 0);
+
+      } else {
+
+        while (!animateDrawing(ctx, stepSize)) {
           setConfigState(false);
           startBtn.innerText = 'Start';
         }
-      }, 0);
+      }
+
     } catch (e) {
       isAnimating = false;
       clearInterval(animId);
@@ -113,20 +126,20 @@ document.addEventListener('DOMContentLoaded', e => {
 
   pauseBtn.addEventListener('click', () => {
     // console.log("step: " + currentStep + "len: " + instructions.length);
-    if (curStep != 0) { // if the drawing is finished, do nothing
-      if (isAnimating) {
+    if (curStep != 0) { // se il disegno e' finito (curStep = 0) non fare nulla
+      if (isAnimating) { // pausa l'animazione
         isAnimating = false;
         setConfigState(true); // temporarily disable config params
         pauseBtn.innerText = 'Resume';
         clearInterval(animId);
-      } else {
+      } else { // continua l'animazione
         isAnimating = true;
         pauseBtn.innerText = 'Pause';
         animId = setInterval(() => {
-          console.log("Animation");
-          if (animateDrawing(ctx)) {
+          // console.log("Animation");
+          if (animateDrawing(ctx, stepSize)) {
             clearInterval(animId);
-            setConfigState(false); // re-enable config params
+            setConfigState(false);
           }
         }, 0);
       }
@@ -164,6 +177,6 @@ document.addEventListener('DOMContentLoaded', e => {
     }).then(res => res.json()).then(console.log);
   });
 
-  
+
 });
 
