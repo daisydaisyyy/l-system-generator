@@ -10,7 +10,7 @@ html {
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f0f8fc;
+  background: rgb(51, 51, 51);
   color: #333;
   display: grid;
   grid-template-columns: 1fr 10fr;
@@ -41,7 +41,7 @@ nav#saveBar {
 
 #plantCanvas {
   display: block;
-  background: #fff;
+  background: transparent;
   /* responsive canvas */
   position: absolute;
   z-index: -1;

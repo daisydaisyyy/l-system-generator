@@ -2,7 +2,8 @@ let instr = '';
 let isAnimating = false;
 let curStep = 0;
 let animId = null;
-let stepSize = 10;
+const STEP_SIZE = 10;
+const LINE_WIDTH = 1;
 
 function resetCanvas(ctx) {
   ctx.save();
@@ -48,11 +49,11 @@ document.addEventListener('DOMContentLoaded', e => {
   const rulesInput = document.getElementById('rulesInput');
   const depthInput = document.getElementById('depthInput');
   const angleInput = document.getElementById('angleInput');
-  const startxInput = document.getElementById('startxInput');
-  const startyInput = document.getElementById('startyInput');
+
   const scaleInput = document.getElementById('scaleInput');
   const rotInput = document.getElementById('rotInput');
-  const centerSelect = document.getElementById('centerSelect');
+  const lineWInput = document.getElementById('lineWInput');
+  const scaleLineWInput = document.getElementById('scaleLineWInput');
 
   // disable/enables parameters
   const config_params = [...document.querySelectorAll('.config')];
@@ -66,22 +67,20 @@ document.addEventListener('DOMContentLoaded', e => {
     startBtn.innerText = 'Restart';
 
     // handle zoom
-    const scale = parseInt(scaleInput.value);
-
-    // if (scale != 5) {
-    //   ctx.canvas.width = ctx.canvas.clientWidth / (scale / 5);
-    //   ctx.canvas.height = ctx.canvas.clientHeight / (scale / 5);
-    // } else {
-    //   ctx.canvas.width = ctx.canvas.clientWidth;
-    //   ctx.canvas.height = ctx.canvas.clientHeight;
-    // }
+    let stepSize = parseFloat(scaleInput.value) * STEP_SIZE || STEP_SIZE;
 
     resetCanvas(ctx);
 
-    ctx.translate(ctx.canvas.width / 2 + parseFloat(startxInput.value), ctx.canvas.height / 2 - parseFloat(startyInput.value));
+    ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
 
+    let [x, y] = autoCenter(parseFloat(scaleInput.value))
+    console.log("autoCenter: " + x + ", " + y);
+    ctx.translate(x, y);
     ctx.strokeStyle = '#0f0';
-    ctx.lineWidth = 2;
+
+    // handle line width, depends on zoom if the checkbox is checked
+    ctx.lineWidth = (scaleLineWInput.checked ? parseFloat(scaleInput.value) : 1) * parseInt(lineWInput.value) || LINE_WIDTH;
+
     try {
       instr = generateLSystem(axiomInput.value, parseRules(rulesInput.value), parseInt(depthInput.value));
       console.log(instr);
@@ -97,11 +96,10 @@ document.addEventListener('DOMContentLoaded', e => {
       // start animation
       animId = setInterval(() => {
         console.log("Animation");
-        if (animateDrawing(ctx)) {
+        if (animateDrawing(ctx, stepSize)) {
           clearInterval(animId);
           setConfigState(false);
           startBtn.innerText = 'Start';
-          centerSelect.value = 'no';
         }
       }, 0);
     } catch (e) {
@@ -137,7 +135,6 @@ document.addEventListener('DOMContentLoaded', e => {
   });
 
   const handleReset = () => {
-    centerSelect.disabled = false;
     isAnimating = false;
     curStep = 0;
     resetCanvas(ctx);
@@ -156,7 +153,7 @@ document.addEventListener('DOMContentLoaded', e => {
       angle: parseInt(angleInput.value),
       startx: parseInt(startxInput.value),
       starty: parseInt(startyInput.value),
-      scale: parseInt(scaleInput.value),
+      scale: parseFloat(scaleInput.value),
       rot: parseInt(rotInput.value)
     };
     const compressed = compressDrawing(drawingConfig);
@@ -167,29 +164,6 @@ document.addEventListener('DOMContentLoaded', e => {
     }).then(res => res.json()).then(console.log);
   });
 
-
-  let savedX = parseInt(startxInput.value);
-  let savedY = parseInt(startyInput.value);
-
-  const centerListener = () => {
-    if (centerSelect.value !== "no" && !isAnimating) {
-      setConfigState(true);
-      savedX = parseInt(startxInput.value);
-      savedY = parseInt(startyInput.value);
-      let [x, y] = centerSelect.value === "auto" ? autoCenter(ctx) : autoCenter(ctx, parseInt(startxInput.value), parseInt(startyInput.value));
-      console.log("autoCenter: " + x + ", " + y);
-      ctx.translate(x, y);
-      startxInput.value = x;
-      startyInput.value = y;
-    }
-    else {
-      startxInput.value = savedX;
-      startyInput.value = savedY;
-      setConfigState(false);
-
-    }
-  };
-
-  centerSelect.addEventListener('change', centerListener);
+  
 });
 

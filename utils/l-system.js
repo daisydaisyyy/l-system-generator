@@ -14,7 +14,7 @@ function generateLSystem(axiom, rules, depth) {
 }
 
 
-function animateDrawing(ctx) {
+function animateDrawing(ctx, stepSize) {
   if (!isAnimating || curStep >= instr.length) {
     isAnimating = false;
     curStep = 0;
@@ -23,8 +23,6 @@ function animateDrawing(ctx) {
 
   const cmd = instr[curStep];
   const angle = parseInt(angleInput.value) * Math.PI / 180;
-
-  ctx.lineWidth = 2;
 
   switch (cmd) {
     case 'F':
@@ -86,7 +84,7 @@ function animateDrawing(ctx) {
 }
 
 // auto center drawing
-function autoCenter(ctx, offsetX = 0, offsetY = 0) {
+function autoCenter(scale = 1) {
   const axiom = axiomInput.value;
   const rules = parseRules(rulesInput.value);
   const depth = parseInt(depthInput.value, 10) || 0;
@@ -95,37 +93,41 @@ function autoCenter(ctx, offsetX = 0, offsetY = 0) {
 
   let instr;
   try {
-    instr = generateLSystem(axiom, rules, depth).replace(/\s+/g, '');
+    instr = generateLSystem(axiom, rules, depth).replace(/\s+/g, ''); // generate l-system
   } catch (e) {
-    return [Math.round(parseInt(startxInput.value) || 0), Math.round(parseInt(startyInput.value) || 0)];
+    return [0, 0];
   }
 
-  const step = 5;
+  const stroke_lenght = 5 * scale;
   const rot = (rotDeg * Math.PI) / 180;
 
-  let tx = 0, ty = 0, dir = 0;
+  let tx = 0, ty = 0, dir = 0; // tx, ty = posizione attuale, dir = direzione in gradi
   let minX = tx, maxX = tx, minY = ty, maxY = ty;
   const stack = [];
 
+  // simula il disegno per trovare il "bounding box" = quadrilatero che contiene il disegno
   for (let i = 0; i < instr.length; i++) {
     const c = instr[i];
     if (variables.includes(c)) {
-      const dx = Math.cos(dir * Math.PI / 180) * step;
-      const dy = Math.sin(dir * Math.PI / 180) * step;
+      const dx = Math.cos(dir * Math.PI / 180) * stroke_lenght;
+      const dy = Math.sin(dir * Math.PI / 180) * stroke_lenght;
       tx += dx; ty += dy;
-      const xr = tx * Math.cos(rot) - ty * Math.sin(rot);
-      const yr = tx * Math.sin(rot) + ty * Math.cos(rot);
+      const xr = tx * Math.cos(rot) - ty * Math.sin(rot); // ruota x
+      const yr = tx * Math.sin(rot) + ty * Math.cos(rot); // ruota y
+
+      // aggiorna bounding box
       if (xr < minX) minX = xr;
       if (xr > maxX) maxX = xr;
       if (yr < minY) minY = yr;
       if (yr > maxY) maxY = yr;
+
     } else if (c === '+') {
       dir += angle;
     } else if (c === '-') {
       dir -= angle;
     } else if (c === '[') {
       stack.push({ tx, ty, dir });
-    } else if (c === ']') {
+    } else if (c === ']') { // restore state
       const s = stack.pop();
       if (s) {
         tx = s.tx; ty = s.ty; dir = s.dir;
@@ -139,15 +141,9 @@ function autoCenter(ctx, offsetX = 0, offsetY = 0) {
     }
   }
 
-  if (minX === maxX && minY === maxY) {
-    return [Math.round(parseInt(startxInput.value) || 0), Math.round(parseInt(startyInput.value) || 0)];
-  }
-
   console.log(`Bounding Box: (${Math.round(minX)}, ${Math.round(minY)}) to (${Math.round(maxX)}, ${Math.round(maxY)})`);
   const centerX = (maxX + minX);
   const centerY = (maxY + minY);
-  const startX = offsetX - centerX;
-  const startY = centerY + offsetY;
-  console.log(`Auto Center Offset: (${startX}, ${startY})`);
-  return [Math.round(startX), Math.round(startY)];
+  console.log(`Auto Center coords: (${-centerX}, ${centerY})`);
+  return [Math.round(-centerX), Math.round(-centerY)];
 }
