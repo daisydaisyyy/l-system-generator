@@ -6,6 +6,25 @@ const STEP_SIZE = 10;
 const LINE_WIDTH = 1;
 let stepSize = null;
 
+const varsList = []; // lista con variabili associate al movimento da fare nel disegno
+
+// prende in input l'axiom e le regole e ritorna la stringa con i simboli
+function getVariables(axiom, rules) {
+  const vars = new Set();
+  axiom.split("").map(c => {
+    if (c.match(/[a-zA-Z\d]/)) // regex per prendere solo lettere e numeri
+      vars.add(c);
+  });
+
+  rules.split("").map(c => {
+    if (c.match(/[a-zA-Z\d]/)) // regex per prendere solo lettere e numeri
+      vars.add(c);
+  });
+
+  return [...vars.values()];
+}
+
+
 function resetCanvas(ctx) {
   ctx.save();
   ctx.reset();
@@ -178,5 +197,8 @@ document.addEventListener('DOMContentLoaded', e => {
   });
 
 
+  // TODO: implementa aggiunta variabili dinamicamente
+  axiomInput.addEventListener('change', getVariables(axiomInput.value, rulesInput.value));
+  rulesInput.addEventListener('change', getVariables(axiomInput.value, rulesInput.value));
 });
 
