@@ -6,7 +6,7 @@ const STEP_SIZE = 10;
 const LINE_WIDTH = 1;
 let stepSize = null;
 
-const varsList = []; // lista con variabili associate al movimento da fare nel disegno
+let varsList = []; // lista con variabili associate al movimento da fare nel disegno
 
 // prende in input l'axiom e le regole e ritorna la stringa con i simboli
 function getVariables(axiom, rules) {
@@ -75,7 +75,37 @@ document.addEventListener('DOMContentLoaded', e => {
   const lineWInput = document.getElementById('lineWInput');
   const scaleLineWInput = document.getElementById('scaleLineWInput');
   const showAnimInput = document.getElementById('showAnimInput');
+  const varsContainer = document.getElementById('varsContainer');
 
+
+  // crea dinamicamente html per ogni variabile trovata per scegliere il movimento da fare
+  function handleRules() {
+    varsList = getVariables(axiomInput.value, rulesInput.value);
+    let dynamicElems = "";
+    varsList.map(v => {
+      dynamicElems += `
+        <label for="movSelect_${v}">${v}</label>
+        <select id="movSelect_${v}">
+          <option value="drawLine" selected>Draw Line</option>
+          <option value="drawDot">Draw Dot</option>
+          <option value="moveTo">Move To</option>
+          <option value="noOp">Do nothing</option>
+        </select>
+      `;
+    });
+    varsContainer.innerHTML = dynamicElems;
+  }
+
+  function handleReset() {
+    isAnimating = false;
+    curStep = 0;
+    resetCanvas(ctx);
+    pauseBtn.innerText = 'Pause';
+    startBtn.innerText = 'Start';
+    setConfigState(false);
+  }
+
+  handleRules();
 
   // disable/enables parameters
   const config_params = [...document.querySelectorAll('.config')];
@@ -166,15 +196,6 @@ document.addEventListener('DOMContentLoaded', e => {
 
   });
 
-  const handleReset = () => {
-    isAnimating = false;
-    curStep = 0;
-    resetCanvas(ctx);
-    pauseBtn.innerText = 'Pause';
-    startBtn.innerText = 'Start';
-    setConfigState(false);
-  };
-
   resetBtn.addEventListener('click', handleReset);
 
   saveBtn.addEventListener('click', () => {
@@ -198,7 +219,7 @@ document.addEventListener('DOMContentLoaded', e => {
 
 
   // TODO: implementa aggiunta variabili dinamicamente
-  axiomInput.addEventListener('change', getVariables(axiomInput.value, rulesInput.value));
-  rulesInput.addEventListener('change', getVariables(axiomInput.value, rulesInput.value));
+  axiomInput.addEventListener('change', handleRules);
+  rulesInput.addEventListener('change', handleRules);
 });
 
