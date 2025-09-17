@@ -6,7 +6,7 @@ const STEP_SIZE = 10;
 const LINE_WIDTH = 1;
 let stepSize = null;
 let varsList = []; // lista con variabili associate al movimento da fare nel disegno
-let movList = null;
+let movList = [];
 // prende in input l'axiom e le regole e ritorna la stringa con i simboli
 function getVariables(axiom, rules) {
   const vars = new Set();
@@ -81,18 +81,23 @@ document.addEventListener('DOMContentLoaded', e => {
   function handleRules() {
     varsList = getVariables(axiomInput.value, rulesInput.value);
     let dynamicElems = "";
+    // imposta il selected e l'input color in base al movimento e colore gia' scelti in precedenza cosi' non si resetta ogni volta che si aggiunge/rimuove una variabile qualsiasi
     varsList.map(v => {
+      const obj = Movement.findByLabel(movList, v);
+
       dynamicElems += `
         <label for="movSelect_${v}">${v}</label>
-        <select id="movSelect_${v}">
-          <option value="drawLine" selected>Draw Line</option>
-          <option value="drawDot">Draw Dot</option>
-          <option value="moveTo">Move To</option>
-          <option value="noOp">Do nothing</option>
+        <select id="movSelect_${v}" class="config">
+          <option value="drawLine" ${obj instanceof DrawLine ? "selected" : ""}>Draw Line</option>
+          <option value="drawDot" ${obj instanceof DrawDot ? "selected" : ""}>Draw Dot</option>
+          <option value="moveTo" ${obj instanceof MoveTo ? "selected" : ""}>Move To</option>
+          <option value="noOp" ${obj instanceof NoOp ? "selected" : ""}>Do nothing</option>
         </select>
+        <input type="color" id="colorInput_${v}" class="config ${(obj instanceof NoOp || obj instanceof MoveTo) ? "hidden" : ""}" value="${obj ? obj.color : "#00ff00"}"/>
       `;
     });
     varsContainer.innerHTML = dynamicElems;
+    movList = assignMovements();
   }
 
   // assegna il movimento a ciascuna variabile istanziando gli oggetti e mettendoli in una lista
@@ -100,9 +105,11 @@ document.addEventListener('DOMContentLoaded', e => {
     const movList = [];
     varsList.map(v => {
       const sel = document.getElementById(`movSelect_${v}`).value;
+      const color = document.getElementById(`colorInput_${v}`).value;
+
       switch (sel) {
-        case 'drawLine': movList.push(new DrawLine(v)); break;
-        case 'drawDot': movList.push(new DrawDot(v)); break;
+        case 'drawLine': movList.push(new DrawLine(v, color)); break;
+        case 'drawDot': movList.push(new DrawDot(v, color)); break;
         case 'moveTo': movList.push(new MoveTo(v)); break;
         case 'noOp': movList.push(new NoOp(v)); break;
         default: movList.push(new NoOp(v)); break;
@@ -134,7 +141,7 @@ document.addEventListener('DOMContentLoaded', e => {
     startBtn.innerText = 'Restart';
 
     movList = assignMovements();
-    console.log(movList);
+
     // handle zoom
     stepSize = parseFloat(scaleInput.value) * STEP_SIZE || STEP_SIZE;
 
@@ -143,9 +150,8 @@ document.addEventListener('DOMContentLoaded', e => {
     ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
 
     let [x, y] = autoCenter(parseFloat(scaleInput.value))
-    console.log("autoCenter: " + x + ", " + y);
+    // console.log("autoCenter: " + x + ", " + y);
     ctx.translate(x, y);
-    ctx.strokeStyle = "rgba(0, 255, 76, 0.50)"; // imposta il colore e la trasparenza delle linee
 
     // handle line width, depends on zoom if the checkbox is checked
     ctx.lineWidth = (scaleLineWInput.checked ? parseFloat(scaleInput.value) : 1) * parseInt(lineWInput.value) || LINE_WIDTH;
@@ -155,7 +161,6 @@ document.addEventListener('DOMContentLoaded', e => {
       // console.log(instr);
 
       let rot = parseInt(rotInput.value)
-      // console.log("rot: " + rot*Math.PI/180);
       ctx.rotate(rot * Math.PI / 180);
 
       // reset animation state
@@ -165,7 +170,6 @@ document.addEventListener('DOMContentLoaded', e => {
       if (showAnimInput.checked) {
         // start animation
         animId = setInterval(() => {
-          // console.log("Animation");
           if (animateDrawing(ctx, stepSize, movList)) {
             clearInterval(animId);
             setConfigState(false);
@@ -191,7 +195,6 @@ document.addEventListener('DOMContentLoaded', e => {
   });
 
   pauseBtn.addEventListener('click', () => {
-    // console.log("step: " + currentStep + "len: " + instructions.length);
     if (curStep != 0) { // se il disegno e' finito (curStep = 0) non fare nulla
       if (isAnimating) { // pausa l'animazione
         isAnimating = false;
@@ -202,7 +205,6 @@ document.addEventListener('DOMContentLoaded', e => {
         isAnimating = true;
         pauseBtn.innerText = 'Pause';
         animId = setInterval(() => {
-          // console.log("Animation");
           if (animateDrawing(ctx, stepSize, movList)) {
             clearInterval(animId);
             setConfigState(false);
@@ -215,28 +217,17 @@ document.addEventListener('DOMContentLoaded', e => {
 
   resetBtn.addEventListener('click', handleReset);
 
-  saveBtn.addEventListener('click', () => {
-    const drawingConfig = {
-      axiom: axiomInput.value,
-      rules: parseRules(rulesInput.value),
-      depth: parseInt(depthInput.value),
-      angle: parseInt(angleInput.value),
-      startx: parseInt(startxInput.value),
-      starty: parseInt(startyInput.value),
-      scale: parseFloat(scaleInput.value),
-      rot: parseInt(rotInput.value)
-    };
-    const compressed = compressDrawing(drawingConfig);
-    fetch('/api/save.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: getSessionToken(), drawingConfig: compressed })
-    }).then(res => res.json()).then(console.log);
+  // event listeners
+  axiomInput.addEventListener('input', handleRules);
+  rulesInput.addEventListener('input', handleRules);
+  varsContainer.addEventListener('change', e => {
+    // event delegation
+    if (e.target && e.target.tagName === 'SELECT') {
+      movList = assignMovements();
+      if (e.target.value == "moveTo" || e.target.value == "noOp")
+        document.getElementById(`colorInput_${e.target.id.split('_')[1]}`).classList.add("hidden"); //  nascondi scelta del colore se il movimento non disegna nulla
+      else document.getElementById(`colorInput_${e.target.id.split('_')[1]}`).classList.remove("hidden"); // mostra di nuovo al cambio della scelta se il movimento disegna
+    }
   });
-
-
-  // TODO: implementa aggiunta variabili dinamicamente
-  axiomInput.addEventListener('change', handleRules);
-  rulesInput.addEventListener('change', handleRules);
 });
 

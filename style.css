@@ -68,3 +68,7 @@ button:disabled {
 button:active {
   opacity: 0.8;
 }
+
+.hidden {
+  opacity: 0;
+}
