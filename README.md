@@ -20,22 +20,12 @@ fixed drawing commands:
 ]: pop position & angle from stack
 ```
 
-
-3. genome compression and persistence: save and reload plant configurations 
-
 #### Structure:
 Login / Signup: users register or log in, PHP creates a session.
 
 Configuration: users enter their axiom, rules, depth, and angle, then click Start
 
 Generate + Draw: animate the plant growth, auto-centering the drawing is done by default.
-
-Save: sends the compressed genome to /api/save.php, where PHP stores it in the plants table using prepared statements.
-
-Load: on page load (or when opening the save panel), JS fetches /api/load.php, PHP returns all saved genomes for that user, and JS can decode and render small previews or provide “Load” buttons.
-
-Delete: issues a DELETE request to /api/delete.php?id=…, removing that record.
-
 
 ```
 web_l-system/
