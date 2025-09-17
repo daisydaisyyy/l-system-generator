@@ -1,4 +1,3 @@
-const variables = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 // L-System implementation
 function generateLSystem(axiom, rules, depth) {
@@ -42,13 +41,6 @@ function animateDrawing(ctx, stepSize, movList) {
       ctx.restore();
       break;
 
-    case '.':
-      ctx.beginPath();
-      ctx.arc(0, 0, 3, 0, Math.PI * 2);
-      ctx.fillStyle = '#f00';
-      ctx.fill();
-      break;
-
     default: // e' una variabile, esegui il movimento associato
       const mov = Movement.findByLabel(movList, cmd);
       if (mov) {
@@ -85,23 +77,7 @@ function autoCenter(scale = 1) {
   // simula il disegno per trovare il "bounding box" = quadrilatero che contiene il disegno
   for (let i = 0; i < instr.length; i++) {
     const c = instr[i];
-    if (variables.includes(c)) { // TODO: fix replacing objects movements
-      const mov = Movement.findByLabel(movList, c);
-      if (mov && (mov instanceof MoveTo || mov instanceof DrawLine)) { // se esiste l'oggetto e ha un movimento di traslazione
-        // calcola nuova posizione
-        const dx = Math.cos(dir * Math.PI / 180) * stroke_lenght;
-        const dy = Math.sin(dir * Math.PI / 180) * stroke_lenght;
-        tx += dx; ty += dy;
-        const xr = tx * Math.cos(rot) - ty * Math.sin(rot); // ruota x
-        const yr = tx * Math.sin(rot) + ty * Math.cos(rot); // ruota y
-
-        // aggiorna bounding box
-        if (xr < minX) minX = xr;
-        if (xr > maxX) maxX = xr;
-        if (yr < minY) minY = yr;
-        if (yr > maxY) maxY = yr;
-      }
-    } else if (c === '+') {
+    if (c === '+') {
       dir += angle;
     } else if (c === '-') {
       dir -= angle;
@@ -113,6 +89,22 @@ function autoCenter(scale = 1) {
         tx = s.tx; ty = s.ty; dir = s.dir;
         const xr = tx * Math.cos(rot) - ty * Math.sin(rot);
         const yr = tx * Math.sin(rot) + ty * Math.cos(rot);
+        if (xr < minX) minX = xr;
+        if (xr > maxX) maxX = xr;
+        if (yr < minY) minY = yr;
+        if (yr > maxY) maxY = yr;
+      }
+    } else {
+      const mov = Movement.findByLabel(movList, c);
+      if (mov && (mov instanceof MoveTo || mov instanceof DrawLine)) { // se esiste l'oggetto e ha un movimento di traslazione
+        // calcola nuova posizione
+        const dx = Math.cos(dir * Math.PI / 180) * stroke_lenght;
+        const dy = Math.sin(dir * Math.PI / 180) * stroke_lenght;
+        tx += dx; ty += dy;
+        const xr = tx * Math.cos(rot) - ty * Math.sin(rot); // ruota x
+        const yr = tx * Math.sin(rot) + ty * Math.cos(rot); // ruota y
+
+        // aggiorna bounding box
         if (xr < minX) minX = xr;
         if (xr > maxX) maxX = xr;
         if (yr < minY) minY = yr;

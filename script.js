@@ -11,12 +11,12 @@ let movList = null;
 function getVariables(axiom, rules) {
   const vars = new Set();
   axiom.split("").map(c => {
-    if (c.match(/[a-zA-Z\d]/)) // regex per prendere solo lettere e numeri
+    if (c.match(/[^\[\]+\-=;]/)) // regex per prendere tutto tranne i caratteri speciali ([,],+,-)
       vars.add(c);
   });
 
   rules.split("").map(c => {
-    if (c.match(/[a-zA-Z\d]/)) // regex per prendere solo lettere e numeri
+    if (c.match(/[^\[\]+\-=;]/)) // regex per prendere tutto tranne i caratteri speciali ([,],+,-)
       vars.add(c);
   });
 

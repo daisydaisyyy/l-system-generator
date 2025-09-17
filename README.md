@@ -9,14 +9,18 @@ a l-system is defined by:
 
 2. graphic renderer
 
-drawing commands:
+The user can choose custom movement commands to assign to other variables.
+Variables must be one-character long and can be any character that is not a special command (as defined below), regex: /[^\[\]+\-=;]/
+
+fixed drawing commands:
 ```
-F: draw forward one segment
 +: turn right by θ degrees
 -: turn left by θ degrees
 [: push current position & angle onto stack
 ]: pop position & angle from stack
 ```
+
+
 3. genome compression and persistence: save and reload plant configurations 
 
 #### Structure:
@@ -24,7 +28,7 @@ Login / Signup: users register or log in, PHP creates a session.
 
 Configuration: users enter their axiom, rules, depth, and angle, then click Start
 
-Generate & Draw: animate the plant growth
+Generate + Draw: animate the plant growth, auto-centering the drawing is done by default.
 
 Save: sends the compressed genome to /api/save.php, where PHP stores it in the plants table using prepared statements.
 
@@ -34,25 +38,13 @@ Delete: issues a DELETE request to /api/delete.php?id=…, removing that record.
 
 
 ```
-project/
+web_l-system/
 ├── index.html
 ├── style.css
-├── l-system.js
-├── compressor.js
 ├── script.js
-├── db/
-│   ├── connection.php
-│   └── schema.sql
-├── api/
-│   ├── signup.php
-│   ├── login.php
-│   ├── save.php
-│   ├── load.php
-│   ├── delete.php
-│   └── random.php
 └── utils/
-    ├── session.php
-    └── validate.php
+    ├── l-system.js
+    └── Movement.js
 ```
 
 references:
