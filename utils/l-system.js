@@ -14,7 +14,7 @@ function generateLSystem(axiom, rules, depth) {
 }
 
 
-function animateDrawing(ctx, stepSize) {
+function animateDrawing(ctx, stepSize, movList) {
   if (!isAnimating || curStep >= instr.length) {
     isAnimating = false;
     curStep = 0;
@@ -25,10 +25,6 @@ function animateDrawing(ctx, stepSize) {
   const angle = parseInt(angleInput.value) * Math.PI / 180;
 
   switch (cmd) {
-
-    case 'f':
-      ctx.translate(stepSize, 0);
-      break;
 
     case '+':
       ctx.rotate(angle);
@@ -53,12 +49,11 @@ function animateDrawing(ctx, stepSize) {
       ctx.fill();
       break;
 
-    default:
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(stepSize, 0);
-      ctx.stroke();
-      ctx.translate(stepSize, 0);
+    default: // e' una variabile, esegui il movimento associato
+      const mov = Movement.findByLabel(movList, cmd);
+      if (mov) {
+        mov.apply(ctx, stepSize);
+      }
       break;
   }
 
@@ -90,19 +85,22 @@ function autoCenter(scale = 1) {
   // simula il disegno per trovare il "bounding box" = quadrilatero che contiene il disegno
   for (let i = 0; i < instr.length; i++) {
     const c = instr[i];
-    if (variables.includes(c)) {
-      const dx = Math.cos(dir * Math.PI / 180) * stroke_lenght;
-      const dy = Math.sin(dir * Math.PI / 180) * stroke_lenght;
-      tx += dx; ty += dy;
-      const xr = tx * Math.cos(rot) - ty * Math.sin(rot); // ruota x
-      const yr = tx * Math.sin(rot) + ty * Math.cos(rot); // ruota y
+    if (variables.includes(c)) { // TODO: fix replacing objects movements
+      const mov = Movement.findByLabel(movList, c);
+      if (mov && (mov instanceof MoveTo || mov instanceof DrawLine)) { // se esiste l'oggetto e ha un movimento di traslazione
+        // calcola nuova posizione
+        const dx = Math.cos(dir * Math.PI / 180) * stroke_lenght;
+        const dy = Math.sin(dir * Math.PI / 180) * stroke_lenght;
+        tx += dx; ty += dy;
+        const xr = tx * Math.cos(rot) - ty * Math.sin(rot); // ruota x
+        const yr = tx * Math.sin(rot) + ty * Math.cos(rot); // ruota y
 
-      // aggiorna bounding box
-      if (xr < minX) minX = xr;
-      if (xr > maxX) maxX = xr;
-      if (yr < minY) minY = yr;
-      if (yr > maxY) maxY = yr;
-
+        // aggiorna bounding box
+        if (xr < minX) minX = xr;
+        if (xr > maxX) maxX = xr;
+        if (yr < minY) minY = yr;
+        if (yr > maxY) maxY = yr;
+      }
     } else if (c === '+') {
       dir += angle;
     } else if (c === '-') {

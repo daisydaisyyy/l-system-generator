@@ -5,9 +5,8 @@ let animId = null;
 const STEP_SIZE = 10;
 const LINE_WIDTH = 1;
 let stepSize = null;
-
 let varsList = []; // lista con variabili associate al movimento da fare nel disegno
-
+let movList = null;
 // prende in input l'axiom e le regole e ritorna la stringa con i simboli
 function getVariables(axiom, rules) {
   const vars = new Set();
@@ -96,6 +95,22 @@ document.addEventListener('DOMContentLoaded', e => {
     varsContainer.innerHTML = dynamicElems;
   }
 
+  // assegna il movimento a ciascuna variabile istanziando gli oggetti e mettendoli in una lista
+  function assignMovements() {
+    const movList = [];
+    varsList.map(v => {
+      const sel = document.getElementById(`movSelect_${v}`).value;
+      switch (sel) {
+        case 'drawLine': movList.push(new DrawLine(v)); break;
+        case 'drawDot': movList.push(new DrawDot(v)); break;
+        case 'moveTo': movList.push(new MoveTo(v)); break;
+        case 'noOp': movList.push(new NoOp(v)); break;
+        default: movList.push(new NoOp(v)); break;
+      }
+    });
+    return movList;
+  }
+
   function handleReset() {
     isAnimating = false;
     curStep = 0;
@@ -118,6 +133,8 @@ document.addEventListener('DOMContentLoaded', e => {
     setConfigState(true);
     startBtn.innerText = 'Restart';
 
+    movList = assignMovements();
+    console.log(movList);
     // handle zoom
     stepSize = parseFloat(scaleInput.value) * STEP_SIZE || STEP_SIZE;
 
@@ -149,7 +166,7 @@ document.addEventListener('DOMContentLoaded', e => {
         // start animation
         animId = setInterval(() => {
           // console.log("Animation");
-          if (animateDrawing(ctx, stepSize)) {
+          if (animateDrawing(ctx, stepSize, movList)) {
             clearInterval(animId);
             setConfigState(false);
             startBtn.innerText = 'Start';
@@ -158,7 +175,7 @@ document.addEventListener('DOMContentLoaded', e => {
 
       } else {
 
-        while (!animateDrawing(ctx, stepSize)) {
+        while (!animateDrawing(ctx, stepSize, movList)) {
           setConfigState(false);
           startBtn.innerText = 'Start';
         }
@@ -186,7 +203,7 @@ document.addEventListener('DOMContentLoaded', e => {
         pauseBtn.innerText = 'Pause';
         animId = setInterval(() => {
           // console.log("Animation");
-          if (animateDrawing(ctx, stepSize)) {
+          if (animateDrawing(ctx, stepSize, movList)) {
             clearInterval(animId);
             setConfigState(false);
           }

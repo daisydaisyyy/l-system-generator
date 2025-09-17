@@ -9,50 +9,38 @@ class Movement {
         return movements.find(m => m.label === label);
     }
 
-    static fromVarsList(variables) {
-        return variables.map(v => {
-            switch (v.movement) {
-                case 'DrawLine': return new DrawLine(v.label);
-                case 'MoveTo': return new MoveTo(v.label);
-                case 'DrawDot': return new DrawDot(v.label);
-                default: return new NoOp(v.label);
-            };
-        });
-    }
-
-    apply(ctx, state) {
+    apply(ctx, stepSize) {
         throw new Error("apply must be implemented");
     }
 }
 
 class DrawLine extends Movement {
-    apply(ctx, state) {
+    apply(ctx, stepSize) {
         ctx.beginPath();
-        ctx.moveTo(state.x, state.y);
-        state.x += Math.cos(state.angle) * state.step;
-        state.y += Math.sin(state.angle) * state.step;
-        ctx.lineTo(state.x, state.y);
+        ctx.moveTo(0, 0);
+        ctx.lineTo(stepSize, 0);
         ctx.stroke();
+        ctx.translate(stepSize, 0);
     }
 }
 
 class MoveTo extends Movement {
-    apply(ctx, state) {
-        state.x += Math.cos(state.angle) * state.step;
-        state.y += Math.sin(state.angle) * state.step;
+    apply(ctx, stepSize) {
+        ctx.translate(stepSize, 0);
     }
 }
 
 class DrawDot extends Movement {
-    apply(ctx, state) {
+    apply(ctx, stepSize) {
         ctx.beginPath();
-        ctx.arc(state.x, state.y, 2, 0, 2 * Math.PI);
+        ctx.arc(0, 0, 3, 0, Math.PI * 2);
+        ctx.fillStyle = '#f00';
         ctx.fill();
     }
 }
 
 class NoOp extends Movement {
-    apply(ctx, state) {
+    apply(ctx, stepSize) {
         // do nothing
     }
 }
