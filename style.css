@@ -72,3 +72,14 @@ button:active {
 .hidden {
   opacity: 0;
 }
+
+#varsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+  align-items: center;
+  justify-items: center;
+  min-height: fit-content;
+  max-height: 20vh;
+  overflow-y: auto;
+}

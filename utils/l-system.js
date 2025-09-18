@@ -53,9 +53,7 @@ function animateDrawing(ctx, stepSize, movList) {
 }
 
 // auto center drawing
-function autoCenter(scale = 1) {
-  const axiom = axiomInput.value;
-  const rules = parseRules(rulesInput.value);
+function autoCenter(scale = 1, axiom, rules) {
   const depth = parseInt(depthInput.value, 10) || 0;
   const angle = parseFloat(angleInput.value) || 0;
   const rotDeg = parseFloat(rotInput.value) || 0;
