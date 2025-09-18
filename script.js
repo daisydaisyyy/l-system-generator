@@ -7,14 +7,22 @@ const LINE_WIDTH = 1;
 let stepSize = null;
 let varsList = []; // lista con variabili associate al movimento da fare nel disegno
 let movList = [];
+let rulesList = []; //  stringa con le rules, var = regola separate da ;
+
 // prende in input l'axiom e le regole e ritorna la stringa con i simboli
-function getVariables(axiom, rules) {
+function getVariables(axiom) {
   const vars = new Set();
   axiom.split("").map(c => {
     if (c.match(/[^\[\]+\-=;]/)) // regex per prendere tutto tranne i caratteri speciali ([,],+,-)
       vars.add(c);
   });
 
+  rules = "";
+
+  // trasforma rulesList a stringa
+  rulesList.map(x => rules += `${x.label}=${x.rule};`);
+
+  // applica regex per trovare le variabili
   rules.split("").map(c => {
     if (c.match(/[^\[\]+\-=;]/)) // regex per prendere tutto tranne i caratteri speciali ([,],+,-)
       vars.add(c);
@@ -36,12 +44,6 @@ function resetCanvas(ctx) {
   isAnimating = false;
 }
 
-// helper to parse rules
-function parseRules(str) {
-  return str.split(';').reduce((obj, pair) => {
-    const [k, v] = pair.split('='); if (k && v) obj[k] = v; return obj;
-  }, {});
-}
 
 function getSessionToken() {
   return localStorage.getItem('sessionToken') || '';
@@ -61,13 +63,10 @@ document.addEventListener('DOMContentLoaded', e => {
   const startBtn = document.getElementById('startBtn');
   const pauseBtn = document.getElementById('pauseBtn');
   const resetBtn = document.getElementById('resetBtn');
-  const saveBtn = document.getElementById('saveBtn');
 
   // input parameters
   const axiomInput = document.getElementById('axiomInput');
-  const rulesInput = document.getElementById('rulesInput');
   const depthInput = document.getElementById('depthInput');
-  const angleInput = document.getElementById('angleInput');
 
   const scaleInput = document.getElementById('scaleInput');
   const rotInput = document.getElementById('rotInput');
@@ -75,11 +74,53 @@ document.addEventListener('DOMContentLoaded', e => {
   const scaleLineWInput = document.getElementById('scaleLineWInput');
   const showAnimInput = document.getElementById('showAnimInput');
   const varsContainer = document.getElementById('varsContainer');
+  const rulesContainer = document.getElementById('rulesContainer');
+  const addRuleBtn = document.getElementById('addRuleBtn');
 
+
+  function parseRules() {
+    let rules = [];
+    const rulesElems = [...rulesContainer.querySelectorAll('input')];
+    for (let i = 0; i < rulesElems.length; i += 2) {
+      const variable = rulesElems[i].value.trim();
+      const replacement = rulesElems[i + 1].value.trim();
+      if (variable && replacement) {
+        rules.push({ label: variable, rule: replacement });
+      }
+    }
+    return rules;
+  }
+
+
+  // gestisci le regole e aggiungi una nuova regola dinamicamente
+  function handleRules() {
+    let elems = "";
+
+    // rigenera html per non resettare i dati gia' inseriti
+    rulesList.map(x =>
+      elems += `
+        <input type="text" class="config" value="${x.label}"/>
+        <span>=</span>
+        <input type="text" class="config" value="${x.rule}" />
+        <button class="config" type="button">-</button>
+      `
+    );
+
+    // nuova regola
+    elems += `
+        <input type="text" class="config" placeholder="Variable"/>
+        <span>=</span>
+        <input type="text" class="config" placeholder="Rule" />
+        <button class="config" type="button">-</button>
+    `;
+
+    rulesContainer.innerHTML = elems;
+
+  }
 
   // crea dinamicamente html per ogni variabile trovata per scegliere il movimento da fare
-  function handleRules() {
-    varsList = getVariables(axiomInput.value, rulesInput.value);
+  function handleMovements() {
+    varsList = getVariables(axiomInput.value);
     let dynamicElems = "";
     // imposta il selected e l'input color in base al movimento e colore gia' scelti in precedenza cosi' non si resetta ogni volta che si aggiunge/rimuove una variabile qualsiasi
     varsList.map(v => {
@@ -127,7 +168,8 @@ document.addEventListener('DOMContentLoaded', e => {
     setConfigState(false);
   }
 
-  handleRules();
+  handleRules(); // aggiungi di default una regola vuota
+  handleMovements();
 
   // disable/enables parameters
   const config_params = [...document.querySelectorAll('.config')];
@@ -149,7 +191,10 @@ document.addEventListener('DOMContentLoaded', e => {
 
     ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
 
-    let [x, y] = autoCenter(parseFloat(scaleInput.value))
+    let rules = {};
+    rulesList.map(x => rules[x.label] = x.rule); // trasforma in dizionario
+
+    let [x, y] = autoCenter(parseFloat(scaleInput.value), axiomInput.value, rules);
     // console.log("autoCenter: " + x + ", " + y);
     ctx.translate(x, y);
 
@@ -157,7 +202,7 @@ document.addEventListener('DOMContentLoaded', e => {
     ctx.lineWidth = (scaleLineWInput.checked ? parseFloat(scaleInput.value) : 1) * parseInt(lineWInput.value) || LINE_WIDTH;
 
     try {
-      instr = generateLSystem(axiomInput.value, parseRules(rulesInput.value), parseInt(depthInput.value));
+      instr = generateLSystem(axiomInput.value, rules, parseInt(depthInput.value));
       // console.log(instr);
 
       let rot = parseInt(rotInput.value)
@@ -215,11 +260,34 @@ document.addEventListener('DOMContentLoaded', e => {
 
   });
 
-  resetBtn.addEventListener('click', handleReset);
-
   // event listeners
-  axiomInput.addEventListener('input', handleRules);
-  rulesInput.addEventListener('input', handleRules);
+  resetBtn.addEventListener('click', handleReset);
+  addRuleBtn.addEventListener('click', handleRules);
+
+  rulesContainer.addEventListener('input', e => {
+    rulesList = parseRules();
+    handleMovements();
+  });
+
+  rulesContainer.addEventListener('click', e => {
+    // event delegation
+    if (e.target && e.target.tagName === 'BUTTON') {
+      let btns = Array.from(document.querySelectorAll("#rulesContainer > button"));
+      let idx = btns.findIndex(x => x === e.target);
+      rulesList.splice(idx, 1); // rimuovi regola dalla lista
+
+      // rimuovi elementi html
+      e.target.previousElementSibling.remove();
+      e.target.previousElementSibling.remove();
+      e.target.previousElementSibling.remove();
+      e.target.remove();
+
+    }
+
+  });
+
+  axiomInput.addEventListener('input', handleMovements);
+  
   varsContainer.addEventListener('change', e => {
     // event delegation
     if (e.target && e.target.tagName === 'SELECT') {

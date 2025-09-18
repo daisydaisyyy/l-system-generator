@@ -1,14 +1,17 @@
 # web_l-system
-A  web application for procedurally generating and visualizing plant growth using L‑Systems.
+A web application for procedurally generating and visualizing plant growth using L‑Systems.
 
 1. l-system genome generation
 a l-system is defined by:
 - axiom (initial string)
 - production rules (mappings that rewrite each symbol)
 - depth
+- angle
 
 2. graphic renderer
+The user can customize the scale (zoom), line width, and starting rotation, and can pause the animation or disable it entirely.
 
+Symbols:
 The user can choose custom movement commands to assign to other variables.
 Variables must be one-character long and can be any character that is not a special command (as defined below), regex: /[^\[\]+\-=;]/
 
@@ -36,6 +39,9 @@ web_l-system/
     ├── l-system.js
     └── Movement.js
 ```
+
+This is the front-end version; the backend is still in development and will include additional features.
+
 
 references:
 ```
