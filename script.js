@@ -68,7 +68,6 @@ document.addEventListener('DOMContentLoaded', e => {
   const axiomInput = document.getElementById('axiomInput');
   const depthInput = document.getElementById('depthInput');
 
-  const scaleInput = document.getElementById('scaleInput');
   const rotInput = document.getElementById('rotInput');
   const lineWInput = document.getElementById('lineWInput');
   const scaleLineWInput = document.getElementById('scaleLineWInput');
@@ -110,7 +109,7 @@ document.addEventListener('DOMContentLoaded', e => {
     elems += `
         <input type="text" class="config" placeholder="Variable"/>
         <span>=</span>
-        <input type="text" class="config" placeholder="Rule" />
+        <input type="text" class="config" placeholder="Replacement" />
         <button class="config" type="button">-</button>
     `;
 
@@ -185,7 +184,7 @@ document.addEventListener('DOMContentLoaded', e => {
     movList = assignMovements();
 
     // handle zoom
-    stepSize = parseFloat(scaleInput.value) * STEP_SIZE || STEP_SIZE;
+    stepSize = STEP_SIZE;
 
     resetCanvas(ctx);
 
@@ -194,12 +193,12 @@ document.addEventListener('DOMContentLoaded', e => {
     let rules = {};
     rulesList.map(x => rules[x.label] = x.rule); // trasforma in dizionario
 
-    let [x, y] = autoCenter(parseFloat(scaleInput.value), axiomInput.value, rules);
-    // console.log("autoCenter: " + x + ", " + y);
+    let [x, y, scale] = autoCenter(1, axiomInput.value, rules, ctx.canvas.width, ctx.canvas.height);
     ctx.translate(x, y);
+    stepSize = scale * STEP_SIZE; // aggiorna step size (lunghezza unitaria della linea) in base alla scala
 
     // handle line width, depends on zoom if the checkbox is checked
-    ctx.lineWidth = (scaleLineWInput.checked ? parseFloat(scaleInput.value) : 1) * parseInt(lineWInput.value) || LINE_WIDTH;
+    ctx.lineWidth = (scaleLineWInput.checked ? scale * 1.2 : 1) * parseInt(lineWInput.value) || LINE_WIDTH;
 
     try {
       instr = generateLSystem(axiomInput.value, rules, parseInt(depthInput.value));
@@ -281,13 +280,11 @@ document.addEventListener('DOMContentLoaded', e => {
       e.target.previousElementSibling.remove();
       e.target.previousElementSibling.remove();
       e.target.remove();
-
     }
-
   });
 
   axiomInput.addEventListener('input', handleMovements);
-  
+
   varsContainer.addEventListener('change', e => {
     // event delegation
     if (e.target && e.target.tagName === 'SELECT') {

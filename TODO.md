@@ -6,10 +6,13 @@ frontend:
 - [X] optimize animateDrawing
 - [X] fix responsive canvas when resizing
 - [X] check selection feature, current mode: before starting, restores coords to previous custom value if "no centering" is selected (after their change being on centering); and when animation ends with centering selected, it keeps centered coords.
-- [ ] make better UI/UX (experience!)
 - [X] line width dependant on scale
-- [ ] slider for zoom param with fixed values
 - [X] checkbox to show animation
+- [X] auto zoom
+
+UI:
+- [ ] show/hide menu ui
+- [ ] divide menu sections: l-system setup, drawing settings
 
 backend:
 - [ ] php backend (save/restore drawings, user auth, session)
