@@ -51,7 +51,7 @@ function getSessionToken() {
 
 // events
 document.addEventListener('DOMContentLoaded', e => {
-  const canvas = document.getElementById('plantCanvas');
+  const canvas = document.getElementById('drawingCanvas');
   canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight;
   window.addEventListener("resize", e => {
     canvas.width = canvas.clientWidth * (parseInt(depthInput.value) + 1); canvas.height = canvas.clientHeight * (parseInt(depthInput.value) + 1);
@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', e => {
   const lineWInput = document.getElementById('lineWInput');
   const scaleLineWInput = document.getElementById('scaleLineWInput');
   const showAnimInput = document.getElementById('showAnimInput');
+  const backgroundColorInput = document.getElementById('backgroundColorInput');
   const varsContainer = document.getElementById('varsContainer');
   const rulesContainer = document.getElementById('rulesContainer');
   const addRuleBtn = document.getElementById('addRuleBtn');
@@ -114,7 +115,6 @@ document.addEventListener('DOMContentLoaded', e => {
     `;
 
     rulesContainer.innerHTML = elems;
-
   }
 
   // crea dinamicamente html per ogni variabile trovata per scegliere il movimento da fare
@@ -187,6 +187,10 @@ document.addEventListener('DOMContentLoaded', e => {
     stepSize = STEP_SIZE;
 
     resetCanvas(ctx);
+
+    ctx.rect(0,0,ctx.canvas.width,ctx.canvas.height);
+    ctx.fillStyle = backgroundColorInput.value || '#ffffff';
+    ctx.fill();
 
     ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
 
@@ -263,11 +267,13 @@ document.addEventListener('DOMContentLoaded', e => {
   resetBtn.addEventListener('click', handleReset);
   addRuleBtn.addEventListener('click', handleRules);
 
+  // ascolta i cambiamenti nelle  regole e aggiorna la lista delle regole
   rulesContainer.addEventListener('input', e => {
     rulesList = parseRules();
     handleMovements();
   });
 
+  //  aggiunta e rimozione regole
   rulesContainer.addEventListener('click', e => {
     // event delegation
     if (e.target && e.target.tagName === 'BUTTON') {
@@ -283,8 +289,10 @@ document.addEventListener('DOMContentLoaded', e => {
     }
   });
 
+  // aggiorna le variabili e i movimenti associati quando cambia l'axiom
   axiomInput.addEventListener('input', handleMovements);
 
+  // aggiorna i movimenti associati quando cambia il movimento scelto per una variabile
   varsContainer.addEventListener('change', e => {
     // event delegation
     if (e.target && e.target.tagName === 'SELECT') {
@@ -294,5 +302,28 @@ document.addEventListener('DOMContentLoaded', e => {
       else document.getElementById(`colorInput_${e.target.id.split('_')[1]}`).classList.remove("hidden"); // mostra di nuovo al cambio della scelta se il movimento disegna
     }
   });
+
+
+  // handle fullscreen
+  document.addEventListener('keydown', e => {
+    if (e.key === "F11") {
+      e.preventDefault();
+      ctx.canvas.requestFullscreen();
+    }
+    else  if (e.key === "Escape") {
+      e.preventDefault();
+      document.exitFullscreen();
+    }
+  });
+
+  // ridimensiona il canvas (ridisegna da capo) se si ridimensiona la finestra
+  window.addEventListener('resize', e => {
+    startBtn.click();
+  });
+
+  backgroundColorInput.addEventListener('change', e => {
+    document.querySelector('body').style.backgroundColor = backgroundColorInput.value || "#ffffff";
+  });
+
 });
 

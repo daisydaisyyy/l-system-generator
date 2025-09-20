@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlantSim</title>
+  <title>L-system generator</title>
   <link rel="stylesheet" href="style.css">
   <script src="utils/l-system.js"></script>
   <script src="utils/Movement.js"></script>
@@ -14,13 +14,7 @@
 <body>
   <div>
     <header>
-      <h1>PlantSim</h1>
-      <nav id="authBar">
-        <!-- LOGIN / SIGNUP forms inserted here -->
-      </nav>
-      <nav id="saveBar">
-        <!-- List of saved plants + save/delete buttons -->
-      </nav>
+      <h1>L-systems generator</h1>
     </header>
 
     <main>
@@ -52,6 +46,9 @@
         <label for="rotInput">Starting rotation:</label>
         <input id="rotInput" name="rotInput" class="config" type="number" value="0" min="-360" max="360" />
 
+        <label for="backgroundColorInput">Background color:</label>
+        <input name="backgroundColorInput" id="backgroundColorInput" class="config" type="color" />
+
         <label for="showAnimInput">Show Animation: </label>
         <input name="showAnimInput" id="showAnimInput" class="config" type="checkbox" checked />
 
@@ -61,7 +58,7 @@
       </section>
     </main>
   </div>
-  <canvas id="plantCanvas"></canvas>
+  <canvas id="drawingCanvas"></canvas>
 
 </body>
 

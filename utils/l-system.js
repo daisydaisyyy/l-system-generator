@@ -111,7 +111,7 @@ function getBoundingBox(scale = 1, axiom, rules) {
     }
   }
 
-  console.log(`Bounding Box: (${Math.round(minX)}, ${Math.round(minY)}) to (${Math.round(maxX)}, ${Math.round(maxY)})`);
+  // console.log(`Bounding Box: (${Math.round(minX)}, ${Math.round(minY)}) to (${Math.round(maxX)}, ${Math.round(maxY)})`);
   return [Math.round(minX), Math.round(minY), Math.round(maxX), Math.round(maxY)];
 }
 
@@ -128,11 +128,10 @@ function autoCenter(scale = 1, axiom, rules, canvasW, canvasH) {
   let [minX, minY, maxX, maxY] = getBoundingBox(scale, axiom, rules);
   const width = maxX - minX;
   const height = maxY - minY;
-  console.log(`Width: ${width}, Height: ${height}`);
 
   let zoom = 1;
   zoom = autoScale(canvasW, canvasH, width, height);
-  console.log(`Auto Scale: ${zoom}`);
+  // console.log(`Auto Scale: ${zoom}`);
 
   maxX *= zoom;
   maxY *= zoom;
@@ -141,6 +140,6 @@ function autoCenter(scale = 1, axiom, rules, canvasW, canvasH) {
 
   const centerX = (maxX + minX);
   const centerY = (maxY + minY);
-  console.log(`Auto Center coords: (${-centerX}, ${centerY})`);
+  // console.log(`Auto Center coords: (${-centerX}, ${centerY})`);
   return [Math.round(-centerX), Math.round(-centerY), zoom];
 }

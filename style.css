@@ -39,7 +39,7 @@ nav#saveBar {
   gap: 1rem;
 }
 
-#plantCanvas {
+#drawingCanvas {
   display: block;
   background: transparent;
   /* responsive canvas */
@@ -71,6 +71,10 @@ button:active {
 
 .hidden {
   opacity: 0;
+}
+
+main.hidden {
+  display: none;
 }
 
 #varsContainer {
