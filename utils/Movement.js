@@ -21,6 +21,7 @@ class DrawLine extends Movement {
         ctx.moveTo(0, 0);
         ctx.lineTo(stepSize, 0);
         ctx.strokeStyle = this.color || '#000';
+        ctx.lineCap = 'round';
         ctx.stroke();
         ctx.translate(stepSize, 0);
     }

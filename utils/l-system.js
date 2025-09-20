@@ -52,8 +52,8 @@ function animateDrawing(ctx, stepSize, movList) {
   curStep++;
 }
 
-// auto center drawing
-function autoCenter(scale = 1, axiom, rules) {
+
+function getBoundingBox(scale = 1, axiom, rules) {
   const depth = parseInt(depthInput.value, 10) || 0;
   const angle = parseFloat(angleInput.value) || 0;
   const rotDeg = parseFloat(rotInput.value) || 0;
@@ -112,8 +112,35 @@ function autoCenter(scale = 1, axiom, rules) {
   }
 
   console.log(`Bounding Box: (${Math.round(minX)}, ${Math.round(minY)}) to (${Math.round(maxX)}, ${Math.round(maxY)})`);
+  return [Math.round(minX), Math.round(minY), Math.round(maxX), Math.round(maxY)];
+}
+
+function autoScale(canvasW, canvasH, width, height) {
+  const scaleX = (canvasW * 0.4) / (width);
+  const scaleY = (canvasH * 0.4) / (height);
+  const autoScale = Math.min(scaleX, scaleY)
+  return autoScale;
+}
+
+
+// auto center drawing
+function autoCenter(scale = 1, axiom, rules, canvasW, canvasH) {
+  let [minX, minY, maxX, maxY] = getBoundingBox(scale, axiom, rules);
+  const width = maxX - minX;
+  const height = maxY - minY;
+  console.log(`Width: ${width}, Height: ${height}`);
+
+  let zoom = 1;
+  zoom = autoScale(canvasW, canvasH, width, height);
+  console.log(`Auto Scale: ${zoom}`);
+
+  maxX *= zoom;
+  maxY *= zoom;
+  minX *= zoom;
+  minY *= zoom;
+
   const centerX = (maxX + minX);
   const centerY = (maxY + minY);
   console.log(`Auto Center coords: (${-centerX}, ${centerY})`);
-  return [Math.round(-centerX), Math.round(-centerY)];
+  return [Math.round(-centerX), Math.round(-centerY), zoom];
 }
