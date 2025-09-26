@@ -1,19 +1,20 @@
 
 // L-System implementation
-function generateLSystem(axiom, rules, depth) {
+function generateLSystem(axiom, varObjList, depth) {
   let cur = axiom;
   for (let i = 0; i < depth; i++) {
     let next = '';
-    for (const ch of cur) {
-      next += rules[ch] || ch;
-    }
+    for (const ch of cur)
+      // cerca l'oggetto e prende la rule se esiste
+      next += (Variable.findByLabel(varObjList, ch)?.rule) || ch;
+
     cur = next;
   }
   return cur;
 }
 
 
-function animateDrawing(ctx, stepSize, movList) {
+function animateDrawing(ctx, stepSize, varObjList) {
   if (!isAnimating || curStep >= instr.length) {
     isAnimating = false;
     curStep = 0;
@@ -42,25 +43,25 @@ function animateDrawing(ctx, stepSize, movList) {
       break;
 
     default: // e' una variabile, esegui il movimento associato
-      const mov = Movement.findByLabel(movList, cmd);
+      const mov = Variable.findByLabel(varObjList, cmd);
       if (mov) {
         mov.apply(ctx, stepSize);
       }
       break;
   }
-
+  // console.log(`Step ${curStep + 1}/${instr.length}: ${cmd}`);
   curStep++;
 }
 
 
-function getBoundingBox(scale = 1, axiom, rules) {
+function getBoundingBox(scale = 1, axiom, varObjList) {
   const depth = parseInt(depthInput.value, 10) || 0;
   const angle = parseFloat(angleInput.value) || 0;
   const rotDeg = parseFloat(rotInput.value) || 0;
 
   let instr;
   try {
-    instr = generateLSystem(axiom, rules, depth).replace(/\s+/g, ''); // generate l-system
+    instr = generateLSystem(axiom, varObjList, depth).replace(/\s+/g, ''); // generate l-system
   } catch (e) {
     return [0, 0];
   }
@@ -93,7 +94,7 @@ function getBoundingBox(scale = 1, axiom, rules) {
         if (yr > maxY) maxY = yr;
       }
     } else {
-      const mov = Movement.findByLabel(movList, c);
+      const mov = Variable.findByLabel(varObjList, c);
       if (mov && (mov instanceof MoveTo || mov instanceof DrawLine)) { // se esiste l'oggetto e ha un movimento di traslazione
         // calcola nuova posizione
         const dx = Math.cos(dir * Math.PI / 180) * stroke_lenght;
@@ -124,8 +125,8 @@ function autoScale(canvasW, canvasH, width, height) {
 
 
 // auto center drawing
-function autoCenter(scale = 1, axiom, rules, canvasW, canvasH) {
-  let [minX, minY, maxX, maxY] = getBoundingBox(scale, axiom, rules);
+function autoCenter(scale = 1, axiom, varObjList, canvasW, canvasH) {
+  let [minX, minY, maxX, maxY] = getBoundingBox(scale, axiom, varObjList);
   const width = maxX - minX;
   const height = maxY - minY;
 
