@@ -7,58 +7,82 @@
   <title>L-system generator</title>
   <link rel="stylesheet" href="style.css">
   <script src="utils/l-system.js"></script>
-  <script src="utils/Movement.js"></script>
+  <script src="utils/Variable.js"></script>
   <script src="script.js"></script>
 </head>
 
 <body>
   <div>
     <header>
-      <h1>L-systems generator</h1>
+      <h2>L-systems generator</h2>
     </header>
 
     <main>
       <section id="controls">
-        <label for="axiomInput">Axiom: </label>
-        <input id="axiomInput" class="config" value="F--F--F" />
-
-        <!-- div dinamico per aggiungere le rules -->
-        <h2>Rules: </h2><button id="addRuleBtn" class="config" type="button">+</button>
-        <div id="rulesContainer">
+        <div class="stdContainer">
+          <label for="axiomInput">Axiom:</label>
+          <input id="axiomInput" class="config" type="text" />
         </div>
-        <br>
 
-        <h2>Variables: </h2>
+        <div id="varsHeader">
+          <label>Variables: </label><button id="addVarBtn" type="button">+</button>
+        </div>
+
         <div id="varsContainer"></div> <!-- div dinamico, aggiunta variabili dinamicamente -->
 
-        <label for="depthInput">Depth: </label>
-        <input name="depthInput" id="depthInput" class="config" type="number" value="2" min="1" max="10" />
 
-        <label for="angleInput">Angle: </label>
-        <input name="angleInput" id="angleInput" class="config" type="number" value="60" />
+        <div class="stdContainer">
+          <label for="depthInput">Depth: </label>
+          <input name="depthInput" id="depthInput" class="config" type="number" value="2" min="1" max="10" />
 
-        <label for="lineWInput">Line Width: </label>
-        <input name="lineWInput" id="lineWInput" class="config" type="number" value="1" min="1" max="10" />
+          <label for="angleInput">Angle: </label>
+          <input name="angleInput" id="angleInput" class="config" type="number" value="60" />
 
-        <label for="scaleLineWInput">Line Width depends on zoom: </label>
-        <input name="scaleLineWInput" id="scaleLineWInput" class="config" type="checkbox" checked />
+          <label for="lineWInput">Line Width: </label>
+          <input name="lineWInput" id="lineWInput" class="config" type="number" value="1" min="1" max="10" />
 
-        <label for="rotInput">Starting rotation:</label>
-        <input id="rotInput" name="rotInput" class="config" type="number" value="0" min="-360" max="360" />
+          <label for="scaleLineWInput">Line Width depends on zoom: </label>
+          <input name="scaleLineWInput" id="scaleLineWInput" class="config" type="checkbox" checked />
 
-        <label for="backgroundColorInput">Background color:</label>
-        <input name="backgroundColorInput" id="backgroundColorInput" class="config" type="color" />
+          <label for="rotInput">Starting rotation:</label>
+          <input id="rotInput" name="rotInput" class="config" type="number" value="0" min="-360" max="360" />
 
-        <label for="showAnimInput">Show Animation: </label>
-        <input name="showAnimInput" id="showAnimInput" class="config" type="checkbox" checked />
+          <label for="backgroundColorInput">Background color:</label>
+          <input name="backgroundColorInput" id="backgroundColorInput" class="config" type="color" />
 
-        <button id="startBtn" type="button">Start</button>
-        <button id="pauseBtn" type="button">Pause</button>
-        <button id="resetBtn" type="button">Reset</button>
+          <label for="showAnimInput">Show Animation: </label>
+          <input name="showAnimInput" id="showAnimInput" class="config" type="checkbox" checked />
+        </div>
+
+        <p>Press F11 to go in fullscreen!</p>
+
+        <div class="btnContainer">
+          <button id="startBtn" type="button">Start</button>
+          <button id="pauseBtn" type="button">Pause</button>
+          <button id="resetBtn" type="button">Reset</button>
+        </div>
+
       </section>
     </main>
   </div>
   <canvas id="drawingCanvas"></canvas>
+
+
+  <!-- modal per aggiunta di variabili manualmente -->
+  <div id="varModal" class="modalBackground hidden">
+    <div class="modalContainer">
+      <h2>New variable</h2>
+      <div>
+        <label for="newVarInput">New variable symbol:</label>
+        <input type="text" name="newVarInput" id="newVarInput">
+
+        <button type="button" id="discardVarBtn">Discard</button>
+        <button type="button" id="confirmVarBtn">Confirm</button>
+
+      </div>
+    </div>
+  </div>
+
 
 </body>
 

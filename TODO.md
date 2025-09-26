@@ -5,14 +5,27 @@ frontend:
     - implementation: superclass "movement" and every type of it (drawLine, drawDot, MoveTo...) inherits from it
 - [X] optimize animateDrawing
 - [X] fix responsive canvas when resizing
-- [X] check selection feature, current mode: before starting, restores coords to previous custom value if "no centering" is selected (after their change being on centering); and when animation ends with centering selected, it keeps centered coords.
+- [X] auto centering by default
 - [X] line width dependant on scale
 - [X] checkbox to show animation
 - [X] auto zoom
+- [X] fix rules adding and input change events
+- [X] manually add variables using the + button
+- [ ] input checks!!! example: remove duplicate vars
+- [X] fix rules input, you can insert only one character at a time :( -> fixed using blur instead of input event
+
 
 UI:
-- [ ] show/hide menu ui
+- [X] show/hide menu ui
 - [ ] divide menu sections: l-system setup, drawing settings
+- [X] rule must be beside the movement choice in the variables section
+- [X] rename css classes (config etc)
+- [X] padding, background per for vars list
+- [X] fix font size
+- [X] fix bottom btns layout
+- [ ] improve alert??
+
+
 
 backend:
 - [ ] php backend (save/restore drawings, user auth, session)

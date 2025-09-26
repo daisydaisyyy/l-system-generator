@@ -1,13 +1,15 @@
 // regole da assegnare ai simboli
 
-class Movement {
-    constructor(label, color) {
+class Variable {
+    constructor(label, rule, color) {
         this.label = label;
         this.color = color;
+        if(rule == undefined) this.rule = label;
+        else this.rule = rule;
     }
 
-    static findByLabel(movements, label) {
-        return movements.find(m => m.label === label);
+    static findByLabel(variables, label) {
+        return variables.find(m => m.label === label);
     }
 
     apply(ctx) {
@@ -15,7 +17,7 @@ class Movement {
     }
 }
 
-class DrawLine extends Movement {
+class DrawLine extends Variable {
     apply(ctx, stepSize) {
         ctx.beginPath();
         ctx.moveTo(0, 0);
@@ -27,13 +29,13 @@ class DrawLine extends Movement {
     }
 }
 
-class MoveTo extends Movement {
+class MoveTo extends Variable {
     apply(ctx, stepSize) {
         ctx.translate(stepSize, 0);
     }
 }
 
-class DrawDot extends Movement {
+class DrawDot extends Variable {
     apply(ctx) {
         ctx.beginPath();
         ctx.arc(0, 0, ctx.lineWidth / 2, 0, Math.PI * 2);
@@ -42,7 +44,7 @@ class DrawDot extends Movement {
     }
 }
 
-class NoOp extends Movement {
+class NoOp extends Variable {
     apply() {
         // do nothing
     }
