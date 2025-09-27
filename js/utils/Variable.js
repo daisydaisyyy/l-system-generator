@@ -1,11 +1,10 @@
 // regole da assegnare ai simboli
 
 class Variable {
-    constructor(label, rule, color) {
+    constructor(label, rule = "", color = getRandColor()) {
         this.label = label;
         this.color = color;
-        if(rule == undefined) this.rule = label;
-        else this.rule = rule;
+        this.rule = rule;
     }
 
     static findByLabel(variables, label) {

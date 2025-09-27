@@ -9,12 +9,15 @@ let varObjList = [];
 let axiom = '';
 
 
-function getRandColor() {
-  return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+function getRandColor(colorToAvoid = "#ffffff") {
+  let color = colorToAvoid;
+  while (color === colorToAvoid) // evita che il colore sia uguale allo sfondo
+    color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+  return color;
 }
 
 
-// prende in input l'axiom e le regole e ritorna la stringa con i simboli
+// prende in input l'axiom e le regole e ritorna la stringa con i simboli presenti in entrambi per creare le variabili
 function getVariables() {
   const vars = new Set();
   axiom.split("").map(c => {
@@ -24,11 +27,19 @@ function getVariables() {
 
   rules = "";
 
-  document.querySelectorAll('.config').forEach(el => {
+  document.querySelectorAll('.varConfig input[type="text"]').forEach(el => {
     if (el.id.startsWith('ruleInput_')) {
       rules += el.value;
     }
   });
+
+  // prendi variabile nella label
+  document.querySelectorAll('.varConfig label').forEach(el => {
+    if (el.htmlFor.startsWith('ruleInput_')) {
+      rules += el.innerText;
+    }
+  });
+
 
   // applica regex per trovare le variabili
   rules.split("").map(c => {
@@ -40,6 +51,7 @@ function getVariables() {
 }
 
 
+// cancella disegno dal canvas, torna allo stato iniziale
 function resetCanvas(ctx) {
   ctx.save();
   ctx.reset();
@@ -52,7 +64,7 @@ function resetCanvas(ctx) {
   isAnimating = false;
 }
 
-// events
+// on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', e => {
   const canvas = document.getElementById('drawingCanvas');
   canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight;
@@ -82,18 +94,18 @@ document.addEventListener('DOMContentLoaded', e => {
   const confirmVarBtn = document.getElementById('confirmVarBtn');
   const newVarInput = document.getElementById('newVarInput');
 
-  // crea dinamicamente html per ogni variabile trovata per scegliere il movimento da fare
-  function renderVarContainer() {
+  // crea dinamicamente l'html di configurazione per ogni variabile trovata
+  function renderVarsContainer() {
     let dynamicElems = '';
 
-    // ri-crea html dinamico per ogni variabile trovata
+    // ri-crea da capo html dinamico per ogni variabile trovata
     // imposta il selected e l'input color in base al movimento e colore gia' scelti in precedenza cosi' non si resetta ogni volta che si aggiunge/rimuove una variabile qualsiasi
     varObjList.map(obj => {
       dynamicElems += `
       <div id="varContainer_${obj.label}" class="varConfig">
-        <label for="movSelect_${obj.label}">${obj.label}</label>
+        <label for="ruleInput_${obj.label}">${obj.label}</label>
         <input type="text" id="ruleInput_${obj.label}" class="config" placeholder="rule" value="${obj && obj.rule ? obj.rule : ""}"/>
-        <select id="movSelect_${obj.label}" class="config">
+        <select id="ruleSelect_${obj.label}" class="config">
           <option value="drawLine" ${obj instanceof DrawLine ? "selected" : ""}>Draw Line</option>
           <option value="drawDot" ${obj instanceof DrawDot ? "selected" : ""}>Draw Dot</option>
           <option value="moveTo" ${obj instanceof MoveTo ? "selected" : ""}>Move To</option>
@@ -109,12 +121,12 @@ document.addEventListener('DOMContentLoaded', e => {
 
 
   // assegna il movimento a ciascuna variabile istanziando gli oggetti e mettendoli in una lista
-  function updateVarConfig() {
+  function updateVarsConfig() {
     const configsList = [];
     varObjList.map(obj => {
-      const sel = document.getElementById(`movSelect_${obj.label}`).value;
+      const sel = document.getElementById(`ruleSelect_${obj.label}`).value;
       const color = document.getElementById(`colorInput_${obj.label}`).value;
-      const rule = document.getElementById(`ruleInput_${obj.label}`).value == "" ? obj : document.getElementById(`ruleInput_${obj.label}`).value; // se non e' stata inserita nessuna regola, la regola e' la variabile stessa
+      const rule = document.getElementById(`ruleInput_${obj.label}`).value == undefined ? obj.rule : document.getElementById(`ruleInput_${obj.label}`).value; // se non e' stata inserita nessuna regola, la regola e' la variabile stessa
 
       switch (sel) {
         case 'drawLine': configsList.push(new DrawLine(obj.label, rule, color)); break;
@@ -125,11 +137,13 @@ document.addEventListener('DOMContentLoaded', e => {
       }
     });
     varObjList = configsList; // aggiorno lista di oggetti con i nuovi movimenti
-    renderVarContainer();
+    renderVarsContainer();
   }
 
+  // on change, aggiunge o rimuove variabili dalla lista e aggiorna l'html
   function handleObjChange() {
     let newVars = getVariables();
+    console.log(newVars);
     let objLabels = varObjList.map(m => m.label);
 
     // controlla se sono state aggiunte o rimosse variabili
@@ -140,9 +154,9 @@ document.addEventListener('DOMContentLoaded', e => {
     }
 
     if (newVars.some(label => !objLabels.includes(label)))  // aggiunta
-      varObjList.push(...newVars.filter(label => !objLabels.includes(label)).map(v => new DrawLine(v, v, getRandColor())));
+      varObjList.push(...newVars.filter(label => !objLabels.includes(label)).map(v => new DrawLine(v, "", getRandColor(backgroundColorInput.value)))); // di default il movimento e' DrawLine
 
-    renderVarContainer();
+    renderVarsContainer(); // aggiorna html
   }
 
   function handleReset() {
@@ -163,6 +177,8 @@ document.addEventListener('DOMContentLoaded', e => {
   }
 
   handleBackgroundColor(); // mantieni colore scelto al caricamento della pagina
+  axiom = axiomInput.value;
+  handleObjChange(); // inizializza varObjList e html delle variabili
 
   // disable/enables parameters
   const config_params = [...document.querySelectorAll('.config')];
@@ -176,7 +192,7 @@ document.addEventListener('DOMContentLoaded', e => {
     setConfigState(true);
     startBtn.innerText = 'Restart';
 
-    updateVarConfig();
+    updateVarsConfig();
 
     // handle zoom
     stepSize = STEP_SIZE;
@@ -269,7 +285,7 @@ document.addEventListener('DOMContentLoaded', e => {
   varsContainer.addEventListener('change', e => {
     // event delegation
     if (e.target && e.target.tagName === 'SELECT') {
-      updateVarConfig();
+      updateVarsConfig();
       if (e.target.value == "moveTo" || e.target.value == "noOp") {
         document.getElementById(`colorInput_${e.target.id.split('_')[1]}`).classList.add("hidden"); //  nascondi scelta del colore se il movimento non disegna nulla
       } else document.getElementById(`colorInput_${e.target.id.split('_')[1]}`).classList.remove("hidden"); // mostra di nuovo al cambio della scelta se il movimento disegna
@@ -277,26 +293,27 @@ document.addEventListener('DOMContentLoaded', e => {
   });
 
   // ascolta i cambiamenti nelle rules e aggiorna la singola rule nell'oggetto corrispondente
-  varsContainer.addEventListener('blur', e => {
+  varsContainer.addEventListener('change', e => {
     if (e.target && e.target.tagName === 'INPUT' && e.target.id.startsWith('ruleInput_')) {
       const v = e.target.id.split('_')[1];
       const obj = Variable.findByLabel(varObjList, v);
-      if (obj) obj.rule = e.target.value; // aggiorna solo questa regola
+      if (obj) obj.rule = e.target.value || ""; // aggiorna solo questa regola
       // chiama handler per aggiungere variabili se scritte nella regola
       handleObjChange();
     }
   });
 
-  //  aggiunta e rimozione regole
+  //  rimozione regole
   varsContainer.addEventListener('click', e => {
     // event delegation
     if (e.target && e.target.tagName === 'BUTTON') {
       // rimuovi il varContainer
       const label = e.target.parentElement.querySelector('label').innerText;
-      e.target.parentElement.remove();
-
-      // rimuovi l'oggetto e aggiorna la lista delle variabili presenti
-      varObjList = varObjList.filter(m => m.label != label);
+      if (!axiom.includes(label)) {
+        e.target.parentElement.remove();
+        // rimuovi l'oggetto e aggiorna la lista delle variabili presenti
+        varObjList = varObjList.filter(m => m.label != label);
+      }
     }
   });
 
@@ -313,8 +330,8 @@ document.addEventListener('DOMContentLoaded', e => {
     // validazione input, evita duplicati
     if (!varObjList.map(obj => obj.label).includes(label)) {
       // aggiungi variabile nella lista, edit html
-      varObjList.push(new DrawLine(label, label, getRandColor()));
-      renderVarContainer();
+      varObjList.push(new DrawLine(label, "", getRandColor(backgroundColorInput.value))); // aggiunta di default
+      renderVarsContainer();
       document.getElementById("varModal").classList.add("hidden");
     } else {
       alert("Variable is already on the list! Choose another symbol or discard your choice.");
@@ -347,7 +364,5 @@ document.addEventListener('DOMContentLoaded', e => {
   });
 
   backgroundColorInput.addEventListener('change', handleBackgroundColor);
-
-
 });
 

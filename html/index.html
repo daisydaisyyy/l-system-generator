@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>L-system generator</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="utils/l-system.js"></script>
-  <script src="utils/Variable.js"></script>
-  <script src="script.js"></script>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/script.js"></script>
+  <script src="../js/utils/l-system.js"></script>
+  <script src="../js/utils/Variable.js"></script>
 </head>
 
 <body>
@@ -33,10 +33,10 @@
 
         <div class="stdContainer">
           <label for="depthInput">Depth: </label>
-          <input name="depthInput" id="depthInput" class="config" type="number" value="2" min="1" max="10" />
+          <input name="depthInput" id="depthInput" class="config" type="number" value="1" min="1" max="10" />
 
           <label for="angleInput">Angle: </label>
-          <input name="angleInput" id="angleInput" class="config" type="number" value="60" />
+          <input name="angleInput" id="angleInput" class="config" type="number" value="0" />
 
           <label for="lineWInput">Line Width: </label>
           <input name="lineWInput" id="lineWInput" class="config" type="number" value="1" min="1" max="10" />
@@ -48,7 +48,7 @@
           <input id="rotInput" name="rotInput" class="config" type="number" value="0" min="-360" max="360" />
 
           <label for="backgroundColorInput">Background color:</label>
-          <input name="backgroundColorInput" id="backgroundColorInput" class="config" type="color" />
+          <input name="backgroundColorInput" id="backgroundColorInput" class="config" type="color" value="rgb(192, 172, 147)" />
 
           <label for="showAnimInput">Show Animation: </label>
           <input name="showAnimInput" id="showAnimInput" class="config" type="checkbox" checked />
