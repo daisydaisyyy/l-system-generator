@@ -13,7 +13,10 @@ frontend:
 - [X] manually add variables using the + button
 - [ ] input checks!!! example: remove duplicate vars
 - [X] fix rules input, you can insert only one character at a time :( -> fixed using blur instead of input event
-
+- [X] rename folders, css/html/js/php
+- [ ] validate html + css
+- [X] empty rule -> object appears :( -> make empty string as default
+- [X] when adding a var manually and later writing it into axiom, rule is cancelled
 
 UI:
 - [X] show/hide menu ui
