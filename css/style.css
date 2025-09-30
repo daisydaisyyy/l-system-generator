@@ -19,7 +19,6 @@ body {
 
 body > * {
   width: 100%;
-
 }
 
 header {
@@ -47,7 +46,6 @@ nav#saveBar {
   padding: 1rem;
   background: #ecf0f1;
   border-radius: 0 0 10px 0;
-
 }
 
 #drawingCanvas {
@@ -85,7 +83,6 @@ button:active {
   pointer-events: none;
 }
 
-
 main.hidden, .modalBackground.hidden {
   display: none;
 }
@@ -104,7 +101,6 @@ main.hidden, .modalBackground.hidden {
   box-shadow: 0 0 10px 2px olive;
 }
 
-
 /* grid */
 .varConfig {
   display: grid;
@@ -120,7 +116,6 @@ main.hidden, .modalBackground.hidden {
   font-size: inherit;
 }
 
-
 #varsHeader {
   display: flex;
   justify-content: space-between;
@@ -128,19 +123,15 @@ main.hidden, .modalBackground.hidden {
   align-items: center;
 }
 
-
 .varConfig>label::after {
   content: ":";
   padding-left: 2px;
 }
 
-
-
 .varConfig > * {
   width: 100%;
   box-sizing: border-box;
 }
-
 
 .stdContainer > * {
   width: 100%;
@@ -179,7 +170,6 @@ input[type="color"] {
   aspect-ratio: 1 / 1;
   justify-self: center;
 }
-
 
 input[type="checkbox"] {
  transform: scale(2);
@@ -224,7 +214,3 @@ input[type="checkbox"] {
 #discardVarBtn {
   background-color: darkred;
 }
-
-
-
-

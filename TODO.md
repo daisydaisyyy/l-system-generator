@@ -11,12 +11,14 @@ frontend:
 - [X] auto zoom
 - [X] fix rules adding and input change events
 - [X] manually add variables using the + button
-- [ ] input checks!!! example: remove duplicate vars
+- [X] input checks!!! example: remove duplicate vars, in modal: avoid adding special chars, not permitted
 - [X] fix rules input, you can insert only one character at a time :( -> fixed using blur instead of input event
 - [X] rename folders, css/html/js/php
-- [ ] validate html + css
 - [X] empty rule -> object appears :( -> make empty string as default
 - [X] when adding a var manually and later writing it into axiom, rule is cancelled
+- [X] !! remove var on axiom change -> no, otherwise any manually added var would be cancelled right after adding it because it's not present in axiominput
+- [ ] input check on axiom? on "?!()" chars
+
 
 UI:
 - [X] show/hide menu ui
@@ -28,9 +30,11 @@ UI:
 - [X] fix bottom btns layout
 - [ ] improve alert??
 
+- [ ] documentazione (20/30 righe)
+- [ ] validate html + css
 
 
 backend:
 - [ ] php backend (save/restore drawings, user auth, session)
 - [ ] fix compression/decompression drawing params (-> base64)
-- [ ] make an examples list, the user clicks on it and it automatically sets drawing parameters (fetched from db? or pre-stored in an examples folder?)
+- [ ] make an examples list, the user clicks on it and it automatically sets drawing parameters (presets fetched from db? or pre-stored in an examples folder?)
