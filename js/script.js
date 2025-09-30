@@ -7,7 +7,7 @@ const LINE_WIDTH = 1;
 let stepSize = null;
 let varObjList = [];
 let axiom = '';
-
+const REGEX = /[\[\]\+\-\=;\?!()/\\]/; // regex per evitare caratteri speciali
 
 function getRandColor(colorToAvoid = "#ffffff") {
   let color = colorToAvoid;
@@ -21,7 +21,7 @@ function getRandColor(colorToAvoid = "#ffffff") {
 function getVariables() {
   const vars = new Set();
   axiom.split("").map(c => {
-    if (c.match(/[^\[\]+\-=;]/)) // regex per prendere tutto tranne i caratteri speciali ([,],+,-)
+    if (!c.match(REGEX)) // regex per prendere tutto tranne i caratteri speciali ([,],+,-)
       vars.add(c);
   });
 
@@ -43,7 +43,7 @@ function getVariables() {
 
   // applica regex per trovare le variabili
   rules.split("").map(c => {
-    if (c.match(/[^\[\]+\-=;]/)) // regex per prendere tutto tranne i caratteri speciali ([,],+,-)
+    if (!c.match(REGEX)) // regex per prendere tutto tranne i caratteri speciali ([,],+,-)
       vars.add(c);
   });
 
@@ -328,13 +328,18 @@ document.addEventListener('DOMContentLoaded', e => {
   confirmVarBtn.addEventListener('click', e => {
     const label = document.getElementById("newVarInput").value.trim();
     // validazione input, evita duplicati
-    if (!varObjList.map(obj => obj.label).includes(label)) {
+    if (label.length === 0) {
+      alert("Variable cannot be empty!");
+    } else if (label.match(REGEX)) {
+      alert("Variable cannot be a special character ([,],+,-,=,;). Choose another symbol.");
+    }
+    else if (varObjList.map(obj => obj.label).includes(label)) {
       // aggiungi variabile nella lista, edit html
+      alert("Variable is already on the list! Choose another symbol or discard your choice.");
+    } else {
       varObjList.push(new DrawLine(label, "", getRandColor(backgroundColorInput.value))); // aggiunta di default
       renderVarsContainer();
       document.getElementById("varModal").classList.add("hidden");
-    } else {
-      alert("Variable is already on the list! Choose another symbol or discard your choice.");
     }
   });
 

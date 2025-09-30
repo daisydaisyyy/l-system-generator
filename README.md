@@ -1,7 +1,7 @@
 # web_l-system
 A web application for procedurally generating and visualizing plant growth using L‑Systems.
 
-1. l-system genome generation
+1. l-system generation
 a l-system is defined by:
 - axiom (initial string)
 - production rules (mappings that rewrite each symbol)
@@ -9,11 +9,23 @@ a l-system is defined by:
 - angle
 
 2. graphic renderer
-The user can customize the scale (zoom), line width, and starting rotation, and can pause the animation or disable it entirely.
+the user can customize:
+- variables rules, movement and stroke color
+- depth
+- line width
+- starting rotation
+- background color
+
+
+other features:
+- show/hide animation
+- can pause the animation or disable it entirely
+- fullscreen mode
+- auto-centering and auto-scaling the drawing is done by default
 
 Symbols:
-The user can choose custom movement commands to assign to other variables.
-Variables must be one-character long and can be any character that is not a special command (as defined below), regex: /[^\[\]+\-=;]/
+The user can choose custom movement commands to assign to variables.
+Variables must be one alphanumeric character long and can be any character that is not a special command (as defined below)
 
 fixed drawing commands:
 ```
@@ -24,12 +36,6 @@ fixed drawing commands:
 ```
 
 #### Structure:
-Login / Signup: users register or log in, PHP creates a session.
-
-Configuration: users enter their axiom, rules, depth, and angle, then click Start
-
-Generate + Draw: animate the plant growth, auto-centering the drawing is done by default.
-
 ```
 web_l-system/
 ├── index.html

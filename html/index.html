@@ -18,10 +18,10 @@
     </header>
 
     <main>
-      <section id="controls">
+      <div id="controls">
         <div class="stdContainer">
           <label for="axiomInput">Axiom:</label>
-          <input id="axiomInput" class="config" type="text" />
+          <input id="axiomInput" class="config" type="text">
         </div>
 
         <div id="varsHeader">
@@ -33,25 +33,25 @@
 
         <div class="stdContainer">
           <label for="depthInput">Depth: </label>
-          <input name="depthInput" id="depthInput" class="config" type="number" value="1" min="1" max="10" />
+          <input name="depthInput" id="depthInput" class="config" type="number" value="1" min="1" max="10">
 
           <label for="angleInput">Angle: </label>
-          <input name="angleInput" id="angleInput" class="config" type="number" value="0" />
+          <input name="angleInput" id="angleInput" class="config" type="number" value="0">
 
           <label for="lineWInput">Line Width: </label>
-          <input name="lineWInput" id="lineWInput" class="config" type="number" value="1" min="1" max="10" />
+          <input name="lineWInput" id="lineWInput" class="config" type="number" value="1" min="1" max="10">
 
           <label for="scaleLineWInput">Line Width depends on zoom: </label>
-          <input name="scaleLineWInput" id="scaleLineWInput" class="config" type="checkbox" checked />
+          <input name="scaleLineWInput" id="scaleLineWInput" class="config" type="checkbox" checked>
 
           <label for="rotInput">Starting rotation:</label>
-          <input id="rotInput" name="rotInput" class="config" type="number" value="0" min="-360" max="360" />
+          <input id="rotInput" name="rotInput" class="config" type="number" value="0" min="-360" max="360">
 
           <label for="backgroundColorInput">Background color:</label>
-          <input name="backgroundColorInput" id="backgroundColorInput" class="config" type="color" value="rgb(192, 172, 147)" />
+          <input name="backgroundColorInput" id="backgroundColorInput" class="config" type="color" value="#C0AC93">
 
           <label for="showAnimInput">Show Animation: </label>
-          <input name="showAnimInput" id="showAnimInput" class="config" type="checkbox" checked />
+          <input name="showAnimInput" id="showAnimInput" class="config" type="checkbox" checked>
         </div>
 
         <p>Press F11 to go in fullscreen!</p>
@@ -62,7 +62,7 @@
           <button id="resetBtn" type="button">Reset</button>
         </div>
 
-      </section>
+      </div>
     </main>
   </div>
   <canvas id="drawingCanvas"></canvas>
