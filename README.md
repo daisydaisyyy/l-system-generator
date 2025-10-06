@@ -1,31 +1,30 @@
 # web_l-system
 A web application for procedurally generating and visualizing plant growth using L‑Systems.
 
-1. l-system generation
+#### 1. l-system generation
 a l-system is defined by:
 - axiom (initial string)
 - production rules (mappings that rewrite each symbol)
 - depth
 - angle
 
-2. graphic renderer
+#### 2. graphic renderer
 the user can customize:
 - variables rules, movement and stroke color
-- depth
-- line width
+- line width, choosing to adapt it to the zoom factor
 - starting rotation
 - background color
 
 
-other features:
+##### other features:
+- auto-centering and auto-scaling the drawing by default
 - show/hide animation
-- can pause the animation or disable it entirely
+- pause the animation and resume it
 - fullscreen mode
-- auto-centering and auto-scaling the drawing is done by default
 
-Symbols:
-The user can choose custom movement commands to assign to variables.
-Variables must be one alphanumeric character long and can be any character that is not a special command (as defined below)
+##### Symbols:
+The user can choose custom movement to assign to variables.
+Each variable must be one alphanumeric character long and can be any character that is not a special command (as defined below)
 
 fixed drawing commands:
 ```
@@ -46,7 +45,7 @@ web_l-system/
     └── Movement.js
 ```
 
-This is the front-end version; the backend is still in development and will include additional features.
+This is the front-end version; backend is still in development and will include additional features.
 
 
 references:

@@ -1,0 +1,57 @@
+L-System Generator è un’applicazione web per la generazione procedurale e la visualizzazione della crescita di piante e di frattali mediante L-system (sistemi di Lindenmayer).
+
+E' possibile quindi creare figure complesse a partire da parametri iniziali e di osservarne l’evoluzione in tempo reale attraverso animazioni interattive.
+
+1. Parametri per generare L-System
+
+Gli L-Systems sono definiti da:
+
+- Axiom (assioma): stringa iniziale da cui parte la generazione
+
+- Rules (regole): indicano come trasformare i simboli dell’assioma a ogni iterazione
+
+- Depth (Livello di ricorsione): numero di iterazioni delle regole; figure più complesse possono essere ottenute incrementando il livello di ricorsione
+
+- Angle (θ): angolo da utilizzare per il disegno
+
+Una volta impostate le regole di costruzione è possibile iterare in maniera ricorsiva sostituendo la simbologia per ottenere delle strutture sempre più grandi e complesse.
+
+
+
+2. Regole e assiomi: comandi
+
++ → gira a destra di θ gradi
+
+- → gira a sinistra di θ gradi
+
+[ → salva posizione e angolo correnti
+
+] → ripristina posizione e angolo salvati
+
+Le variabili personalizzabili devono essere caratteri alfanumerici e non possono essere simboli riservati (+, -, [, ]).
+
+
+
+3. Impostazioni grafiche
+
+L’applicazione permette di personalizzare:
+
+- Movimento associato a ciascuna variabile (Draw Line, Draw Dot, Move To, Do Nothing)
+
+- Colore e larghezza del tratto
+
+- Rotazione iniziale
+
+- Colore di sfondo del canvas
+
+
+
+4. Funzionalità di visualizzazione
+
+- Centramento e zoom automatico del disegno sul canvas
+
+- Mostrare o nascondere l’animazione del disegno
+
+- Mettere in pausa e riprendere l’animazione
+
+- Modalità fullscreen (premendo F11) per visualizzare il disegno a schermo intero
