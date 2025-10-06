@@ -17,12 +17,12 @@ frontend:
 - [X] empty rule -> object appears :( -> make empty string as default
 - [X] when adding a var manually and later writing it into axiom, rule is cancelled
 - [X] !! remove var on axiom change -> no, otherwise any manually added var would be cancelled right after adding it because it's not present in axiominput
-- [ ] input check on axiom? on "?!()" chars
+- [X] input checks!
 
 
 UI:
 - [X] show/hide menu ui
-- [ ] divide menu sections: l-system setup, drawing settings
+- [ ] separated menu sections: l-system setup, drawing settings
 - [X] rule must be beside the movement choice in the variables section
 - [X] rename css classes (config etc)
 - [X] padding, background per for vars list
@@ -30,8 +30,8 @@ UI:
 - [X] fix bottom btns layout
 - [ ] improve alert??
 
-- [ ] documentazione (20/30 righe)
-- [ ] validate html + css
+- [ ] !! manuale utente (20/30 righe), da aggiungere un link alla pagina con il manuale in index.html
+- [X] validate html + css
 
 
 backend:

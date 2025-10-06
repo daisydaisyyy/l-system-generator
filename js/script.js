@@ -7,7 +7,7 @@ const LINE_WIDTH = 1;
 let stepSize = null;
 let varObjList = [];
 let axiom = '';
-const REGEX = /[\[\]\+\-\=;\?!()/\\]/; // regex per evitare caratteri speciali
+const REGEX = /[\[\]\+\-\=;\()\\]/; // regex per evitare caratteri speciali
 
 function getRandColor(colorToAvoid = "#ffffff") {
   let color = colorToAvoid;
@@ -53,13 +53,12 @@ function getVariables() {
 
 // cancella disegno dal canvas, torna allo stato iniziale
 function resetCanvas(ctx) {
-  ctx.save();
-  ctx.reset();
-  // debug, changes color at every reset
-  //ctx.fillStyle = `rgb(${Math.floor(Math.random() * 256)} ${Math.floor(Math.random() * 128)} ${Math.floor(Math.random() * 256)})`;
+  // reset delle trasformazioni (translate, rotate, scale) riportando la matrice di trasformazione allo stato iniziale
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
 
+  // pulisci il canvas
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  ctx.restore();
+
   curStep = 0;
   isAnimating = false;
 }
