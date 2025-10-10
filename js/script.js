@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', e => {
   const discardVarBtn = document.getElementById('discardVarBtn');
   const confirmVarBtn = document.getElementById('confirmVarBtn');
   const newVarInput = document.getElementById('newVarInput');
+  const angleInput = document.getElementById('angleInput');
 
   // crea dinamicamente l'html di configurazione per ogni variabile trovata
   function renderVarsContainer() {
@@ -142,7 +143,7 @@ document.addEventListener('DOMContentLoaded', e => {
   // on change, aggiunge o rimuove variabili dalla lista e aggiorna l'html
   function handleObjChange() {
     let newVars = getVariables();
-    console.log(newVars);
+    // console.log(newVars);
     let objLabels = varObjList.map(m => m.label);
 
     // controlla se sono state aggiunte o rimosse variabili
@@ -205,7 +206,7 @@ document.addEventListener('DOMContentLoaded', e => {
     ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
 
 
-    let [x, y, scale] = autoCenter(1, axiomInput.value, varObjList, ctx.canvas.width, ctx.canvas.height);
+    let [x, y, scale] = autoCenter(1, axiomInput.value, parseInt(depthInput.value), parseInt(angleInput.value), parseInt(rotInput.value), varObjList, ctx.canvas.width, ctx.canvas.height);
     ctx.translate(x, y);
     stepSize = scale * STEP_SIZE; // aggiorna step size (lunghezza unitaria della linea) in base alla scala
 
@@ -226,7 +227,7 @@ document.addEventListener('DOMContentLoaded', e => {
       if (showAnimInput.checked) {
         // start animation
         animId = setInterval(() => {
-          if (animateDrawing(ctx, stepSize, varObjList)) {
+          if (animateDrawing(ctx, stepSize, varObjList, parseInt(angleInput.value))) {
             clearInterval(animId);
             setConfigState(false);
             startBtn.innerText = 'Start';
@@ -235,7 +236,7 @@ document.addEventListener('DOMContentLoaded', e => {
 
       } else {
 
-        while (!animateDrawing(ctx, stepSize, varObjList)) {
+        while (!animateDrawing(ctx, stepSize, varObjList, parseInt(angleInput.value))) {
           setConfigState(false);
           startBtn.innerText = 'Start';
         }
@@ -261,7 +262,7 @@ document.addEventListener('DOMContentLoaded', e => {
         isAnimating = true;
         pauseBtn.innerText = 'Pause';
         animId = setInterval(() => {
-          if (animateDrawing(ctx, stepSize, varObjList)) {
+          if (animateDrawing(ctx, stepSize, varObjList, parseInt(angleInput.value))) {
             clearInterval(animId);
             setConfigState(false);
           }
