@@ -1,0 +1,8 @@
+database:
+
+l-system (0,1) <-> (1,N) rules
+one l-system can have 1,N rules, a rule can be assigned to 0,1 l-systems
+
+
+l-system: (name (pk), axiom, depth, angle, starting_rot, line_width, scale)
+rule: pk: (name, l-system (fk)), replacement

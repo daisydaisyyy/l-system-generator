@@ -14,7 +14,7 @@ function generateLSystem(axiom, varObjList, depth) {
 }
 
 
-function animateDrawing(ctx, stepSize, varObjList) {
+function animateDrawing(ctx, stepSize, varObjList, angle) {
   if (!isAnimating || curStep >= instr.length) {
     isAnimating = false;
     curStep = 0;
@@ -22,16 +22,16 @@ function animateDrawing(ctx, stepSize, varObjList) {
   }
 
   const cmd = instr[curStep];
-  const angle = parseInt(angleInput.value) * Math.PI / 180;
+  const angle_rad = angle * Math.PI / 180;
 
   switch (cmd) {
 
     case '+':
-      ctx.rotate(angle);
+      ctx.rotate(angle_rad);
       break;
 
     case '-':
-      ctx.rotate(-angle);
+      ctx.rotate(-angle_rad);
       break;
 
     case '[':
@@ -54,10 +54,7 @@ function animateDrawing(ctx, stepSize, varObjList) {
 }
 
 
-function getBoundingBox(scale = 1, axiom, varObjList) {
-  const depth = parseInt(depthInput.value, 10) || 0;
-  const angle = parseFloat(angleInput.value) || 0;
-  const rotDeg = parseFloat(rotInput.value) || 0;
+function getBoundingBox(scale = 1, axiom, depth, angle, rotDeg, varObjList) {
 
   let instr;
   try {
@@ -125,8 +122,8 @@ function autoScale(canvasW, canvasH, width, height) {
 
 
 // auto center drawing
-function autoCenter(scale = 1, axiom, varObjList, canvasW, canvasH) {
-  let [minX, minY, maxX, maxY] = getBoundingBox(scale, axiom, varObjList);
+function autoCenter(scale = 1, axiom, depth, angle, rot, varObjList, canvasW, canvasH) {
+  let [minX, minY, maxX, maxY] = getBoundingBox(scale, axiom, depth, angle, rot, varObjList);
   const width = maxX - minX;
   const height = maxY - minY;
 
@@ -143,4 +140,60 @@ function autoCenter(scale = 1, axiom, varObjList, canvasW, canvasH) {
   const centerY = (maxY + minY);
   // console.log(`Auto Center coords: (${-centerX}, ${centerY})`);
   return [Math.round(-centerX), Math.round(-centerY), zoom];
+}
+
+// php, TODO: fix
+async function saveDrawing() {
+  const data = {
+    name: document.getElementById("nameInput").value,
+    axiom: document.getElementById("axiomInput").value,
+    depth: +document.getElementById("depthInput").value,
+    angle: +document.getElementById("angleInput").value,
+    starting_rot: +document.getElementById("rotInput").value,
+    line_width: +document.getElementById("widthInput").value,
+    scale: +document.getElementById("scaleInput").value,
+    rules: Array.from(document.querySelectorAll(".rule")).map(r => ({
+      name: r.querySelector(".rule-name").value,
+      replacement: r.querySelector(".rule-replacement").value
+    }))
+  };
+
+  const res = await fetch("save_lsystem.php", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(data)
+  });
+
+  const out = await res.json();
+  alert(out.success ? "Saved!" : "Error: " + out.error);
+}
+
+async function loadDrawing(name) {
+  const res = await fetch(`load_lsystem.php?name=${encodeURIComponent(name)}`);
+  const data = await res.json();
+
+  if (data.error) return alert(data.error);
+
+  document.getElementById("axiomInput").value = data.axiom;
+  document.getElementById("depthInput").value = data.depth;
+  document.getElementById("angleInput").value = data.angle;
+  document.getElementById("rotInput").value = data.starting_rot;
+  document.getElementById("widthInput").value = data.line_width;
+  document.getElementById("scaleInput").value = data.scale;
+
+  // fill rules
+  const container = document.getElementById("rulesContainer");
+  container.innerHTML = "";
+  data.rules.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "rule";
+    div.innerHTML = `
+      <input class="rule-name" value="${r.name}">
+      →
+      <input class="rule-replacement" value="${r.replacement}">
+    `;
+    container.appendChild(div);
+  });
+
+  alert("Loaded: " + name);
 }
