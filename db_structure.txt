@@ -1,8 +1,15 @@
 database:
 
-l-system (0,1) <-> (1,N) rules
-one l-system can have 1,N rules, a rule can be assigned to 0,1 l-systems
+users (1,1) <-> (0,N) drawing (0,1) <-> (1,N) rules
+one drawing can have 1,N rules, a rule can be assigned to 0,N drawing -> junction table drawing-rule
 
 
-l-system: (name (pk), axiom, depth, angle, starting_rot, line_width, scale)
-rule: pk: (name, l-system (fk)), replacement
+users(username (pk), password_hash, is_admin)
+drawing(name (pk),  owner(pk,fk), axiom, depth, angle, starting_rot, line_width, scale, is_public)
+rule(id (pk), variable, replacement)
+drawing-rule(drawing_name (pk,fk). owner (pk,fk), rule(pk,fk))
+
+admin user owns default drawing presets
+need to handle users sessions
+
+
