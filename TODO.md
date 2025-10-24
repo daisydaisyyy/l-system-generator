@@ -35,6 +35,6 @@ UI:
 
 
 backend:
+- [ ] review backend code, linking with script.js
 - [ ] php backend (save/restore drawings, user auth, session)
-- [ ] fix compression/decompression drawing params (-> base64)
-- [ ] make an examples list, the user clicks on it and it automatically sets drawing parameters (presets fetched from db? or pre-stored in an examples folder?)
+- [ ] insert default presets/examples into the db (owned by admin), the user clicks on it and it automatically sets drawing parameters (presets fetched from db? or pre-stored in an examples folder?)
