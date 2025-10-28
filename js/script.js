@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', e => {
   // aggiorna la UI dopo login/logout
   function updateUserUI() {
     if (currentUser) {
-      // Loggato
+      // logged
       userArea.innerHTML = `
         <span>Welcome, <strong>${currentUser}</strong></span>
         <button id="logoutBtn" type="button">Logout</button>
@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', e => {
       showLoadModalBtn.disabled = false;
       document.getElementById('logoutBtn').addEventListener('click', handleLogout);
     } else {
-      // Non loggato
+      // not logged in
       userArea.innerHTML = `
         <button id="showLoginBtn" type="button">Login</button>
         <button id="showRegisterBtn" type="button">Register</button>
@@ -566,7 +566,7 @@ document.addEventListener('DOMContentLoaded', e => {
       }
 
 
-      // pulsante di eliminazione se l'owner === currentUser
+      // eliminazione se l'owner === currentUser
       drawingListContainer.innerHTML = '<ul>' + data.drawings.map(d => {
 
         const deleteBtnHtml = d.owner === currentUser
@@ -621,16 +621,13 @@ document.addEventListener('DOMContentLoaded', e => {
       }
 
       try {
-        // Chiamata al NUOVO file PHP
         const res = await fetch(`../php/delete_drawing.php?name=${encodeURIComponent(name)}`);
         const data = await res.json();
 
         if (!res.ok) throw new Error(data.error || 'Failed to delete drawing');
 
-        // Eliminazione riuscita
         alert(data.message || 'Drawing deleted!');
 
-        // Rimuovi l'elemento dalla lista nel modal
         handleOpenLoadModal();
 
       } catch (err) {
@@ -639,10 +636,8 @@ document.addEventListener('DOMContentLoaded', e => {
     }
   });
 
-  // Funzione helper per applicare i dati del disegno caricato
   function loadDrawingData(data) {
     handleReset();
-
     axiomInput.value = data.axiom;
     axiom = data.axiom;
     depthInput.value = data.depth;
@@ -662,7 +657,7 @@ document.addEventListener('DOMContentLoaded', e => {
         case 'noOp':
           return new NoOp(rule.variable, rule.replacement);
         default:
-          // Fallback nel caso i dati siano corrotti
+          // fallback
           return new DrawLine(rule.variable, rule.replacement, getRandColor(backgroundColorInput.value));
       }
     });
@@ -673,7 +668,24 @@ document.addEventListener('DOMContentLoaded', e => {
   }
 
   // aggiorna ui dell'utente
-  updateUserUI();
+  (async () => {
+    try {
+      const res = await fetch('../php/check_session.php');
+      
+      if (res.ok) {
+        const data = await res.json();
+        currentUser = data.username;
+      } else {
+        currentUser = null;
+      }
+    } catch (err) {
+      console.error('Error checking session:', err);
+      currentUser = null;
+    }
+    
+    updateUserUI();
+  })();
+  
 
 
 });
