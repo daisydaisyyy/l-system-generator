@@ -9,6 +9,10 @@ let varObjList = [];
 let axiom = '';
 const REGEX = /[\[\]\+\-\=;\()\\]/; // regex per evitare caratteri speciali
 
+let currentUser = null;
+let currentScale = 1;
+
+
 function getRandColor(colorToAvoid = "#ffffff") {
   let color = colorToAvoid;
   while (color === colorToAvoid) // evita che il colore sia uguale allo sfondo
@@ -93,6 +97,28 @@ document.addEventListener('DOMContentLoaded', e => {
   const confirmVarBtn = document.getElementById('confirmVarBtn');
   const newVarInput = document.getElementById('newVarInput');
   const angleInput = document.getElementById('angleInput');
+
+  const userArea = document.getElementById('userArea');
+  const showLoginBtn = document.getElementById('showLoginBtn');
+  const showRegisterBtn = document.getElementById('showRegisterBtn');
+  const showSaveModalBtn = document.getElementById('showSaveModalBtn');
+  const showLoadModalBtn = document.getElementById('showLoadModalBtn');
+
+  const loginModal = document.getElementById('loginModal');
+  const registerModal = document.getElementById('registerModal');
+  const saveModal = document.getElementById('saveModal');
+  const loadModal = document.getElementById('loadModal');
+  const varModal = document.getElementById('varModal');
+
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+  const saveForm = document.getElementById('saveForm');
+
+  const loginError = document.getElementById('loginError');
+  const registerError = document.getElementById('registerError');
+  const saveError = document.getElementById('saveError');
+
+  const drawingListContainer = document.getElementById('drawingListContainer');
 
   // crea dinamicamente l'html di configurazione per ogni variabile trovata
   function renderVarsContainer() {
@@ -369,5 +395,286 @@ document.addEventListener('DOMContentLoaded', e => {
   });
 
   backgroundColorInput.addEventListener('change', handleBackgroundColor);
+
+
+  // --- DATABASE LOGIC ---
+
+  // aggiorna la UI dopo login/logout
+  function updateUserUI() {
+    if (currentUser) {
+      // Loggato
+      userArea.innerHTML = `
+        <span>Welcome, <strong>${currentUser}</strong></span>
+        <button id="logoutBtn" type="button">Logout</button>
+      `;
+      showSaveModalBtn.disabled = false;
+      showLoadModalBtn.disabled = false;
+      document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    } else {
+      // Non loggato
+      userArea.innerHTML = `
+        <button id="showLoginBtn" type="button">Login</button>
+        <button id="showRegisterBtn" type="button">Register</button>
+      `;
+      showSaveModalBtn.disabled = true;
+      showLoadModalBtn.disabled = true;
+      document.getElementById('showLoginBtn').addEventListener('click', () => loginModal.classList.remove('hidden'));
+      document.getElementById('showRegisterBtn').addEventListener('click', () => registerModal.classList.remove('hidden'));
+    }
+  }
+
+  // --- modals ---
+  showLoginBtn.addEventListener('click', () => loginModal.classList.remove('hidden'));
+  showRegisterBtn.addEventListener('click', () => registerModal.classList.remove('hidden'));
+  showSaveModalBtn.addEventListener('click', () => saveModal.classList.remove('hidden'));
+  showLoadModalBtn.addEventListener('click', handleOpenLoadModal);
+
+  // chiudi modal
+  document.querySelectorAll('.modalDiscardBtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.modalBackground').classList.add('hidden');
+    });
+  });
+
+  // --- gestione PHP ---
+
+  // registrazione
+  registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    registerError.textContent = '';
+    const username = document.getElementById('registerUser').value;
+    const password = document.getElementById('registerPass').value;
+
+    try {
+      const res = await fetch('../php/register.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Registration failed');
+
+      currentUser = data.username;
+      updateUserUI();
+      registerModal.classList.add('hidden');
+      registerForm.reset();
+
+    } catch (err) {
+      registerError.textContent = err.message;
+    }
+  });
+
+  // login
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    loginError.textContent = '';
+    const username = document.getElementById('loginUser').value;
+    const password = document.getElementById('loginPass').value;
+
+    try {
+      const res = await fetch('../php/login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Login failed');
+
+      currentUser = data.username;
+      updateUserUI();
+      loginModal.classList.add('hidden');
+      loginForm.reset();
+
+    } catch (err) {
+      loginError.textContent = err.message;
+    }
+  });
+
+  // logout
+  async function handleLogout() {
+    try {
+      await fetch('../php/logout.php');
+    } catch (err) {
+      console.error('Logout failed', err);
+    }
+    currentUser = null;
+    updateUserUI();
+  }
+
+  // salvataggio
+  saveForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    saveError.textContent = '';
+
+    const payload = {
+      name: document.getElementById('drawingNameInput').value,
+      axiom: axiomInput.value,
+      is_public: document.getElementById('drawingPublicInput').checked ? 1 : 0,
+      depth: parseInt(depthInput.value),
+      angle: parseFloat(angleInput.value),
+      starting_rot: parseFloat(rotInput.value),
+      line_width: parseFloat(lineWInput.value),
+      scale: currentScale,
+
+      rules: varObjList.map(obj => {
+        let movement_type = 'noOp';
+        if (obj instanceof DrawLine) movement_type = 'drawLine';
+        else if (obj instanceof DrawDot) movement_type = 'drawDot';
+        else if (obj instanceof MoveTo) movement_type = 'moveTo';
+
+        return {
+          variable: obj.label,
+          replacement: obj.rule,
+          movement_type: movement_type,
+          color: obj.color || '#000000'
+        };
+      })
+    };
+
+    try {
+      const res = await fetch('../php/save_drawing.php', { // Il percorso è corretto
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Save failed');
+
+      alert('Drawing saved successfully!');
+      saveModal.classList.add('hidden');
+      saveForm.reset();
+
+    } catch (err) {
+      saveError.textContent = err.message;
+    }
+  });
+
+
+  // load drawing, visualizzazione lista
+  async function handleOpenLoadModal() {
+    loadModal.classList.remove('hidden');
+    drawingListContainer.innerHTML = '<p>Loading drawings...</p>';
+
+    try {
+      const res = await fetch('../php/list_drawings.php?page=1&per_page=100');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to load list');
+
+      if (data.total === 0 || data.drawings.length === 0) {
+        drawingListContainer.innerHTML = '<p>No drawings found.</p>';
+        return;
+      }
+
+
+      // pulsante di eliminazione se l'owner === currentUser
+      drawingListContainer.innerHTML = '<ul>' + data.drawings.map(d => {
+
+        const deleteBtnHtml = d.owner === currentUser
+          ? `<button class="delete-item-btn" data-name="${d.name}" title="Delete">🗑️</button>`
+          : ''; // non mostrare l'icona
+
+        return `<li>
+         <span>${d.name} (by ${d.owner === currentUser ? 'you' : d.owner})</span>
+         <div class="drawing-item-actions">
+           <button class="load-item-btn" data-name="${d.name}" data-owner="${d.owner}">Load</button>
+           ${deleteBtnHtml}
+         </div>
+       </li>`;
+      }).join('') + '</ul>';
+
+      drawingListContainer.insertAdjacentHTML('afterbegin', `<h4>Showing ${data.drawings.length} of ${data.total} drawings</h4>`);
+
+
+    } catch (err) {
+      drawingListContainer.innerHTML = `<p class="modalError">${err.message}</p>`;
+    }
+  }
+
+
+  drawingListContainer.addEventListener('click', async (e) => {
+    const target = e.target;
+
+    if (target.classList.contains('load-item-btn')) {
+      const name = target.dataset.name;
+      const owner = target.dataset.owner;
+
+      try {
+        const res = await fetch(`../php/load_drawing.php?name=${encodeURIComponent(name)}&owner=${encodeURIComponent(owner)}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to load drawing');
+
+        // load drawing
+        loadDrawingData(data);
+        loadModal.classList.add('hidden');
+
+      } catch (err) {
+        alert(`Error loading drawing: ${err.message}`);
+      }
+    }
+
+    if (target.classList.contains('delete-item-btn')) {
+      const li = target.closest('li'); // La riga <li>
+      const name = target.dataset.name;
+
+      if (!confirm(`Are you sure to delete "${name}"? This action is irreversible.`)) {
+        return;
+      }
+
+      try {
+        // Chiamata al NUOVO file PHP
+        const res = await fetch(`../php/delete_drawing.php?name=${encodeURIComponent(name)}`);
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || 'Failed to delete drawing');
+
+        // Eliminazione riuscita
+        alert(data.message || 'Drawing deleted!');
+
+        // Rimuovi l'elemento dalla lista nel modal
+        handleOpenLoadModal();
+
+      } catch (err) {
+        alert(`Error deleting drawing: ${err.message}`);
+      }
+    }
+  });
+
+  // Funzione helper per applicare i dati del disegno caricato
+  function loadDrawingData(data) {
+    handleReset();
+
+    axiomInput.value = data.axiom;
+    axiom = data.axiom;
+    depthInput.value = data.depth;
+    angleInput.value = data.angle;
+    rotInput.value = data.starting_rot;
+    lineWInput.value = data.line_width;
+    currentScale = data.scale;
+
+    varObjList = data.rules.map(rule => {
+      switch (rule.movement_type) {
+        case 'drawLine':
+          return new DrawLine(rule.variable, rule.replacement, rule.color);
+        case 'drawDot':
+          return new DrawDot(rule.variable, rule.replacement, rule.color);
+        case 'moveTo':
+          return new MoveTo(rule.variable, rule.replacement);
+        case 'noOp':
+          return new NoOp(rule.variable, rule.replacement);
+        default:
+          // Fallback nel caso i dati siano corrotti
+          return new DrawLine(rule.variable, rule.replacement, getRandColor(backgroundColorInput.value));
+      }
+    });
+
+    renderVarsContainer();
+
+    handleObjChange();
+  }
+
+  // aggiorna ui dell'utente
+  updateUserUI();
+
+
 });
 

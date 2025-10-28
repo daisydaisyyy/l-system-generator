@@ -22,19 +22,23 @@ frontend:
 
 UI:
 - [X] show/hide menu ui
-- [ ] separated menu sections: l-system setup, drawing settings
 - [X] rule must be beside the movement choice in the variables section
 - [X] rename css classes (config etc)
 - [X] padding, background per for vars list
 - [X] fix font size
 - [X] fix bottom btns layout
-- [ ] improve alert??
+- [?] separated menu sections: l-system setup, drawing settings
 
+- [ ] improve alert??
 - [ ] !! manuale utente (20/30 righe), da aggiungere un link alla pagina con il manuale in index.html
-- [X] validate html + css
+- [ ] add drawing name to the page top + point if not saved
+- [ ] improve css
+- [ ] validate html + css
+
 
 
 backend:
-- [ ] review backend code, linking with script.js
-- [ ] php backend (save/restore drawings, user auth, session)
-- [ ] insert default presets/examples into the db (owned by admin), the user clicks on it and it automatically sets drawing parameters (presets fetched from db? or pre-stored in an examples folder?)
+- [X] php backend (save/restore drawings, user auth, session)
+- [ ] review backend code
+- [ ] remain logged in after refreshing
+- [ ] insert default presets/examples into the db
