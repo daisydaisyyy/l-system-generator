@@ -40,5 +40,6 @@ UI:
 backend:
 - [X] php backend (save/restore drawings, user auth, session)
 - [ ] review backend code
-- [ ] remain logged in after refreshing
+- [X] FIX SESSION HANDLING + cookies misuse
 - [ ] insert default presets/examples into the db
+- [ ] separate owner drawings from public ones, make 2 tabs in load modal

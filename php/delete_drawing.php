@@ -2,7 +2,6 @@
 require_once 'db.php';
 header('Content-Type: application/json');
 
-// Verifica che l'utente sia loggato
 if (!isset($_SESSION['username'])) {
     http_response_code(401);
     echo json_encode(['error' => 'Devi essere loggato per eliminare un disegno']);
@@ -16,43 +15,57 @@ if (!isset($_GET['name'])) {
 }
 
 $name = $_GET['name'];
-$owner = $_SESSION['username'];
+$owner = $_SESSION['username']; 
 
-// Verifica che il disegno appartenga all'utente
-$stmt = $mysqli->prepare("SELECT owner FROM drawing WHERE name = ?");
-$stmt->bind_param('s', $name);
-$stmt->execute();
-$res = $stmt->get_result();
+$mysqli->begin_transaction();
 
-if ($res->num_rows === 0) {
-    http_response_code(404);
-    echo json_encode(['error' => 'Disegno non trovato']);
-    exit;
-}
+try {
+    $stmt_find_rules = $mysqli->prepare("SELECT rule FROM drawing_rule WHERE drawing_name = ? AND owner = ?");
+    if (!$stmt_find_rules) throw new Exception('DB prepare (find rules) failed: ' . $mysqli->error);
+    
+    $stmt_find_rules->bind_param('ss', $name, $owner);
+    if (!$stmt_find_rules->execute()) throw new Exception('DB execute (find rules) failed: ' . $stmt_find_rules->error);
 
-$drawing = $res->fetch_assoc();
-$stmt->close();
+    $res = $stmt_find_rules->get_result();
+    $rule_ids = [];
+    while ($row = $res->fetch_assoc()) {
+        $rule_ids[] = $row['rule'];
+    }
+    $stmt_find_rules->close();
 
-if ($drawing['owner'] !== $owner) {
-    http_response_code(403);
-    echo json_encode(['error' => 'Non hai il permesso di eliminare questo disegno']);
-    exit;
-}
+    $stmt_del_drawing = $mysqli->prepare("DELETE FROM drawing WHERE name = ? AND owner = ?");
+    if (!$stmt_del_drawing) throw new Exception('DB prepare failed: ' . $mysqli->error);
+    
+    $stmt_del_drawing->bind_param('ss', $name, $owner);
+    if (!$stmt_del_drawing->execute()) throw new Exception('DB execute failed: ' . $stmt_del_drawing->error);
 
-// Elimina le regole associate al disegno
-$rstmt = $mysqli->prepare("DELETE FROM rule WHERE drawing_name = ?");
-$rstmt->bind_param('s', $name);
-$rstmt->execute();
-$rstmt->close();
 
-// Elimina il disegno
-$stmt = $mysqli->prepare("DELETE FROM drawing WHERE name = ?");
-$stmt->bind_param('s', $name);
-if ($stmt->execute()) {
+    if ($stmt_del_drawing->affected_rows === 0) {
+        throw new Exception('Drawing not found or you are not its owner', 404);
+    }
+    $stmt_del_drawing->close();
+
+    if (!empty($rule_ids)) {
+        $placeholders = implode(',', array_fill(0, count($rule_ids), '?'));
+        $types = str_repeat('i', count($rule_ids));
+        
+        $stmt_del_rules = $mysqli->prepare("DELETE FROM rule WHERE id IN ($placeholders)");
+        if (!$stmt_del_rules) throw new Exception('DB prepare (del rules) failed: ' . $mysqli->error);
+
+        $stmt_del_rules->bind_param($types, ...$rule_ids);
+        if (!$stmt_del_rules->execute()) throw new Exception('DB execute (del rules) failed: ' . $stmt_del_rules->error);
+        
+        $stmt_del_rules->close();
+    }
+
+    $mysqli->commit();
     echo json_encode(['status' => 'ok', 'message' => 'Disegno eliminato con successo']);
-} else {
-    http_response_code(500);
-    echo json_encode(['error' => 'Errore durante l\'eliminazione del disegno']);
+
+} catch (Exception $e) {
+    $mysqli->rollback();
+    
+    $code = $e->getCode() === 404 ? 404 : 500;
+    http_response_code($code);
+    echo json_encode(['error' => $e->getMessage()]);
 }
-$stmt->close();
 ?>
