@@ -15,8 +15,10 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
+
 $name = isset($input['name']) ? trim($input['name']) : null;
 $owner = $_SESSION['username'];
+$axiom = isset($input['axiom']) ? trim($input['axiom']) : '';
 $depth = isset($input['depth']) ? (int)$input['depth'] : 0;
 $angle = isset($input['angle']) ? (float)$input['angle'] : 0.0;
 $starting_rot = isset($input['starting_rot']) ? (float)$input['starting_rot'] : 0.0;
@@ -30,8 +32,8 @@ if (!$name || mb_strlen($name) > 128) {
     exit;
 }
 
-$insert_sql = "INSERT INTO drawing (name, owner, depth, angle, starting_rot, line_width, scale, is_public)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+$insert_sql = "INSERT INTO drawing (name, owner, axiom, depth, angle, starting_rot, line_width, scale, is_public)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $mysqli->prepare($insert_sql);
 if ($stmt === false) {
     http_response_code(500);
@@ -39,11 +41,11 @@ if ($stmt === false) {
     exit;
 }
 
-$stmt->bind_param("ssiddddi", $name, $owner, $depth, $angle, $starting_rot, $line_width, $scale, $is_public);
+$stmt->bind_param("sssiddddi", $name, $owner, $axiom, $depth, $angle, $starting_rot, $line_width, $scale, $is_public);
 if (!$stmt->execute()) {
     if ($mysqli->errno === 1062) {
         http_response_code(409);
-        echo json_encode(['error' => 'Disegno con questo nome esiste già per questo utente']);
+        echo json_encode(['error' => 'Drawing already exists for this user']);
     } else {
         http_response_code(500);
         echo json_encode(['error' => 'DB execute failed: ' . $stmt->error]);
@@ -52,30 +54,38 @@ if (!$stmt->execute()) {
 }
 $stmt->close();
 
-// insert in rule and drawing-rule
+// --- CORREZIONE SALVATAGGIO REGOLE ---
 if (!empty($input['rules']) && is_array($input['rules'])) {
-    $rstmt = $mysqli->prepare("INSERT INTO rule (variable, drawing_name, replacement) VALUES (?, ?, ?)");
+    
+    $rstmt = $mysqli->prepare("INSERT INTO rule (variable, drawing_name, replacement, movement_type, color) VALUES (?, ?, ?, ?, ?)");
     if ($rstmt === false) {
         http_response_code(500);
         echo json_encode(['error' => 'DB prepare failed (rule): ' . $mysqli->error]);
         exit;
     }
-    $jrstmt = $mysqli->prepare("INSERT INTO `drawing-rule` (drawing_name, owner, rule) VALUES (?, ?, ?)");
+    
+    $jrstmt = $mysqli->prepare("INSERT INTO drawing_rule (drawing_name, owner, rule) VALUES (?, ?, ?)");
     if ($jrstmt === false) {
         http_response_code(500);
-        echo json_encode(['error' => 'DB prepare failed (drawing-rule): ' . $mysqli->error]);
+        echo json_encode(['error' => 'DB prepare failed (drawing_rule): ' . $mysqli->error]);
         exit;
     }
 
     foreach ($input['rules'] as $rule) {
         $variable = isset($rule['variable']) ? $rule['variable'] : null;
-        $replacement = isset($rule['replacement']) ? $rule['replacement'] : null;
-        if ($variable === null || $replacement === null) continue;
+        $replacement = isset($rule['replacement']) ? $rule['replacement'] : ''; // Default a stringa vuota se null
+        
+         $movement_type = isset($rule['movement_type']) ? $rule['movement_type'] : 'noOp';
+        $color = isset($rule['color']) ? $rule['color'] : '#000000'; // Default se non fornito
 
-        $rstmt->bind_param("sss", $variable, $name, $replacement);
+        if ($variable === null) continue; // Non salvare regole senza variabile
+
+        $rstmt->bind_param("sssss", $variable, $name, $replacement, $movement_type, $color);
         if (!$rstmt->execute()) {
-            continue; // ignore single failures
+            error_log("Failed to insert rule for variable $variable: " . $rstmt->error);
+            continue; 
         }
+        
         $rule_id = $mysqli->insert_id;
         $jrstmt->bind_param("ssi", $name, $owner, $rule_id);
         $jrstmt->execute();
@@ -85,3 +95,5 @@ if (!empty($input['rules']) && is_array($input['rules'])) {
 }
 
 echo json_encode(['status' => 'ok', 'name' => $name, 'owner' => $owner]);
+
+?>

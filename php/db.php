@@ -4,9 +4,9 @@ declare(strict_types=1);
 session_start();
 
 define('DB_HOST', 'localhost');
-define('DB_USER', 'app_user');    // cambia se usi un utente diverso
-define('DB_PASS', 'user');
-define('DB_NAME', 'lsystem_db');
+define('DB_USER', 'root');    // cambia se usi un utente diverso
+define('DB_PASS', '');
+define('DB_NAME', 'aloia_692438');
 
 $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 if ($mysqli->connect_error) {

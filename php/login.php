@@ -12,7 +12,7 @@ if (!$input || empty($input['username']) || empty($input['password'])) {
 $username = trim($input['username']);
 $password = $input['password'];
 
-$stmt = $mysqli->prepare("SELECT password_hash FROM user WHERE username = ?");
+$stmt = $mysqli->prepare("SELECT password_hash FROM account WHERE username = ?");
 if ($stmt === false) {
     http_response_code(500);
     echo json_encode(['error' => 'DB prepare failed: ' . $mysqli->error]);

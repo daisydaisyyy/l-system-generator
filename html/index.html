@@ -15,6 +15,10 @@
   <div>
     <header>
       <h2>L-systems generator</h2>
+      <div id="userArea">
+        <button id="showLoginBtn" type="button">Login</button>
+        <button id="showRegisterBtn" type="button">Register</button>
+      </div>
     </header>
 
     <main>
@@ -60,9 +64,8 @@
           <button id="startBtn" type="button">Start</button>
           <button id="pauseBtn" type="button">Pause</button>
           <button id="resetBtn" type="button">Reset</button>
-          <button id="saveBtn" type="button">💾 Save</button>
-          <button id="loadBtn" type="button">📂 Load</button>
-
+          <button id="showSaveModalBtn" type="button">💾 Save</button>
+          <button id="showLoadModalBtn" type="button">📂 Load</button>
         </div>
 
       </div>
@@ -86,6 +89,80 @@
     </div>
   </div>
 
+  <div id="loginModal" class="modalBackground hidden">
+    <div class="modalContainer">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <div>
+          <label for="loginUser">Username:</label>
+          <input type="text" id="loginUser" required>
+        </div>
+        <div>
+          <label for="loginPass">Password:</label>
+          <input type="password" id="loginPass" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="modalDiscardBtn">Cancel</button>
+          <button type="submit">Login</button>
+        </div>
+        <p class="modalError" id="loginError"></p>
+      </form>
+    </div>
+  </div>
+
+  <div id="registerModal" class="modalBackground hidden">
+    <div class="modalContainer">
+      <h2>Register</h2>
+      <form id="registerForm">
+        <div>
+          <label for="registerUser">Username:</label>
+          <input type="text" id="registerUser" required>
+        </div>
+        <div>
+          <label for="registerPass">Password:</label>
+          <input type="password" id="registerPass" minlength="6" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="modalDiscardBtn">Cancel</button>
+          <button type="submit">Register</button>
+        </div>
+        <p class="modalError" id="registerError"></p>
+      </form>
+    </div>
+  </div>
+
+  <div id="saveModal" class="modalBackground hidden">
+    <div class="modalContainer">
+      <h2>Save Drawing</h2>
+      <form id="saveForm">
+        <div>
+          <label for="drawingNameInput">Drawing Name:</label>
+          <input type="text" id="drawingNameInput" required>
+        </div>
+        <div>
+          <label for="drawingPublicInput">Make Public?</label>
+          <input type="checkbox" id="drawingPublicInput">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="modalDiscardBtn">Cancel</button>
+          <button type="submit">Save</button>
+        </div>
+        <p class="modalError" id="saveError"></p>
+      </form>
+    </div>
+  </div>
+
+  <div id="loadModal" class="modalBackground hidden">
+    <div class="modalContainer">
+      <h2>Load Drawing</h2>
+      <div id="drawingListContainer">
+        <p>Loading drawings...</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modalDiscardBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
 
 </body>
 
