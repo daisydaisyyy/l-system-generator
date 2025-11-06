@@ -23,7 +23,7 @@ body > * {
 
 #menu {
   box-shadow: inset -5px -5px 10px -3px rgba(0, 0, 0, 0.30),
-              0px 5px 25px 2px rgba(0, 0, 0, 0.50);
+    0px 5px 25px 2px rgba(0, 0, 0, 0.50);
 }
 
 header {
@@ -55,7 +55,6 @@ nav#saveBar {
 #drawingCanvas {
   display: block;
   background: transparent;
-  /* responsive canvas */
   position: absolute;
   z-index: -1;
   top: 0;
@@ -87,14 +86,14 @@ button:active {
   pointer-events: none;
 }
 
-main.hidden, .modalBackground.hidden {
+main.hidden {
   display: none;
 }
 
 #varsContainer {
   display: flex;
   gap: 10px;
-  flex-direction: column; /* in verticale */
+  flex-direction: column;
   align-items: baseline;
   max-height: 20vh;
   overflow-y: scroll;
@@ -105,11 +104,10 @@ main.hidden, .modalBackground.hidden {
   box-shadow: 0 0 10px 2px olive;
 }
 
-/* grid */
 .varConfig {
   display: grid;
   grid-template-columns: 5fr 20fr 30fr 10fr 10fr;
-  align-items: center; /* allinea variabile scritta agli elementi di configurazione */
+  align-items: center;
   gap: 5px;
   justify-items: center;
 }
@@ -156,38 +154,42 @@ main.hidden, .modalBackground.hidden {
   padding-top: 20px;
 }
 
-.modalBackground {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position:absolute;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
+/* dialogs */
+dialog {
+  border: 3px solid rgba(245, 245, 220, 0.386);
+  border-radius: 10px;
+  padding: 0;
+  max-width: 500px;
+  width: 90%;
+  background-color: beige;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  margin: auto;
+}
+
+dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.362);
 }
 
-.modalContainer {
-  background-color: beige;
-  border-radius: 10px;
+/* contenuto dei dialog (form o div interni) */
+dialog > form,
+dialog > .dialog-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
   padding: 20px;
-  border: 3px solid rgba(245, 245, 220, 0.386);
 }
 
-.modalContainer h2 {
+dialog h2 {
   border-bottom: 2px solid black;
   width: 100%;
   text-align: center;
   padding-bottom: 10px;
+  margin: 0;
 }
 
-.modalContainer > div {
+dialog > form > div:not(.modal-actions),
+dialog > .dialog-content > div:not(.modal-actions) {
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-items: stretch;
@@ -195,10 +197,16 @@ main.hidden, .modalBackground.hidden {
   gap: 30px 50px;
 }
 
-.modalContainer input[type="checkbox"] {
-  justify-self: center;
+.modal-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
 }
 
+dialog input[type="checkbox"] {
+  justify-self: center;
+}
 
 input[type="text"], input[type="number"], input[type="password"], select {
   text-align: center;
@@ -207,7 +215,7 @@ input[type="text"], input[type="number"], input[type="password"], select {
   color: inherit;
   border-radius: 500px;
   border: 1px solid olivedrab;
-  background-color:rgb(170, 186, 137);
+  background-color: rgb(170, 186, 137);
 }
 
 input[type="color"] {
@@ -220,9 +228,8 @@ input[type="color"] {
 }
 
 input[type="checkbox"] {
- transform: scale(2);
+  transform: scale(2);
 }
-
 
 #confirmVarBtn {
   background-color: rgb(0, 139, 0);
@@ -230,4 +237,48 @@ input[type="checkbox"] {
 
 #discardVarBtn {
   background-color: darkred;
+}
+
+.modalError {
+  color: darkred;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+  font-size: 0.9em;
+}
+
+/* stile specifico per il dialog di load */
+#drawingListContainer {
+  width: 100%;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+#drawingListContainer ul {
+  list-style: none;
+  padding: 0;
+}
+
+#drawingListContainer li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.drawing-item-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.delete-item-btn {
+  background-color: darkred;
+  padding: 0.3rem 0.6rem;
+  font-size: 1.2em;
+}
+
+.load-item-btn {
+  background-color: darkolivegreen;
+  padding: 0.3rem 0.8rem;
 }
