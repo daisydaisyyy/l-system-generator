@@ -344,11 +344,11 @@ document.addEventListener('DOMContentLoaded', e => {
   });
 
   addVarBtn.addEventListener('click', e => {
-    document.getElementById("varModal").showModal();
+    document.getElementById("varModal").classList.remove("hidden");
   });
 
   discardVarBtn.addEventListener('click', e => {
-    document.getElementById("varModal").close();
+    document.getElementById("varModal").classList.add("hidden");
   });
 
   confirmVarBtn.addEventListener('click', e => {
@@ -360,11 +360,12 @@ document.addEventListener('DOMContentLoaded', e => {
       alert("Variable cannot be a special character ([,],+,-,=,;). Choose another symbol.");
     }
     else if (varObjList.map(obj => obj.label).includes(label)) {
+      // aggiungi variabile nella lista, edit html
       alert("Variable is already on the list! Choose another symbol or discard your choice.");
     } else {
       varObjList.push(new DrawLine(label, "", getRandColor(backgroundColorInput.value))); // aggiunta di default
       renderVarsContainer();
-      document.getElementById("varModal").close();
+      document.getElementById("varModal").classList.add("hidden");
     }
   });
 
@@ -383,7 +384,7 @@ document.addEventListener('DOMContentLoaded', e => {
     else if (e.key === "Escape") {
       e.preventDefault();
       document.exitFullscreen();
-      document.getElementById("varModal").close(); // TODO: fix, not hiding when exiting fullscreen
+      document.getElementById("varModal").classList.add("hidden"); // TODO: fix, not hiding when exiting fullscreen
 
     }
   });
@@ -396,13 +397,7 @@ document.addEventListener('DOMContentLoaded', e => {
   backgroundColorInput.addEventListener('change', handleBackgroundColor);
 
 
-  // modals
-  showLoginBtn.addEventListener('click', () => loginModal.classList.remove('hidden'));
-  showRegisterBtn.addEventListener('click', () => registerModal.classList.remove('hidden'));
-  showSaveModalBtn.addEventListener('click', () => saveModal.classList.remove('hidden'));
-  showLoadModalBtn.addEventListener('click', handleOpenLoadModal);
-
-  // --- gestione DATABASE ---
+  // --- DATABASE LOGIC ---
 
   // aggiorna la UI dopo login/logout
   function updateUserUI() {
@@ -428,6 +423,18 @@ document.addEventListener('DOMContentLoaded', e => {
     }
   }
 
+  // --- modals ---
+  showLoginBtn.addEventListener('click', () => loginModal.classList.remove('hidden'));
+  showRegisterBtn.addEventListener('click', () => registerModal.classList.remove('hidden'));
+  showSaveModalBtn.addEventListener('click', () => saveModal.classList.remove('hidden'));
+  showLoadModalBtn.addEventListener('click', handleOpenLoadModal);
+
+  // chiudi modal
+  document.querySelectorAll('.modalDiscardBtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.modalBackground').classList.add('hidden');
+    });
+  });
 
   // --- gestione PHP ---
 
@@ -606,7 +613,7 @@ document.addEventListener('DOMContentLoaded', e => {
     }
 
     if (target.classList.contains('delete-item-btn')) {
-      const li = target.closest('li'); // riga piu' vicina (<li>)
+      const li = target.closest('li'); // La riga <li>
       const name = target.dataset.name;
 
       if (!confirm(`Are you sure to delete "${name}"? This action is irreversible.`)) {
@@ -664,7 +671,7 @@ document.addEventListener('DOMContentLoaded', e => {
   (async () => {
     try {
       const res = await fetch('../php/check_session.php');
-
+      
       if (res.ok) {
         const data = await res.json();
         currentUser = data.username;
@@ -675,10 +682,10 @@ document.addEventListener('DOMContentLoaded', e => {
       console.error('Error checking session:', err);
       currentUser = null;
     }
-
+    
     updateUserUI();
   })();
-
+  
 
 
 });
