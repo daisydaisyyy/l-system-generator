@@ -74,90 +74,93 @@
   <canvas id="drawingCanvas"></canvas>
 
 
-  <!-- modal per aggiunta di variabili manualmente -->
-  <div id="varModal" class="modalBackground hidden">
-    <div class="modalContainer">
-      <h2>New variable</h2>
-      <div>
-        <label for="newVarInput">New variable symbol:</label>
-        <input type="text" name="newVarInput" id="newVarInput">
-
-        <button type="button" id="discardVarBtn">Discard</button>
-        <button type="button" id="confirmVarBtn">Confirm</button>
-
-      </div>
+<!-- Dialogs -->
+<!-- Modal per aggiunta di variabili manualmente -->
+<dialog id="varModal">
+  <div class="dialog-content">
+    <h2>New variable</h2>
+    <div>
+      <label for="newVarInput">New variable symbol:</label>
+      <input type="text" name="newVarInput" id="newVarInput">
+    </div>
+    <div class="modal-actions">
+      <button type="button" id="discardVarBtn">Discard</button>
+      <button type="button" id="confirmVarBtn">Confirm</button>
     </div>
   </div>
+</dialog>
 
-  <div id="loginModal" class="modalBackground hidden">
-      <form id="loginForm" class="modalContainer">
-        <h2>Login</h2>
-        <div>
-          <label for="loginUser">Username:</label>
-          <input type="text" id="loginUser" required>
-        </div>
-        <div>
-          <label for="loginPass">Password:</label>
-          <input type="password" id="loginPass" required>
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="modalDiscardBtn">Cancel</button>
-          <button type="submit">Login</button>
-        </div>
-        <p class="modalError" id="loginError"></p>
-      </form>
-  </div>
+<!--  Login -->
+<dialog id="loginModal">
+  <form id="loginForm">
+    <h2>Login</h2>
+    <div>
+      <label for="loginUser">Username:</label>
+      <input type="text" id="loginUser" required>
+    </div>
+    <div>
+      <label for="loginPass">Password:</label>
+      <input type="password" id="loginPass" required>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="modalDiscardBtn">Cancel</button>
+      <button type="submit">Login</button>
+    </div>
+    <p class="modalError" id="loginError"></p>
+  </form>
+</dialog>
 
-  <div id="registerModal" class="modalBackground hidden">
-      <form id="registerForm" class="modalContainer">
-        <h2>Register</h2>
-        <div>
-          <label for="registerUser">Username:</label>
-          <input type="text" id="registerUser" required>
-        </div>
-        <div>
-          <label for="registerPass">Password:</label>
-          <input type="password" id="registerPass" minlength="6" required>
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="modalDiscardBtn">Cancel</button>
-          <button type="submit">Register</button>
-        </div>
-        <p class="modalError" id="registerError"></p>
-      </form>
-  </div>
+<!--  Register -->
+<dialog id="registerModal">
+  <form id="registerForm">
+    <h2>Register</h2>
+    <div>
+      <label for="registerUser">Username:</label>
+      <input type="text" id="registerUser" required>
+    </div>
+    <div>
+      <label for="registerPass">Password:</label>
+      <input type="password" id="registerPass" minlength="6" required>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="modalDiscardBtn">Cancel</button>
+      <button type="submit">Register</button>
+    </div>
+    <p class="modalError" id="registerError"></p>
+  </form>
+</dialog>
 
-  <div id="saveModal" class="modalBackground hidden">
-      <form id="saveForm" class="modalContainer">
-      <h2>Save Drawing</h2>
-        <div>
-          <label for="drawingNameInput">Drawing Name:</label>
-          <input type="text" id="drawingNameInput" required>
-        </div>
-        <div>
-          <label for="drawingPublicInput">Make Public?</label>
-          <input type="checkbox" id="drawingPublicInput">
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="modalDiscardBtn">Cancel</button>
-          <button type="submit">Save</button>
-        </div>
-        <p class="modalError" id="saveError"></p>
-      </form>
-  </div>
+<!--  Save drawing -->
+<dialog id="saveModal">
+  <form id="saveForm">
+    <h2>Save Drawing</h2>
+    <div>
+      <label for="drawingNameInput">Drawing Name:</label>
+      <input type="text" id="drawingNameInput" required>
+    </div>
+    <div>
+      <label for="drawingPublicInput">Make Public?</label>
+      <input type="checkbox" id="drawingPublicInput">
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="modalDiscardBtn">Cancel</button>
+      <button type="submit">Save</button>
+    </div>
+    <p class="modalError" id="saveError"></p>
+  </form>
+</dialog>
 
-  <div id="loadModal" class="modalBackground hidden">
-    <div class="modalContainer">
-      <h2>Load Drawing</h2>
-      <div id="drawingListContainer">
-        <p>Loading drawings...</p>
-      </div>
-      <div class="modal-actions">
-        <button type="button" class="modalDiscardBtn">Cancel</button>
-      </div>
+<!-- Load drawing -->
+<dialog id="loadModal">
+  <div class="dialog-content">
+    <h2>Load Drawing</h2>
+    <div id="drawingListContainer">
+      <p>Loading drawings...</p>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="modalDiscardBtn">Cancel</button>
     </div>
   </div>
-
+</dialog>
 </body>
-
 </html>
