@@ -14,7 +14,7 @@ export function generateLSystem(axiom, varObjList, depth) {
   return cur;
 }
 
-// Unica modifica necessaria: aggiunto 'state' per accedere a instr, curStep, isAnimating che ora sono esterni
+
 export function animateDrawing(ctx, stepSize, varObjList, angle, state) {
   if (!state.isAnimating || state.curStep >= state.instr.length) {
     state.isAnimating = false;
@@ -52,6 +52,7 @@ export function animateDrawing(ctx, stepSize, varObjList, angle, state) {
   }
   // console.log(`Step ${state.curStep + 1}/${state.instr.length}: ${cmd}`);
   state.curStep++;
+  return false;
 }
 
 
@@ -64,7 +65,6 @@ function getBoundingBox(scale = 1, axiom, depth, angle, rotDeg, varObjList) {
     return [0, 0];
   }
 
-  // RIPRISTINATO: Logica originale
   const stroke_lenght = 5 * scale;
   const rot = (rotDeg * Math.PI) / 180;
 

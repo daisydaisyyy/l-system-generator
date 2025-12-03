@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manuale Utente - L-System Generator</title>
+    <link rel="stylesheet" href="../css/style_docs.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>L-System Generator</h1>
+            <p>Documentazione</p>
+        </header>
+
+        <section>
+            <p><strong>L-System Generator</strong> è un’applicazione web per la generazione procedurale e la visualizzazione della crescita di piante e frattali mediante L-system (sistemi di Lindenmayer).</p>
+            <p>È possibile creare figure complesse a partire da parametri iniziali e osservarne l’evoluzione in tempo reale attraverso animazioni interattive.</p>
+        </section>
+
+        <section>
+            <h2>1. Come generare un disegno?</h2>
+            <p>Gli L-Systems sono definiti da 4 parametri fondamentali:</p>
+            <ul>
+                <li><strong>Axiom (assioma):</strong> La stringa iniziale da cui parte la generazione.</li>
+                <li><strong>Rules (regole):</strong> Indicano come trasformare i simboli dell’assioma a ogni iterazione.</li>
+                <li><strong>Depth (Livello di ricorsione):</strong> Il numero di iterazioni delle regole. Figure più complesse si ottengono incrementando questo valore.</li>
+                <li><strong>Angle (θ):</strong> L'angolo di rotazione tra due linee consecutive.</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>Esempio: Disegno di un albero</strong><br>
+                Axiom: <code>F</code><br>
+                Regola per F: <code>F[+F]F[-F]F</code><br>
+                Depth: <code>4</code><br>
+                Angle: <code>25.71</code><br>
+                Starting Rotation: <code>-90</code>
+            </div>
+        </section>
+
+        <section>
+            <h2>2. Regole e Comandi</h2>
+            
+            <div class="commands-grid">
+                <div class="cmd-symbol">+</div>
+                <div class="cmd-desc">Gira a <strong>destra</strong> di θ gradi</div>
+
+                <div class="cmd-symbol">-</div>
+                <div class="cmd-desc">Gira a <strong>sinistra</strong> di θ gradi</div>
+
+                <div class="cmd-symbol">[</div>
+                <div class="cmd-desc"><strong>Salva</strong> la posizione e l'angolo correnti (inizia un ramo)</div>
+
+                <div class="cmd-symbol">]</div>
+                <div class="cmd-desc"><strong>Ripristina</strong> la posizione e l'angolo salvati (chiude un ramo)</div>
+            </div>
+
+            <h3>Variabili Personalizzabili</h3>
+            <p>Qualsiasi altro carattere alfanumerico (es. <code>F</code>, <code>X</code>, <code>A</code>) è una variabile personalizzabile.</p>
+            <p>L'utente può assegnare un comportamento specifico a ciascuna variabile:</p>
+            <ul>
+                <li><strong>Draw Line:</strong> Disegna una linea in avanti.</li>
+                <li><strong>Move To:</strong> Si sposta in avanti senza disegnare (crea spazi vuoti).</li>
+                <li><strong>Draw Dot:</strong> Disegna un punto nella posizione corrente.</li>
+                <li><strong>Do Nothing:</strong> Non esegue nessun movimento.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>3. Impostazioni Grafiche</h2>
+            <p>L’applicazione permette di personalizzare l'aspetto del disegno:</p>
+            <ul>
+                <li>Movimento associato a ciascuna variabile.</li>
+                <li>Colore e larghezza del tratto.</li>
+                <li>Rotazione iniziale (utile per orientare alberi verso l'alto).</li>
+                <li>Colore di sfondo del canvas.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>4. Funzionalità di Visualizzazione</h2>
+            <ul>
+                <li><strong>Auto-Centering:</strong> Centramento e zoom automatico del disegno per adattarlo allo schermo.</li>
+                <li><strong>Animazione:</strong> Possibilità di mostrare/nascondere il processo di disegno e metterlo in pausa.</li>
+                <li><strong>Fullscreen:</strong> Premi <code>F11</code> per visualizzare il disegno a schermo intero senza interfaccia.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>5. Salvataggio e Caricamento</h2>
+            <ul>
+                <li><strong>Salvataggio:</strong> Puoi salvare i tuoi disegni in modo permanente.
+                    <ul>
+                        <li><em>Privati:</em> visibili solo a te.</li>
+                        <li><em>Pubblici:</em> visibili a tutti gli utenti.</li>
+                    </ul>
+                </li>
+                <li><strong>Caricamento:</strong> Puoi caricare i tuoi disegni salvati o i disegni pubblici presenti nel database.</li>
+            </ul>
+        </section>
+
+        <!-- Link per chiudere la scheda o tornare indietro -->
+        <a href="#" onclick="window.close();" class="back-link">Chiudi Documentazione</a>
+    </div>
+
+</body>
+</html>

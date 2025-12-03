@@ -1,6 +1,6 @@
 import { getRandColor, REGEX } from '../utils.js';
 import { getVariablesFromDOM, renderVarsContainer, updateVarsConfigFromDOM, updateUserUI } from '../views/ui.js';
-import { Variable, DrawLine } from '../models/Variable.js';
+import { Variable, DrawLine, DrawDot, MoveTo, NoOp } from '../models/Variable.js';
 import { resetCanvas, handleBackgroundColor } from '../views/canvas.js';
 import { generateLSystem, autoCenter, animateDrawing } from '../models/l-system.js';
 import * as API from '../api.js';
@@ -13,9 +13,9 @@ function setConfigState(disabled) {
 // Canvas and animation handler
 
 export function onResize(state, elems, ctx) {
+  if(!elems.depthInput) return;
   elems.canvas.width = elems.canvas.clientWidth * (parseInt(elems.depthInput.value) + 1);
   elems.canvas.height = elems.canvas.clientHeight * (parseInt(elems.depthInput.value) + 1);
-  // on resize, ridisegna per aggiustare la figura
   onStartClick(state, elems, ctx);
 }
 
@@ -69,13 +69,17 @@ export function onStartClick(state, elems, ctx) {
     state.isAnimating = true;
 
     if (elems.showAnimInput.checked) {
+      // animation loop
       state.animId = setInterval(() => {
         if (animateDrawing(ctx, state.stepSize, state.varObjList, parseInt(elems.angleInput.value), state)) {
           finishAnimation(state, elems);
         }
       }, 0);
     } else {
-      while (!animateDrawing(ctx, state.stepSize, state.varObjList, parseInt(elems.angleInput.value), state))
+      while (!animateDrawing(ctx, state.stepSize, state.varObjList, parseInt(elems.angleInput.value), state)) {
+        // continua finché animateDrawing ritorna false 
+      }
+      // (= animazione finita)
       finishAnimation(state, elems);
     }
   } catch (e) {
@@ -122,18 +126,26 @@ export function onAxiomInput(state, elems) {
 export function handleObjChange(state, elems) {
   let newVars = getVariablesFromDOM(state.axiom);
   let objLabels = state.varObjList.map(m => m.label);
+  
+  let hasChanged = false;
 
+  // controllo rimozioni
   if (objLabels.some(label => !newVars.includes(label))) {
     let toRemove = objLabels.filter(label => !newVars.includes(label));
     state.varObjList = state.varObjList.filter(m => !toRemove.includes(m.label));
+    hasChanged = true;
   }
 
+  // controllo aggiunte
   if (newVars.some(label => !objLabels.includes(label))) {
-    state.varObjList.push(...newVars.filter(label => !objLabels.includes(label))
-      .map(v => new DrawLine(v, "", getRandColor(elems.backgroundColorInput.value))));
+    const added = newVars.filter(label => !objLabels.includes(label));
+    state.varObjList.push(...added.map(v => new DrawLine(v, "", getRandColor(elems.backgroundColorInput.value))));
+    hasChanged = true;
   }
 
-  renderVarsContainer(elems.varsContainer, state.varObjList);
+  if (hasChanged) {
+    renderVarsContainer(elems.varsContainer, state.varObjList);
+  }
 }
 
 export function onVarsContainerChange(e, state, elems) {
@@ -152,7 +164,6 @@ export function onVarsContainerChange(e, state, elems) {
     const v = e.target.id.split('_')[1];
     const obj = Variable.findByLabel(state.varObjList, v);
     if (obj) obj.rule = e.target.value || "";
-    handleObjChange(state, elems);
   }
 }
 
@@ -302,8 +313,6 @@ function loadDrawingData(data, state, elems, ctx) {
   elems.rotInput.value = data.starting_rot;
   elems.lineWInput.value = data.line_width;
   state.currentScale = data.scale;
-
-  const { DrawLine, DrawDot, MoveTo, NoOp } = require('../models/Variable.js');
 
   state.varObjList = data.rules.map(rule => {
     switch (rule.movement_type) {
