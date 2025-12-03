@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>L-system generator</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/style_main.css">
   <script type="module" src="../js/main.js"></script>
 </head>
 
@@ -50,7 +50,7 @@
           <input id="rotInput" name="rotInput" class="config" type="number" value="0" min="-360" max="360">
 
           <label for="backgroundColorInput">Background color:</label>
-          <input name="backgroundColorInput" id="backgroundColorInput" class="config" type="color" value="#edc79d">
+          <input name="backgroundColorInput" id="backgroundColorInput" class="config" type="color" value="#fdf6e3">
 
           <label for="showAnimInput">Show Animation: </label>
           <input name="showAnimInput" id="showAnimInput" class="config" type="checkbox" checked>
@@ -87,6 +87,7 @@
     </div>
   </div>
 
+  <!-- login modal -->
   <div id="loginModal" class="modalBackground hidden">
       <form id="loginForm" class="modalContainer">
         <h2>Login</h2>
@@ -106,6 +107,7 @@
       </form>
   </div>
 
+  <!-- modal per registrare un nuovo utente -->
   <div id="registerModal" class="modalBackground hidden">
       <form id="registerForm" class="modalContainer">
         <h2>Register</h2>
@@ -125,6 +127,7 @@
       </form>
   </div>
 
+  <!-- modal per salvare un disegno -->
   <div id="saveModal" class="modalBackground hidden">
       <form id="saveForm" class="modalContainer">
       <h2>Save Drawing</h2>
@@ -144,6 +147,7 @@
       </form>
   </div>
 
+  <!-- modal per caricare i disegni -->
   <div id="loadModal" class="modalBackground hidden">
     <div class="modalContainer">
       <h2>Load Drawing</h2>
@@ -155,6 +159,13 @@
       </div>
     </div>
   </div>
+
+
+  <div id="help-btn-container">
+    <a href="docs.html" target="_blank" title="Vai alla documentazione">Docs</a>
+  </div>
+  </body>
+  </html>
 
 </body>
 

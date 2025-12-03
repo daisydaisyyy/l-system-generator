@@ -231,3 +231,91 @@ input[type="checkbox"] {
 #discardVarBtn {
   background-color: darkred;
 }
+
+#help-btn-container {
+  position: fixed;
+  right: 20px;
+  z-index: 99999;
+}
+
+#help-btn-container a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  background-color: beige;
+  color: darkolivegreen;
+  border: 2px solid darkolivegreen;
+  
+  text-decoration: none ;
+  font-family: 'Fira Mono', monospace;
+  font-weight: bold;
+  font-size: 20px;
+  
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s;
+}
+
+#help-btn-container a:hover {
+  transform: scale(1.1); 
+  background-color: darkolivegreen;
+  color: beige;
+  border-color: beige;
+  cursor: pointer;
+}
+
+#help-btn-container {
+  position: fixed;
+  
+  top: 1rem;       
+  right: 2rem;     
+  left: auto;
+  
+  z-index: 999999;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  
+  width: auto; 
+  height: auto;
+}
+
+#help-btn-container a {
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* adaptive width and height */
+  width: auto; 
+  height: auto;
+  padding: 10px 20px;
+  
+  border-radius: 50px; 
+
+  background-color: beige;
+  color: darkolivegreen;
+  border: 2px solid darkolivegreen;
+  
+  text-decoration: none;
+  font-family: 'Fira Mono', monospace;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s, background-color 0.2s, color 0.2s;
+}
+
+#help-btn-container a:hover {
+  transform: scale(1.05); 
+  background-color: darkolivegreen ;
+  color: beige;
+  border-color: beige;
+  cursor: pointer;
+}

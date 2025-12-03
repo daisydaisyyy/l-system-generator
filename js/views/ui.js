@@ -1,8 +1,7 @@
 import { REGEX } from '../utils.js';
 import { DrawLine, DrawDot, MoveTo, NoOp } from '../models/Variable.js';
 
-// --- Variable Configuration Helpers ---
-
+// variable configuration helpers
 export function getVariablesFromDOM(axiom) {
     const vars = new Set();
     axiom.split("").map(c => {
@@ -63,8 +62,7 @@ export function updateVarsConfigFromDOM(varObjList) {
     return configsList;
 }
 
-// --- User Interface Helpers ---
-
+// user interface helpers
 export function updateUserUI(state, elems, onLogout) {
   if (state.currentUser) {
     elems.userArea.innerHTML = `
