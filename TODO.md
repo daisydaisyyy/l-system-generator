@@ -34,8 +34,8 @@ UI:
 - [ ] add drawing name to the page top + point if not saved
 - [ ] improve css
 - [ ] validate html + css
-
-
+- [X] create separated files, organized in folders
+- [ ] remove .innerHTML, use createElement
 
 backend:
 - [X] php backend (save/restore drawings, user auth, session)

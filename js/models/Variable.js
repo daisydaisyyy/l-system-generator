@@ -1,6 +1,6 @@
-// regole da assegnare ai simboli
+import { getRandColor } from '../utils.js';
 
-class Variable {
+export class Variable {
     constructor(label, rule = "", color = getRandColor()) {
         this.label = label;
         this.color = color;
@@ -8,6 +8,7 @@ class Variable {
     }
 
     static findByLabel(variables, label) {
+        if (!Array.isArray(variables)) return undefined;
         return variables.find(m => m.label === label);
     }
 
@@ -16,7 +17,7 @@ class Variable {
     }
 }
 
-class DrawLine extends Variable {
+export class DrawLine extends Variable {
     apply(ctx, stepSize) {
         ctx.beginPath();
         ctx.moveTo(0, 0);
@@ -28,13 +29,13 @@ class DrawLine extends Variable {
     }
 }
 
-class MoveTo extends Variable {
+export class MoveTo extends Variable {
     apply(ctx, stepSize) {
         ctx.translate(stepSize, 0);
     }
 }
 
-class DrawDot extends Variable {
+export class DrawDot extends Variable {
     apply(ctx) {
         ctx.beginPath();
         ctx.arc(0, 0, ctx.lineWidth / 2, 0, Math.PI * 2);
@@ -43,7 +44,7 @@ class DrawDot extends Variable {
     }
 }
 
-class NoOp extends Variable {
+export class NoOp extends Variable {
     apply() {
         // do nothing
     }

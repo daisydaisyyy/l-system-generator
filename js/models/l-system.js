@@ -1,6 +1,7 @@
+import { Variable, DrawLine, MoveTo } from './Variable.js';
 
 // L-System implementation
-function generateLSystem(axiom, varObjList, depth) {
+export function generateLSystem(axiom, varObjList, depth) {
   let cur = axiom;
   for (let i = 0; i < depth; i++) {
     let next = '';
@@ -13,15 +14,15 @@ function generateLSystem(axiom, varObjList, depth) {
   return cur;
 }
 
-
-function animateDrawing(ctx, stepSize, varObjList, angle) {
-  if (!isAnimating || curStep >= instr.length) {
-    isAnimating = false;
-    curStep = 0;
+// Unica modifica necessaria: aggiunto 'state' per accedere a instr, curStep, isAnimating che ora sono esterni
+export function animateDrawing(ctx, stepSize, varObjList, angle, state) {
+  if (!state.isAnimating || state.curStep >= state.instr.length) {
+    state.isAnimating = false;
+    state.curStep = 0;
     return true;
   }
 
-  const cmd = instr[curStep];
+  const cmd = state.instr[state.curStep];
   const angle_rad = angle * Math.PI / 180;
 
   switch (cmd) {
@@ -49,8 +50,8 @@ function animateDrawing(ctx, stepSize, varObjList, angle) {
       }
       break;
   }
-  // console.log(`Step ${curStep + 1}/${instr.length}: ${cmd}`);
-  curStep++;
+  // console.log(`Step ${state.curStep + 1}/${state.instr.length}: ${cmd}`);
+  state.curStep++;
 }
 
 
@@ -63,6 +64,7 @@ function getBoundingBox(scale = 1, axiom, depth, angle, rotDeg, varObjList) {
     return [0, 0];
   }
 
+  // RIPRISTINATO: Logica originale
   const stroke_lenght = 5 * scale;
   const rot = (rotDeg * Math.PI) / 180;
 
@@ -122,7 +124,7 @@ function autoScale(canvasW, canvasH, width, height) {
 
 
 // auto center drawing
-function autoCenter(scale = 1, axiom, depth, angle, rot, varObjList, canvasW, canvasH) {
+export function autoCenter(scale = 1, axiom, depth, angle, rot, varObjList, canvasW, canvasH) {
   let [minX, minY, maxX, maxY] = getBoundingBox(scale, axiom, depth, angle, rot, varObjList);
   const width = maxX - minX;
   const height = maxY - minY;
@@ -140,60 +142,4 @@ function autoCenter(scale = 1, axiom, depth, angle, rot, varObjList, canvasW, ca
   const centerY = (maxY + minY);
   // console.log(`Auto Center coords: (${-centerX}, ${centerY})`);
   return [Math.round(-centerX), Math.round(-centerY), zoom];
-}
-
-// php, TODO: fix
-async function saveDrawing() {
-  const data = {
-    name: document.getElementById("nameInput").value,
-    axiom: document.getElementById("axiomInput").value,
-    depth: +document.getElementById("depthInput").value,
-    angle: +document.getElementById("angleInput").value,
-    starting_rot: +document.getElementById("rotInput").value,
-    line_width: +document.getElementById("widthInput").value,
-    scale: +document.getElementById("scaleInput").value,
-    rules: Array.from(document.querySelectorAll(".rule")).map(r => ({
-      name: r.querySelector(".rule-name").value,
-      replacement: r.querySelector(".rule-replacement").value
-    }))
-  };
-
-  const res = await fetch("save_lsystem.php", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(data)
-  });
-
-  const out = await res.json();
-  alert(out.success ? "Saved!" : "Error: " + out.error);
-}
-
-async function loadDrawing(name) {
-  const res = await fetch(`load_lsystem.php?name=${encodeURIComponent(name)}`);
-  const data = await res.json();
-
-  if (data.error) return alert(data.error);
-
-  document.getElementById("axiomInput").value = data.axiom;
-  document.getElementById("depthInput").value = data.depth;
-  document.getElementById("angleInput").value = data.angle;
-  document.getElementById("rotInput").value = data.starting_rot;
-  document.getElementById("widthInput").value = data.line_width;
-  document.getElementById("scaleInput").value = data.scale;
-
-  // fill rules
-  const container = document.getElementById("rulesContainer");
-  container.innerHTML = "";
-  data.rules.forEach(r => {
-    const div = document.createElement("div");
-    div.className = "rule";
-    div.innerHTML = `
-      <input class="rule-name" value="${r.name}">
-      →
-      <input class="rule-replacement" value="${r.replacement}">
-    `;
-    container.appendChild(div);
-  });
-
-  alert("Loaded: " + name);
 }
