@@ -1,7 +1,6 @@
 import { REGEX } from '../utils.js';
 import { DrawLine, DrawDot, MoveTo, NoOp } from '../models/Variable.js';
 
-// variable configuration helpers
 export function getVariablesFromDOM(axiom) {
     const vars = new Set();
     axiom.split("").map(c => {
@@ -24,24 +23,71 @@ export function getVariablesFromDOM(axiom) {
 }
 
 export function renderVarsContainer(container, varObjList) {
-    let dynamicElems = '';
-    varObjList.map(obj => {
-        dynamicElems += `
-      <div id="varContainer_${obj.label}" class="varConfig">
-        <label for="ruleInput_${obj.label}">${obj.label}</label>
-        <input type="text" id="ruleInput_${obj.label}" class="config" placeholder="rule" value="${obj && obj.rule ? obj.rule : ""}"/>
-        <select id="ruleSelect_${obj.label}" class="config">
-          <option value="drawLine" ${obj instanceof DrawLine ? "selected" : ""}>Draw Line</option>
-          <option value="drawDot" ${obj instanceof DrawDot ? "selected" : ""}>Draw Dot</option>
-          <option value="moveTo" ${obj instanceof MoveTo ? "selected" : ""}>Move To</option>
-          <option value="noOp" ${obj instanceof NoOp ? "selected" : ""}>Do nothing</option>
-        </select>
-        <input type="color" id="colorInput_${obj.label}" class="config ${(obj instanceof NoOp || obj instanceof MoveTo) ? "hidden" : ""}" value="${obj ? obj.color : "#00ff00"}"/>
-        <button class="config" type="button">-</button>
-      </div>
-      `;
+    container.textContent = ''; 
+
+    varObjList.forEach(obj => {
+        // container div
+        const div = document.createElement('div');
+        div.id = `varContainer_${obj.label}`;
+        div.className = 'varConfig';
+
+        // label
+        const label = document.createElement('label');
+        label.htmlFor = `ruleInput_${obj.label}`;
+        label.textContent = obj.label;
+
+        // rule input
+        const inputRule = document.createElement('input');
+        inputRule.type = 'text';
+        inputRule.id = `ruleInput_${obj.label}`;
+        inputRule.className = 'config';
+        inputRule.placeholder = 'rule';
+        inputRule.value = obj && obj.rule ? obj.rule : "";
+
+        // select
+        const select = document.createElement('select');
+        select.id = `ruleSelect_${obj.label}`;
+        select.className = 'config';
+
+        const options = [
+            { val: 'drawLine', text: 'Draw Line', selected: obj instanceof DrawLine },
+            { val: 'drawDot', text: 'Draw Dot', selected: obj instanceof DrawDot },
+            { val: 'moveTo', text: 'Move To', selected: obj instanceof MoveTo },
+            { val: 'noOp', text: 'Do nothing', selected: obj instanceof NoOp }
+        ];
+
+        options.forEach(optData => {
+            const opt = document.createElement('option');
+            opt.value = optData.val;
+            opt.textContent = optData.text;
+            if (optData.selected) opt.selected = true;
+            select.appendChild(opt);
+        });
+
+        // input color
+        const inputColor = document.createElement('input');
+        inputColor.type = 'color';
+        inputColor.id = `colorInput_${obj.label}`;
+        inputColor.className = 'config';
+        if (obj instanceof NoOp || obj instanceof MoveTo) {
+            inputColor.classList.add('hidden');
+        }
+        inputColor.value = obj ? obj.color : "#00ff00";
+
+        // button
+        const btn = document.createElement('button');
+        btn.className = 'config';
+        btn.type = 'button';
+        btn.textContent = '-';
+
+        div.appendChild(label);
+        div.appendChild(inputRule);
+        div.appendChild(select);
+        div.appendChild(inputColor);
+        div.appendChild(btn);
+
+        container.appendChild(div);
     });
-    container.innerHTML = dynamicElems;
 }
 
 export function updateVarsConfigFromDOM(varObjList) {
@@ -63,23 +109,46 @@ export function updateVarsConfigFromDOM(varObjList) {
 }
 
 // user interface helpers
-export function updateUserUI(state, elems, onLogout) {
-  if (state.currentUser) {
-    elems.userArea.innerHTML = `
-      <span>Welcome, <strong>${state.currentUser}</strong></span>
-      <button id="logoutBtn" type="button">Logout</button>
-    `;
-    elems.showSaveModalBtn.disabled = false;
-    elems.showLoadModalBtn.disabled = false;
-    document.getElementById('logoutBtn').addEventListener('click', onLogout);
-  } else {
-    elems.userArea.innerHTML = `
-      <button id="showLoginBtn" type="button">Login</button>
-      <button id="showRegisterBtn" type="button">Register</button>
-    `;
-    elems.showSaveModalBtn.disabled = true;
-    elems.showLoadModalBtn.disabled = true;
-    document.getElementById('showLoginBtn').addEventListener('click', () => elems.loginModal.classList.remove('hidden'));
-    document.getElementById('showRegisterBtn').addEventListener('click', () => elems.registerModal.classList.remove('hidden'));
-  }
+export function updateUserUI(state, elems) {
+    elems.userArea.textContent = '';
+
+    if (state.currentUser) {
+        const span = document.createElement('span');
+        span.appendChild(document.createTextNode('Welcome, '));
+        
+        const strong = document.createElement('strong');
+        strong.textContent = state.currentUser;
+        span.appendChild(strong);
+
+        const logoutBtn = document.createElement('button');
+        logoutBtn.id = 'logout-btn';
+        logoutBtn.type = 'button';
+        logoutBtn.textContent = 'Logout';
+
+        elems.userArea.appendChild(span);
+        elems.userArea.appendChild(logoutBtn);
+
+        elems.showSaveModalBtn.disabled = false;
+        elems.showLoadModalBtn.disabled = false;
+
+    } else {
+        const loginBtn = document.createElement('button');
+        loginBtn.id = 'showLoginBtn';
+        loginBtn.type = 'button';
+        loginBtn.textContent = 'Login';
+
+        const registerBtn = document.createElement('button');
+        registerBtn.id = 'showRegisterBtn';
+        registerBtn.type = 'button';
+        registerBtn.textContent = 'Register';
+
+        elems.userArea.appendChild(loginBtn);
+        elems.userArea.appendChild(registerBtn);
+
+        elems.showSaveModalBtn.disabled = true;
+        elems.showLoadModalBtn.disabled = true;
+
+        loginBtn.addEventListener('click', () => elems.loginModal.classList.remove('hidden'));
+        registerBtn.addEventListener('click', () => elems.registerModal.classList.remove('hidden'));
+    }
 }

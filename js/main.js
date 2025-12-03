@@ -53,6 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
   elems.loginForm.addEventListener('submit', (e) => Handlers.onLoginSubmit(e, state, elems));
   elems.saveForm.addEventListener('submit', (e) => Handlers.onSaveSubmit(e, state, elems));
   
+  // Setup global listener for Logout
+  Handlers.setupLogoutListener(state, elems);
+
   // modals Open/Close
   elems.showSaveModalBtn.addEventListener('click', () => elems.saveModal.classList.remove('hidden'));
   elems.showLoadModalBtn.addEventListener('click', () => Handlers.onLoadListOpen(state, elems));

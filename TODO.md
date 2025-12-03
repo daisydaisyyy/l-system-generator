@@ -30,16 +30,16 @@ UI:
 - [?] separated menu sections: l-system setup, drawing settings
 
 - [ ] improve alert??
-- [ ] !! manuale utente (20/30 righe), da aggiungere un link alla pagina con il manuale in index.html
+- [X] !! manuale utente (20/30 righe), da aggiungere un link alla pagina con il manuale in index.html
 - [ ] add drawing name to the page top + point if not saved
-- [ ] improve css
+- [X] improve css
 - [ ] validate html + css
 - [X] create separated files, organized in folders
-- [ ] remove .innerHTML, use createElement
+- [X] remove .innerHTML, use createElement
 
 backend:
 - [X] php backend (save/restore drawings, user auth, session)
 - [ ] review backend code
 - [X] FIX SESSION HANDLING + cookies misuse
 - [ ] insert default presets/examples into the db
-- [ ] separate owner drawings from public ones, make 2 tabs in load modal
+- [X] separate owner drawings from public ones, make 2 tabs in load modal

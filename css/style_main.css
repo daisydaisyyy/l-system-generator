@@ -1,3 +1,4 @@
+/* base styles */
 html {
   box-sizing: border-box;
   font-family: 'Fira Mono', sans-serif;
@@ -21,29 +22,10 @@ body > * {
   width: 100%;
 }
 
+/* main layout */
 #menu {
   box-shadow: inset -5px -5px 10px -3px rgba(0, 0, 0, 0.30),
               0px 5px 25px 2px rgba(0, 0, 0, 0.50);
-}
-
-header {
-  background: darkolivegreen;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  text-align: center;
-  align-items: center;
-  padding: 5px;
-}
-
-label {
-  font-weight: bold;
-}
-
-nav#authBar,
-nav#saveBar {
-  display: flex;
-  gap: 1rem;
 }
 
 #controls {
@@ -64,6 +46,28 @@ nav#saveBar {
   height: 100vh;
 }
 
+/* header */
+header {
+  background: darkolivegreen;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
+  padding: 5px;
+}
+
+nav#authBar,
+nav#saveBar {
+  display: flex;
+  gap: 1rem;
+}
+
+/* ui components */
+label {
+  font-weight: bold;
+}
+
 button {
   padding: 0.5rem 1rem;
   border: none;
@@ -82,19 +86,60 @@ button:active {
   opacity: 0.8;
 }
 
+input[type="text"], input[type="number"], input[type="password"], select {
+  text-align: center;
+  padding: 2px 8px;
+  font-size: inherit;
+  color: inherit;
+  border-radius: 500px;
+  border: 1px solid olivedrab;
+  background-color: rgb(170, 186, 137);
+}
+
+input[type="color"] {
+  border-radius: 5px;
+  padding: 0;
+  border: 2px solid bisque;
+  width: auto;
+  aspect-ratio: 1 / 1;
+  justify-self: center;
+}
+
+input[type="checkbox"] {
+  transform: scale(2);
+}
+
 .hidden {
   opacity: 0;
   pointer-events: none;
 }
 
-main.hidden, .modalBackground.hidden {
-  display: none;
+/* tabs */
+.tab-header {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  width: 100%;
 }
 
+.tab-btn {
+  background-color: #aaa; /* Colore inattivo */
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.tab-btn.active {
+  background-color: darkolivegreen; /* Colore attivo */
+  font-weight: bold;
+  border: 2px solid white;
+}
+
+/* variables container */
 #varsContainer {
   display: flex;
   gap: 10px;
-  flex-direction: column; /* in verticale */
+  flex-direction: column;
   align-items: baseline;
   max-height: 20vh;
   overflow-y: scroll;
@@ -105,11 +150,17 @@ main.hidden, .modalBackground.hidden {
   box-shadow: 0 0 10px 2px olive;
 }
 
-/* grid */
+#varsHeader {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  align-items: center;
+}
+
 .varConfig {
   display: grid;
   grid-template-columns: 5fr 20fr 30fr 10fr 10fr;
-  align-items: center; /* allinea variabile scritta agli elementi di configurazione */
+  align-items: center;
   gap: 5px;
   justify-items: center;
 }
@@ -118,13 +169,6 @@ main.hidden, .modalBackground.hidden {
   text-align: center;
   font-weight: bold;
   font-size: inherit;
-}
-
-#varsHeader {
-  display: flex;
-  justify-content: space-between;
-  margin: 10px 0;
-  align-items: center;
 }
 
 .varConfig>label::after {
@@ -156,17 +200,22 @@ main.hidden, .modalBackground.hidden {
   padding-top: 20px;
 }
 
+/* modals */
 .modalBackground {
   display: flex;
   justify-content: center;
   align-items: center;
-  position:absolute;
+  position: absolute;
   z-index: 1;
   top: 0;
   left: 0;
   height: 100vh;
   width: 100vw;
   background-color: rgba(0, 0, 0, 0.362);
+}
+
+main.hidden, .modalBackground.hidden {
+  display: none;
 }
 
 .modalContainer {
@@ -199,123 +248,118 @@ main.hidden, .modalBackground.hidden {
   justify-self: center;
 }
 
+#confirmVarBtn { background-color: rgb(0, 139, 0); }
+#discardVarBtn { background-color: darkred; }
 
-input[type="text"], input[type="number"], input[type="password"], select {
-  text-align: center;
-  padding: 2px 8px;
-  font-size: inherit;
-  color: inherit;
-  border-radius: 500px;
-  border: 1px solid olivedrab;
-  background-color:rgb(170, 186, 137);
-}
-
-input[type="color"] {
-  border-radius: 5px;
-  padding: 0;
-  border: 2px solid bisque;
-  width: auto;
-  aspect-ratio: 1 / 1;
-  justify-self: center;
-}
-
-input[type="checkbox"] {
- transform: scale(2);
-}
-
-
-#confirmVarBtn {
-  background-color: rgb(0, 139, 0);
-}
-
-#discardVarBtn {
-  background-color: darkred;
-}
-
+/* btn documentazione */
 #help-btn-container {
   position: fixed;
-  right: 20px;
-  z-index: 99999;
-}
-
-#help-btn-container a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-
-  background-color: beige;
-  color: darkolivegreen;
-  border: 2px solid darkolivegreen;
-  
-  text-decoration: none ;
-  font-family: 'Fira Mono', monospace;
-  font-weight: bold;
-  font-size: 20px;
-  
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  transition: transform 0.2s;
-}
-
-#help-btn-container a:hover {
-  transform: scale(1.1); 
-  background-color: darkolivegreen;
-  color: beige;
-  border-color: beige;
-  cursor: pointer;
-}
-
-#help-btn-container {
-  position: fixed;
-  
   top: 1rem;       
   right: 2rem;     
   left: auto;
-  
   z-index: 999999;
   background: transparent;
   padding: 0;
   margin: 0;
-  
   width: auto; 
   height: auto;
 }
 
 #help-btn-container a {
-  
   display: flex;
   justify-content: center;
   align-items: center;
-
-  /* adaptive width and height */
   width: auto; 
   height: auto;
   padding: 10px 20px;
-  
   border-radius: 50px; 
-
   background-color: beige;
   color: darkolivegreen;
   border: 2px solid darkolivegreen;
-  
   text-decoration: none;
   font-family: 'Fira Mono', monospace;
   font-weight: bold;
   font-size: 14px;
   letter-spacing: 1px;
   white-space: nowrap;
-  
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   transition: transform 0.2s, background-color 0.2s, color 0.2s;
 }
 
 #help-btn-container a:hover {
   transform: scale(1.05); 
-  background-color: darkolivegreen ;
+  background-color: darkolivegreen;
   color: beige;
   border-color: beige;
   cursor: pointer;
+}
+
+/* lista disegni nel db */
+#drawingListContainer {
+  width: 100%;
+}
+
+#drawingListContainer ul {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 2px solid #556b2f;
+  border-radius: 6px;
+  max-height: 300px;   
+  overflow-y: auto;   
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+}
+
+#drawingListContainer li {
+  display: flex; 
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s;
+}
+
+#drawingListContainer li:last-child {
+  border-bottom: none;
+}
+
+#drawingListContainer li:hover {
+  background-color: #f0f5e5;
+}
+
+.drawing-item-actions {
+  display: flex;
+  gap: 5px; 
+  margin: 0;
+}
+
+.load-item-btn, .delete-item-btn {
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.load-item-btn { background-color: green; }
+.load-item-btn:hover { background-color: darkgreen; }
+
+.delete-item-btn { background-color: red; }
+.delete-item-btn:hover { background-color: darkred; }
+
+/* load modal override */
+#loadModal .modalContainer {
+  width: 400px;     
+  max-width: 90vw; 
+}
+
+#loadModal .modalContainer > div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  grid-template-columns: none; 
+  gap: 15px;
 }

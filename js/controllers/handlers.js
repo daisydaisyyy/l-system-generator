@@ -200,7 +200,7 @@ export async function onRegisterSubmit(e, state, elems) {
   try {
     const data = await API.register(elems.registerUser.value, elems.registerPass.value);
     state.currentUser = data.username;
-    updateUserUI(state, elems, () => onLogout(state, elems));
+    updateUserUI(state, elems);
     elems.registerModal.classList.add('hidden');
     elems.registerForm.reset();
   } catch (err) {
@@ -214,7 +214,7 @@ export async function onLoginSubmit(e, state, elems) {
   try {
     const data = await API.login(elems.loginUser.value, elems.loginPass.value);
     state.currentUser = data.username;
-    updateUserUI(state, elems, () => onLogout(state, elems));
+    updateUserUI(state, elems);
     elems.loginModal.classList.add('hidden');
     elems.loginForm.reset();
   } catch (err) {
@@ -225,7 +225,17 @@ export async function onLoginSubmit(e, state, elems) {
 export async function onLogout(state, elems) {
   try { await API.logout(); } catch (err) { console.error(err); }
   state.currentUser = null;
-  updateUserUI(state, elems, () => onLogout(state, elems));
+  updateUserUI(state, elems);
+}
+
+// Global listener setup for Logout (Event Delegation)
+export function setupLogoutListener(state, elems) {
+  document.addEventListener('click', (e) => {
+    // Assicurati che il bottone creato in ui.js abbia id="logout-btn"
+    if (e.target && e.target.id === 'logout-btn') {
+      onLogout(state, elems);
+    }
+  });
 }
 
 export async function onSaveSubmit(e, state, elems) {
@@ -257,31 +267,133 @@ export async function onSaveSubmit(e, state, elems) {
   }
 }
 
-export async function onLoadListOpen(state, elems) {
-  elems.loadModal.classList.remove('hidden');
-  elems.drawingListContainer.innerHTML = '<p>Loading...</p>';
-  try {
-    const data = await API.getDrawingsList();
-    if (!data.drawings || data.total === 0) {
-      elems.drawingListContainer.innerHTML = '<p>No drawings found.</p>';
-      return;
-    }
-    
-    elems.drawingListContainer.innerHTML = '<ul>' + data.drawings.map(d => {
-      const deleteBtn = d.owner === state.currentUser 
-        ? `<button class="delete-item-btn" data-name="${d.name}">🗑️</button>` : '';
-      return `<li>
-        <span>${d.name} (${d.owner})</span>
-        <div class="drawing-item-actions">
-          <button class="load-item-btn" data-name="${d.name}" data-owner="${d.owner}">Load</button>
-          ${deleteBtn}
-        </div>
-      </li>`;
-    }).join('') + '</ul>';
-  } catch (err) {
-    elems.drawingListContainer.innerHTML = `<p class="modalError">${err.message}</p>`;
+// load
+
+function createDrawingRow(drawing, isOwner) {
+  const li = document.createElement('li');
+
+  // Nome e Autore
+  const span = document.createElement('span');
+  span.textContent = `${drawing.name} (${drawing.owner})`;
+
+  // Contenitore Bottoni
+  const actionsDiv = document.createElement('div');
+  actionsDiv.className = 'drawing-item-actions';
+
+  // Bottone Load
+  const loadBtn = document.createElement('button');
+  loadBtn.textContent = 'Load';
+  loadBtn.className = 'load-item-btn';
+  loadBtn.dataset.name = drawing.name;
+  loadBtn.dataset.owner = drawing.owner;
+  actionsDiv.appendChild(loadBtn);
+
+  // Bottone Delete (solo se owner)
+  if (isOwner) {
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = '🗑️';
+    deleteBtn.className = 'delete-item-btn';
+    deleteBtn.dataset.name = drawing.name;
+    actionsDiv.appendChild(deleteBtn);
+  }
+
+  li.appendChild(span);
+  li.appendChild(actionsDiv);
+  return li;
+}
+
+function renderDrawings(container, list, currentUser) {
+  container.textContent = ''; // Reset pulito
+
+  if (!list || list.length === 0) {
+    const p = document.createElement('p');
+    p.textContent = 'No drawings in this category.';
+    container.appendChild(p);
+    return;
+  }
+
+  const ul = document.createElement('ul');
+  list.forEach(drawing => {
+    // Delega la creazione della riga alla funzione helper
+    const li = createDrawingRow(drawing, drawing.owner === currentUser);
+    ul.appendChild(li);
+  });
+  container.appendChild(ul);
+}
+ 
+function resetTabButtons(btnMine, btnPublic) {
+  const newMine = btnMine.cloneNode(true);
+  const newPublic = btnPublic.cloneNode(true);
+  
+  btnMine.parentNode.replaceChild(newMine, btnMine);
+  btnPublic.parentNode.replaceChild(newPublic, btnPublic);
+  
+  return [newMine, newPublic];
+}
+
+function updateTabActiveState(tabMine, tabPublic, isMineActive) {
+  if (isMineActive) {
+    tabMine.classList.add('active');
+    tabPublic.classList.remove('active');
+  } else {
+    tabMine.classList.remove('active');
+    tabPublic.classList.add('active');
   }
 }
+
+export async function onLoadListOpen(state, elems) {
+  elems.loadModal.classList.remove('hidden');
+  const listContainer = elems.drawingListContainer;
+
+  let [tabMine, tabPublic] = resetTabButtons(
+    document.getElementById('tabMine'), 
+    document.getElementById('tabPublic')
+  );
+
+  listContainer.textContent = '';
+  const loadingP = document.createElement('p');
+  loadingP.textContent = 'Loading...';
+  listContainer.appendChild(loadingP);
+
+  try {
+    const data = await API.getDrawingsList();
+    
+    listContainer.textContent = '';
+
+    if (!data.drawings || data.total === 0) {
+      const p = document.createElement('p');
+      p.textContent = 'No drawings found.';
+      listContainer.appendChild(p);
+      return;
+    }
+
+    const myDrawings = data.drawings.filter(d => d.owner === state.currentUser);
+    const publicDrawings = data.drawings.filter(d => d.owner !== state.currentUser);
+
+    
+    tabMine.addEventListener('click', () => {
+      updateTabActiveState(tabMine, tabPublic, true);
+      renderDrawings(listContainer, myDrawings, state.currentUser);
+    });
+
+    tabPublic.addEventListener('click', () => {
+      updateTabActiveState(tabMine, tabPublic, false);
+      renderDrawings(listContainer, publicDrawings, state.currentUser);
+    });
+
+    updateTabActiveState(tabMine, tabPublic, true);
+    renderDrawings(listContainer, myDrawings, state.currentUser);
+
+  } catch (err) {
+    listContainer.textContent = '';
+    const errorP = document.createElement('p');
+    errorP.className = 'modalError';
+    errorP.textContent = err.message;
+    listContainer.appendChild(errorP);
+  }
+}
+
+
 
 export async function onDrawingListClick(e, state, elems, ctx) {
   const target = e.target;
@@ -295,7 +407,6 @@ export async function onDrawingListClick(e, state, elems, ctx) {
   }
   
   if (target.classList.contains('delete-item-btn')) {
-    if (!confirm("Delete?")) return;
     try {
       await API.deleteDrawing(target.dataset.name);
       onLoadListOpen(state, elems); 
