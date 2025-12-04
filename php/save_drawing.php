@@ -54,7 +54,7 @@ if (!$stmt->execute()) {
 }
 $stmt->close();
 
-// --- CORREZIONE SALVATAGGIO REGOLE ---
+
 if (!empty($input['rules']) && is_array($input['rules'])) {
     
     $rstmt = $mysqli->prepare("INSERT INTO rule (variable, drawing_name, replacement, movement_type, color) VALUES (?, ?, ?, ?, ?)");
@@ -73,12 +73,12 @@ if (!empty($input['rules']) && is_array($input['rules'])) {
 
     foreach ($input['rules'] as $rule) {
         $variable = isset($rule['variable']) ? $rule['variable'] : null;
-        $replacement = isset($rule['replacement']) ? $rule['replacement'] : ''; // Default a stringa vuota se null
+        $replacement = isset($rule['replacement']) ? $rule['replacement'] : ''; // default: stringa vuota
         
          $movement_type = isset($rule['movement_type']) ? $rule['movement_type'] : 'noOp';
-        $color = isset($rule['color']) ? $rule['color'] : '#000000'; // Default se non fornito
+        $color = isset($rule['color']) ? $rule['color'] : '#000000'; // se non e' fornito, uso un colore di default
 
-        if ($variable === null) continue; // Non salvare regole senza variabile
+        if ($variable === null) continue; // non salvo le regole senza variabile
 
         $rstmt->bind_param("sssss", $variable, $name, $replacement, $movement_type, $color);
         if (!$rstmt->execute()) {

@@ -1,8 +1,8 @@
 import { getRandColor, REGEX } from '../utils.js';
 import { getVariablesFromDOM, renderVarsContainer, updateVarsConfigFromDOM } from '../views/ui.js';
 import { Variable, DrawLine } from '../models/Variable.js';
-// Variable, UI handlers
 
+// Variables and UI handlers
 export function onAxiomInput(state, elems) {
   state.axiom = elems.axiomInput.value;
   handleObjChange(state, elems);

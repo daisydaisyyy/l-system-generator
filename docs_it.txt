@@ -82,3 +82,6 @@ Funzionalità di salvataggio e caricamento dei disegni
 - Caricamento: puoi anche caricare i tuoi disegni privati o i disegni pubblici e provare a generarli!
 
 Sono gia' presenti nel database dei disegni d'esempio pubblici che l'utente puo' caricare
+
+DATABASE:
+se elimino un utente, tutti i disegni a lui associati verranno eliminati

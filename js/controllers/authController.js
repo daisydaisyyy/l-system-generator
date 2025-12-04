@@ -2,7 +2,7 @@ import { updateUserUI } from '../views/ui.js';
 import * as API from '../api.js';
 
 
-// Auth handlers
+// auth handlers
 export async function onRegisterSubmit(e, state, elems) {
   e.preventDefault();
   elems.registerError.textContent = '';
@@ -37,10 +37,9 @@ export async function onLogout(state, elems) {
   updateUserUI(state, elems);
 }
 
-// Global listener setup for Logout (Event Delegation)
+// global listener setup for logout (event delegation)
 export function setupLogoutListener(state, elems) {
   document.addEventListener('click', (e) => {
-    // Assicurati che il bottone creato in ui.js abbia id="logout-btn"
     if (e.target && e.target.id === 'logout-btn') {
       onLogout(state, elems);
     }

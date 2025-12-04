@@ -25,12 +25,12 @@ if (isset($_SESSION['username'])) {
     }
 }
 
-// If owner param provided, fetch that exact drawing
+// se viene fornito l'owner, prendi quel disegno
 if ($owner_param !== null) {
     $stmt = $mysqli->prepare("SELECT name, owner, axiom, depth, angle, starting_rot, line_width, scale, is_public FROM drawing WHERE name = ? AND owner = ?");
     $stmt->bind_param('ss', $name, $owner_param);
 } else {
-    // otherwise select any drawing...
+    // altrimenti seleziona qualsiasi disegno
     if ($is_admin) {
         $stmt = $mysqli->prepare("SELECT name, owner, axiom, depth, angle, starting_rot, line_width, scale, is_public FROM drawing WHERE name = ?");
         $stmt->bind_param('s', $name);
