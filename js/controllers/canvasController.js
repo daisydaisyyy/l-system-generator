@@ -3,7 +3,7 @@ import { resetCanvas, handleBackgroundColor } from '../views/canvas.js';
 import { generateLSystem, autoCenter, animateDrawing } from '../models/l-system.js';
 import { resetAnimationState } from './state.js';
 
-// Canvas and animation handler
+// canvas and animation handler
 function setConfigState(disabled) {
   document.querySelectorAll('.config').forEach(el => el.disabled = disabled);
 }

@@ -44,3 +44,4 @@ backend:
 - [X] FIX SESSION HANDLING + cookies misuse
 - [ ] insert default presets/examples into the db
 - [X] separate owner drawings from public ones, make 2 tabs in load modal
+- [ ] implement delete user??

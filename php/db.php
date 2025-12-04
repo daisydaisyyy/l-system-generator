@@ -4,7 +4,7 @@ declare(strict_types=1);
 session_start();
 
 define('DB_HOST', 'localhost');
-define('DB_USER', 'root');    // cambia se usi un utente diverso
+define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'aloia_692438');
 

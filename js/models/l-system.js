@@ -1,6 +1,5 @@
 import { Variable, DrawLine, MoveTo } from './Variable.js';
 
-// L-System implementation
 export function generateLSystem(axiom, varObjList, depth) {
   let cur = axiom;
   for (let i = 0; i < depth; i++) {

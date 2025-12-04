@@ -2,10 +2,10 @@ import { getRandColor } from '../utils.js';
 import { renderVarsContainer } from '../views/ui.js';
 import { DrawLine, DrawDot, MoveTo, NoOp } from '../models/Variable.js';
 import * as API from '../api.js';
-
+import { onResetClick } from './canvasController.js';
+import { handleObjChange } from './configController.js';
 
 // load
-
 function createDrawingRow(drawing, isOwner) {
   const li = document.createElement('li');
 
