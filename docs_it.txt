@@ -85,3 +85,4 @@ Sono gia' presenti nel database dei disegni d'esempio pubblici che l'utente puo'
 
 DATABASE:
 se elimino un utente, tutti i disegni a lui associati verranno eliminati
+l'admin puo' vedere qualsiasi disegno, anche quelli privati di altri utenti
