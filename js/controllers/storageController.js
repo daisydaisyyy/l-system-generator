@@ -73,6 +73,7 @@ function updateTabActiveState(tabMine, tabPublic, isMineActive) {
   }
 }
 
+
 export async function onLoadListOpen(state, elems) {
   elems.loadModal.classList.remove('hidden');
   const listContainer = elems.drawingListContainer;
@@ -92,16 +93,10 @@ export async function onLoadListOpen(state, elems) {
     
     listContainer.textContent = '';
 
-    if (!data.drawings || data.total === 0) {
-      const p = document.createElement('p');
-      p.textContent = 'No drawings found.';
-      listContainer.appendChild(p);
-      return;
-    }
+    const allDrawings = data.drawings || [];
 
-    const myDrawings = data.drawings.filter(d => d.owner === state.currentUser);
-    const publicDrawings = data.drawings.filter(d => d.owner !== state.currentUser);
-
+    const myDrawings = allDrawings.filter(d => d.owner === state.currentUser);
+    const publicDrawings = allDrawings.filter(d => d.owner !== state.currentUser);
     
     tabMine.addEventListener('click', () => {
       updateTabActiveState(tabMine, tabPublic, true);

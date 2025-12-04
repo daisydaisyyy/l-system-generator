@@ -23,7 +23,7 @@ export function getVariablesFromDOM(axiom) {
 }
 
 export function renderVarsContainer(container, varObjList) {
-    container.textContent = ''; 
+    container.textContent = '';
 
     varObjList.forEach(obj => {
         // container div
@@ -115,9 +115,19 @@ export function updateUserUI(state, elems) {
     if (state.currentUser) {
         const span = document.createElement('span');
         span.appendChild(document.createTextNode('Welcome, '));
-        
+
         const strong = document.createElement('strong');
+        strong.style.padding = "2px 6px";
+        strong.style.borderRadius = "4px";
         strong.textContent = state.currentUser;
+        if (state.currentUser == "admin") {
+            strong.style.backgroundColor = "darkred";
+            strong.style.border = "1px solid #ff4444";
+        } else {
+            strong.style.backgroundColor = "darkgreen";
+            strong.style.border = "1px solid #44ff6d";
+        }
+        
         span.appendChild(strong);
 
         const logoutBtn = document.createElement('button');
