@@ -36,6 +36,7 @@ UI:
 - [ ] validate html + css
 - [X] create separated files, organized in folders
 - [X] remove .innerHTML, use createElement
+- [X] refactor in model, controller, view
 
 backend:
 - [X] php backend (save/restore drawings, user auth, session)

@@ -5,7 +5,7 @@ export function getDOMElements() {
       pauseBtn: document.getElementById('pauseBtn'),
       resetBtn: document.getElementById('resetBtn'),
       
-      // Inputs
+      // inputs
       axiomInput: document.getElementById('axiomInput'),
       depthInput: document.getElementById('depthInput'),
       rotInput: document.getElementById('rotInput'),
@@ -18,12 +18,12 @@ export function getDOMElements() {
       drawingNameInput: document.getElementById('drawingNameInput'),
       drawingPublicInput: document.getElementById('drawingPublicInput'),
   
-      // Containers & Areas
+      // containers
       varsContainer: document.getElementById('varsContainer'),
       userArea: document.getElementById('userArea'),
       drawingListContainer: document.getElementById('drawingListContainer'),
   
-      // Buttons (Modal triggers & Actions)
+      // buttons
       addVarBtn: document.getElementById('addVarBtn'),
       discardVarBtn: document.getElementById('discardVarBtn'),
       confirmVarBtn: document.getElementById('confirmVarBtn'),
@@ -32,24 +32,24 @@ export function getDOMElements() {
       showSaveModalBtn: document.getElementById('showSaveModalBtn'),
       showLoadModalBtn: document.getElementById('showLoadModalBtn'),
   
-      // Modals
+      // modals
       loginModal: document.getElementById('loginModal'),
       registerModal: document.getElementById('registerModal'),
       saveModal: document.getElementById('saveModal'),
       loadModal: document.getElementById('loadModal'),
       varModal: document.getElementById('varModal'),
   
-      // Forms
+      // forms
       loginForm: document.getElementById('loginForm'),
       registerForm: document.getElementById('registerForm'),
       saveForm: document.getElementById('saveForm'),
   
-      // Errors / Messages
+      // messages
       loginError: document.getElementById('loginError'),
       registerError: document.getElementById('registerError'),
       saveError: document.getElementById('saveError'),
       
-      // Inputs Form Login/Reg (per facilità di accesso)
+      // form inputs
       registerUser: document.getElementById('registerUser'),
       registerPass: document.getElementById('registerPass'),
       loginUser: document.getElementById('loginUser'),

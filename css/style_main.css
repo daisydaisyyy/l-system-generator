@@ -124,13 +124,13 @@ input[type="checkbox"] {
 }
 
 .tab-btn {
-  background-color: #aaa; /* Colore inattivo */
+  background-color: #aaa; /* tab inattiva */
   flex: 1;
   font-size: 0.9rem;
 }
 
 .tab-btn.active {
-  background-color: darkolivegreen; /* Colore attivo */
+  background-color: darkolivegreen; /* tab attiva */
   font-weight: bold;
   border: 2px solid white;
 }

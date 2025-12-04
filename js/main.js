@@ -1,45 +1,47 @@
 import { initialState } from './controllers/state.js';
 import { getDOMElements } from './views/dom.js';
 import { handleBackgroundColor } from './views/canvas.js';
+import { updateUserUI } from './views/ui.js';
 import { checkSession } from './api.js';
-import * as Handlers from './controllers/handlers.js';
 
-// init state
+import * as CanvasCtrl from './controllers/canvasController.js';
+import * as ConfigCtrl from './controllers/configController.js';
+import * as AuthCtrl from './controllers/authController.js';
+import * as StorageCtrl from './controllers/storageController.js';
+
 const state = { ...initialState };
 
 document.addEventListener('DOMContentLoaded', () => {
-  // get elements
   const elems = getDOMElements();
-  
+
   // setup context
   const ctx = elems.canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
   elems.canvas.width = elems.canvas.clientWidth;
   elems.canvas.height = elems.canvas.clientHeight;
 
-  // logic initiallization
+  // init state
   handleBackgroundColor(ctx, elems.backgroundColorInput);
   state.axiom = elems.axiomInput.value;
-  Handlers.handleObjChange(state, elems);
+  ConfigCtrl.handleObjChange(state, elems);
 
-  
-  // canvas / control events
-  window.addEventListener("resize", () => Handlers.onResize(state, elems, ctx));
-  elems.startBtn.addEventListener('click', () => Handlers.onStartClick(state, elems, ctx));
-  elems.pauseBtn.addEventListener('click', () => Handlers.onPauseClick(state, elems, ctx));
-  elems.resetBtn.addEventListener('click', () => Handlers.onResetClick(state, elems, ctx));
+  // canvas events
+  window.addEventListener("resize", () => CanvasCtrl.onResize(state, elems, ctx));
+  elems.startBtn.addEventListener('click', () => CanvasCtrl.onStartClick(state, elems, ctx));
+  elems.pauseBtn.addEventListener('click', () => CanvasCtrl.onPauseClick(state, elems, ctx));
+  elems.resetBtn.addEventListener('click', () => CanvasCtrl.onResetClick(state, elems, ctx));
   elems.backgroundColorInput.addEventListener('change', () => handleBackgroundColor(ctx, elems.backgroundColorInput));
 
-  // variable configuration events
-  elems.axiomInput.addEventListener('input', () => Handlers.onAxiomInput(state, elems));
+  // variables events
+  elems.axiomInput.addEventListener('input', () => ConfigCtrl.onAxiomInput(state, elems));
   
-  elems.varsContainer.addEventListener('change', (e) => Handlers.onVarsContainerChange(e, state, elems));
-  elems.varsContainer.addEventListener('click', (e) => Handlers.onVarsContainerClick(e, state, elems));
+  elems.varsContainer.addEventListener('change', (e) => ConfigCtrl.onVarsContainerChange(e, state, elems));
+  elems.varsContainer.addEventListener('click', (e) => ConfigCtrl.onVarsContainerClick(e, state, elems));
   
-  // variable Modal events
+  // modal events
   elems.addVarBtn.addEventListener('click', () => elems.varModal.classList.remove("hidden"));
   elems.discardVarBtn.addEventListener('click', () => elems.varModal.classList.add("hidden"));
-  elems.confirmVarBtn.addEventListener('click', () => Handlers.onConfirmVarClick(state, elems));
+  elems.confirmVarBtn.addEventListener('click', () => ConfigCtrl.onConfirmVarClick(state, elems));
   elems.newVarInput.addEventListener('input', (e) => { if (e.target.value.length > 1) e.target.value = e.target.value[0]; });
 
   // fullscreen
@@ -48,19 +50,21 @@ document.addEventListener('DOMContentLoaded', () => {
     else if (e.key === "Escape") { document.exitFullscreen().catch(()=>{}); elems.varModal.classList.add("hidden"); }
   });
 
-  // auth, data events
-  elems.registerForm.addEventListener('submit', (e) => Handlers.onRegisterSubmit(e, state, elems));
-  elems.loginForm.addEventListener('submit', (e) => Handlers.onLoginSubmit(e, state, elems));
-  elems.saveForm.addEventListener('submit', (e) => Handlers.onSaveSubmit(e, state, elems));
+  // auth events
+  elems.registerForm.addEventListener('submit', (e) => AuthCtrl.onRegisterSubmit(e, state, elems));
+  elems.loginForm.addEventListener('submit', (e) => AuthCtrl.onLoginSubmit(e, state, elems));
   
-  // Setup global listener for Logout
-  Handlers.setupLogoutListener(state, elems);
+  // setup global listener for logout
+  AuthCtrl.setupLogoutListener(state, elems);
 
-  // modals Open/Close
+  // save event
+  elems.saveForm.addEventListener('submit', (e) => StorageCtrl.onSaveSubmit(e, state, elems));
+
+  // modals
   elems.showSaveModalBtn.addEventListener('click', () => elems.saveModal.classList.remove('hidden'));
-  elems.showLoadModalBtn.addEventListener('click', () => Handlers.onLoadListOpen(state, elems));
+  elems.showLoadModalBtn.addEventListener('click', () => StorageCtrl.onLoadListOpen(state, elems));
   
-  elems.drawingListContainer.addEventListener('click', (e) => Handlers.onDrawingListClick(e, state, elems, ctx));
+  elems.drawingListContainer.addEventListener('click', (e) => StorageCtrl.onDrawingListClick(e, state, elems, ctx));
   
   document.querySelectorAll('.modalDiscardBtn').forEach(btn => {
     btn.addEventListener('click', () => btn.closest('.modalBackground').classList.add('hidden'));
@@ -74,6 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       state.currentUser = null;
     }
-    Handlers.updateUserUI(state, elems);
+    updateUserUI(state, elems);
   })();
 });
