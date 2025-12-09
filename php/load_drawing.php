@@ -10,10 +10,10 @@ if (!isset($_GET['name'])) {
 $name = $_GET['name'];
 $owner_param = isset($_GET['owner']) ? $_GET['owner'] : null;
 
-// check if current account is admin
+// check if current user is admin
 $is_admin = false;
 if (isset($_SESSION['username'])) {
-    $a = $mysqli->prepare("SELECT is_admin FROM account WHERE username = ?"); 
+    $a = $mysqli->prepare("SELECT is_admin FROM user WHERE username = ?"); 
     if ($a) {
         $a->bind_param('s', $_SESSION['username']);
         $a->execute();

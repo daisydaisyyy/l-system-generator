@@ -27,11 +27,11 @@ export function animateDrawing(ctx, stepSize, varObjList, angle, state) {
   switch (cmd) {
 
     case '+':
-      ctx.rotate(angle_rad);
+      ctx.rotate(-angle_rad);
       break;
 
     case '-':
-      ctx.rotate(-angle_rad);
+      ctx.rotate(angle_rad);
       break;
 
     case '[':
@@ -75,9 +75,9 @@ function getBoundingBox(scale = 1, axiom, depth, angle, rotDeg, varObjList) {
   for (let i = 0; i < instr.length; i++) {
     const c = instr[i];
     if (c === '+') {
-      dir += angle;
-    } else if (c === '-') {
       dir -= angle;
+    } else if (c === '-') {
+      dir += angle;
     } else if (c === '[') {
       stack.push({ tx, ty, dir });
     } else if (c === ']') { // restore state

@@ -10,6 +10,6 @@ rule(id (pk), variable, replacement)
 drawing-rule(drawing_name (pk,fk). owner (pk,fk), rule(pk,fk))
 
 admin user owns default drawing presets
-need to handle users sessions
+admin password: adminadmin
 
 

@@ -20,7 +20,7 @@ if (strlen($username) > 64 || strlen($password) < 6) {
 
 $hash = password_hash($password, PASSWORD_DEFAULT);
 
-$stmt = $mysqli->prepare("INSERT INTO account (username, password_hash, is_admin) VALUES (?, ?, 0)");
+$stmt = $mysqli->prepare("INSERT INTO user (username, password_hash, is_admin) VALUES (?, ?, 0)");
 if (!$stmt) {
     http_response_code(500);
     echo json_encode(['error' => 'prepare failed: ' . $mysqli->error]);

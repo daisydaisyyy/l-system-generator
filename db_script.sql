@@ -1,5 +1,5 @@
 
-CREATE TABLE account (
+CREATE TABLE user (
     username VARCHAR(64) PRIMARY KEY,
     password_hash VARCHAR(255) NOT NULL,
     is_admin TINYINT(1) DEFAULT 0
@@ -15,7 +15,7 @@ CREATE TABLE drawing (
     line_width DOUBLE DEFAULT 1,
     scale DOUBLE DEFAULT 1,
     is_public TINYINT(1) DEFAULT 0,
-    FOREIGN KEY (owner) REFERENCES account(username) ON DELETE CASCADE,
+    FOREIGN KEY (owner) REFERENCES user(username) ON DELETE CASCADE,
     PRIMARY KEY(name, owner)
 );
 

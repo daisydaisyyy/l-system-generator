@@ -1,3 +1,5 @@
+// funzioni per gestire l'interfaccia utente
+
 import { REGEX } from '../utils.js';
 import { DrawLine, DrawDot, MoveTo, NoOp } from '../models/Variable.js';
 
@@ -26,7 +28,7 @@ export function renderVarsContainer(container, varObjList) {
     container.textContent = '';
 
     varObjList.forEach(obj => {
-        // container div
+        // variable container
         const div = document.createElement('div');
         div.id = `varContainer_${obj.label}`;
         div.className = 'varConfig';
@@ -44,7 +46,7 @@ export function renderVarsContainer(container, varObjList) {
         inputRule.placeholder = 'rule';
         inputRule.value = obj && obj.rule ? obj.rule : "";
 
-        // select
+        // movement type
         const select = document.createElement('select');
         select.id = `ruleSelect_${obj.label}`;
         select.className = 'config';

@@ -1,3 +1,4 @@
+// prende i dati dal DOM
 export function getDOMElements() {
     return {
       canvas: document.getElementById('drawingCanvas'),
