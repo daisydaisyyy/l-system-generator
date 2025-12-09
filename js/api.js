@@ -1,3 +1,4 @@
+// gestione del php
 export async function register(username, password) {
     const res = await fetch('../php/register.php', {
       method: 'POST',

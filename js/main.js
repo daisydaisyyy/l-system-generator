@@ -46,7 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // fullscreen
   document.addEventListener('keydown', (e) => {
-    if (e.key === "F11") { e.preventDefault(); ctx.canvas.requestFullscreen(); }
+    const skip = 'input[type="text"], input[type="password"]'; 
+    if (e.key === "f" && !e.target.matches(skip)) { e.preventDefault(); ctx.canvas.requestFullscreen(); }
     else if (e.key === "Escape") { document.exitFullscreen().catch(()=>{}); elems.varModal.classList.add("hidden"); }
   });
 

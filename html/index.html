@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -56,7 +56,7 @@
           <input name="showAnimInput" id="showAnimInput" class="config" type="checkbox" checked>
         </div>
 
-        <p>Press F11 to go in fullscreen!</p>
+        <p>Press f to go in fullscreen!</p>
 
         <div class="btnContainer">
           <button id="startBtn" type="button">Start</button>
@@ -89,69 +89,69 @@
 
   <!-- login modal -->
   <div id="loginModal" class="modalBackground hidden">
-      <form id="loginForm" class="modalContainer">
-        <h2>Login</h2>
-        <div>
-          <label for="loginUser">Username:</label>
-          <input type="text" id="loginUser" required>
-        </div>
-        <div>
-          <label for="loginPass">Password:</label>
-          <input type="password" id="loginPass" required>
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="modalDiscardBtn">Cancel</button>
-          <button type="submit">Login</button>
-        </div>
-        <p class="modalError" id="loginError"></p>
-      </form>
+    <form id="loginForm" class="modalContainer">
+      <h2>Login</h2>
+      <div>
+        <label for="loginUser">Username:</label>
+        <input type="text" id="loginUser" required>
+      </div>
+      <div>
+        <label for="loginPass">Password:</label>
+        <input type="password" id="loginPass" required>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modalDiscardBtn">Cancel</button>
+        <button type="submit">Login</button>
+      </div>
+      <p class="modalError" id="loginError"></p>
+    </form>
   </div>
 
   <!-- modal per registrare un nuovo utente -->
   <div id="registerModal" class="modalBackground hidden">
-      <form id="registerForm" class="modalContainer">
-        <h2>Register</h2>
-        <div>
-          <label for="registerUser">Username:</label>
-          <input type="text" id="registerUser" required>
-        </div>
-        <div>
-          <label for="registerPass">Password:</label>
-          <input type="password" id="registerPass" minlength="6" required>
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="modalDiscardBtn">Cancel</button>
-          <button type="submit">Register</button>
-        </div>
-        <p class="modalError" id="registerError"></p>
-      </form>
+    <form id="registerForm" class="modalContainer">
+      <h2>Register</h2>
+      <div>
+        <label for="registerUser">Username:</label>
+        <input type="text" id="registerUser" required>
+      </div>
+      <div>
+        <label for="registerPass">Password:</label>
+        <input type="password" id="registerPass" minlength="6" required>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modalDiscardBtn">Cancel</button>
+        <button type="submit">Register</button>
+      </div>
+      <p class="modalError" id="registerError"></p>
+    </form>
   </div>
 
   <!-- modal per salvare un disegno -->
   <div id="saveModal" class="modalBackground hidden">
-      <form id="saveForm" class="modalContainer">
+    <form id="saveForm" class="modalContainer">
       <h2>Save Drawing</h2>
-        <div>
-          <label for="drawingNameInput">Drawing Name:</label>
-          <input type="text" id="drawingNameInput" required>
-        </div>
-        <div>
-          <label for="drawingPublicInput">Make Public?</label>
-          <input type="checkbox" id="drawingPublicInput">
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="modalDiscardBtn">Cancel</button>
-          <button type="submit">Save</button>
-        </div>
-        <p class="modalError" id="saveError"></p>
-      </form>
+      <div>
+        <label for="drawingNameInput">Drawing Name:</label>
+        <input type="text" id="drawingNameInput" required>
+      </div>
+      <div>
+        <label for="drawingPublicInput">Make Public?</label>
+        <input type="checkbox" id="drawingPublicInput">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modalDiscardBtn">Cancel</button>
+        <button type="submit">Save</button>
+      </div>
+      <p class="modalError" id="saveError"></p>
+    </form>
   </div>
 
   <!-- modal per caricare i disegni -->
   <div id="loadModal" class="modalBackground hidden">
     <div class="modalContainer">
       <h2>Load Drawing</h2>
-      
+
       <div class="tab-header">
         <button type="button" id="tabMine" class="tab-btn active">My Drawings</button>
         <button type="button" id="tabPublic" class="tab-btn">Public Drawings</button>
@@ -170,9 +170,6 @@
   <div id="help-btn-container">
     <a href="docs.html" target="_blank" title="Vai alla documentazione">Docs</a>
   </div>
-  </body>
-  </html>
-
 </body>
 
 </html>

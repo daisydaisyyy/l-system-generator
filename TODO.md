@@ -31,12 +31,13 @@ UI:
 
 - [ ] improve alert??
 - [X] !! manuale utente (20/30 righe), da aggiungere un link alla pagina con il manuale in index.html
-- [ ] add drawing name to the page top + point if not saved
+- [?] add drawing name to the page top + point if not saved
 - [X] improve css
-- [ ] validate html + css
+- [X] validate html + css
 - [X] create separated files, organized in folders
 - [X] remove .innerHTML, use createElement
 - [X] refactor in model, controller, view
+- [ ] fix sierpinski triangle not generating correctly!!
 
 backend:
 - [X] php backend (save/restore drawings, user auth, session)
@@ -44,4 +45,5 @@ backend:
 - [X] FIX SESSION HANDLING + cookies misuse
 - [ ] insert default presets/examples into the db
 - [X] separate owner drawings from public ones, make 2 tabs in load modal
-- [ ] implement delete user??
+- [?] implement delete user
+- [ ] when deleting a drawing, doesn't delete its entries in rule table

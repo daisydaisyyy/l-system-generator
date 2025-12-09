@@ -20,18 +20,19 @@ $owner = $_SESSION['username'];
 $mysqli->begin_transaction();
 
 try {
-    $stmt_find_rules = $mysqli->prepare("SELECT rule FROM drawing_rule WHERE drawing_name = ? AND owner = ?");
-    if (!$stmt_find_rules) throw new Exception('DB prepare (find rules) failed: ' . $mysqli->error);
+    // trovo gli id delle regole del disegno
+    $stmt_find_ids = $mysqli->prepare("SELECT rule FROM drawing_rule WHERE drawing_name = ? AND owner = ?");
+    if (!$stmt_find_ids) throw new Exception('DB prepare (find rules) failed: ' . $mysqli->error);
     
-    $stmt_find_rules->bind_param('ss', $name, $owner);
-    if (!$stmt_find_rules->execute()) throw new Exception('DB execute (find rules) failed: ' . $stmt_find_rules->error);
+    $stmt_find_ids->bind_param('ss', $name, $owner);
+    if (!$stmt_find_ids->execute()) throw new Exception('DB execute (find rules) failed: ' . $stmt_find_ids->error);
 
-    $res = $stmt_find_rules->get_result();
+    $res = $stmt_find_ids->get_result();
     $rule_ids = [];
     while ($row = $res->fetch_assoc()) {
-        $rule_ids[] = $row['rule'];
+        $rule_ids[] = $row['rule']; // salvo gli id da eliminare
     }
-    $stmt_find_rules->close();
+    $stmt_find_ids->close();
 
     $stmt_del_drawing = $mysqli->prepare("DELETE FROM drawing WHERE name = ? AND owner = ?");
     if (!$stmt_del_drawing) throw new Exception('DB prepare failed: ' . $mysqli->error);
@@ -39,12 +40,12 @@ try {
     $stmt_del_drawing->bind_param('ss', $name, $owner);
     if (!$stmt_del_drawing->execute()) throw new Exception('DB execute failed: ' . $stmt_del_drawing->error);
 
-
     if ($stmt_del_drawing->affected_rows === 0) {
         throw new Exception('Drawing not found or you are not its owner', 404);
     }
     $stmt_del_drawing->close();
 
+    // elimino dalla tabella rule
     if (!empty($rule_ids)) {
         $placeholders = implode(',', array_fill(0, count($rule_ids), '?'));
         $types = str_repeat('i', count($rule_ids));
@@ -59,7 +60,7 @@ try {
     }
 
     $mysqli->commit();
-    echo json_encode(['status' => 'ok', 'message' => 'Disegno eliminato con successo']);
+    echo json_encode(['status' => 'ok', 'message' => 'Drawing deleted successfully.']);
 
 } catch (Exception $e) {
     $mysqli->rollback();
