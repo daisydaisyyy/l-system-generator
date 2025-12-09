@@ -37,13 +37,12 @@ UI:
 - [X] create separated files, organized in folders
 - [X] remove .innerHTML, use createElement
 - [X] refactor in model, controller, view
-- [ ] fix sierpinski triangle not generating correctly!!
 
 backend:
 - [X] php backend (save/restore drawings, user auth, session)
 - [ ] review backend code
 - [X] FIX SESSION HANDLING + cookies misuse
-- [ ] insert default presets/examples into the db
+- [X] insert default presets/examples into the db
 - [X] separate owner drawings from public ones, make 2 tabs in load modal
 - [?] implement delete user
-- [ ] when deleting a drawing, doesn't delete its entries in rule table
+- [X] when deleting a drawing, delete its entries in rule table
