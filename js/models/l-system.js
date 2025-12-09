@@ -1,6 +1,6 @@
+import { Variable, DrawLine, MoveTo } from './Variable.js';
 
-// L-System implementation
-function generateLSystem(axiom, varObjList, depth) {
+export function generateLSystem(axiom, varObjList, depth) {
   let cur = axiom;
   for (let i = 0; i < depth; i++) {
     let next = '';
@@ -14,24 +14,24 @@ function generateLSystem(axiom, varObjList, depth) {
 }
 
 
-function animateDrawing(ctx, stepSize, varObjList) {
-  if (!isAnimating || curStep >= instr.length) {
-    isAnimating = false;
-    curStep = 0;
+export function animateDrawing(ctx, stepSize, varObjList, angle, state) {
+  if (!state.isAnimating || state.curStep >= state.instr.length) {
+    state.isAnimating = false;
+    state.curStep = 0;
     return true;
   }
 
-  const cmd = instr[curStep];
-  const angle = parseInt(angleInput.value) * Math.PI / 180;
+  const cmd = state.instr[state.curStep];
+  const angle_rad = angle * Math.PI / 180;
 
   switch (cmd) {
 
     case '+':
-      ctx.rotate(angle);
+      ctx.rotate(-angle_rad);
       break;
 
     case '-':
-      ctx.rotate(-angle);
+      ctx.rotate(angle_rad);
       break;
 
     case '[':
@@ -49,15 +49,13 @@ function animateDrawing(ctx, stepSize, varObjList) {
       }
       break;
   }
-  // console.log(`Step ${curStep + 1}/${instr.length}: ${cmd}`);
-  curStep++;
+  // console.log(`Step ${state.curStep + 1}/${state.instr.length}: ${cmd}`);
+  state.curStep++;
+  return false;
 }
 
 
-function getBoundingBox(scale = 1, axiom, varObjList) {
-  const depth = parseInt(depthInput.value, 10) || 0;
-  const angle = parseFloat(angleInput.value) || 0;
-  const rotDeg = parseFloat(rotInput.value) || 0;
+function getBoundingBox(scale = 1, axiom, depth, angle, rotDeg, varObjList) {
 
   let instr;
   try {
@@ -77,9 +75,9 @@ function getBoundingBox(scale = 1, axiom, varObjList) {
   for (let i = 0; i < instr.length; i++) {
     const c = instr[i];
     if (c === '+') {
-      dir += angle;
-    } else if (c === '-') {
       dir -= angle;
+    } else if (c === '-') {
+      dir += angle;
     } else if (c === '[') {
       stack.push({ tx, ty, dir });
     } else if (c === ']') { // restore state
@@ -125,8 +123,8 @@ function autoScale(canvasW, canvasH, width, height) {
 
 
 // auto center drawing
-function autoCenter(scale = 1, axiom, varObjList, canvasW, canvasH) {
-  let [minX, minY, maxX, maxY] = getBoundingBox(scale, axiom, varObjList);
+export function autoCenter(scale = 1, axiom, depth, angle, rot, varObjList, canvasW, canvasH) {
+  let [minX, minY, maxX, maxY] = getBoundingBox(scale, axiom, depth, angle, rot, varObjList);
   const width = maxX - minX;
   const height = maxY - minY;
 

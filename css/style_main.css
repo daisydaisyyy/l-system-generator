@@ -1,0 +1,367 @@
+/* base styles */
+html {
+  box-sizing: border-box;
+  font-family: 'Fira Mono', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+}
+
+body {
+  margin: 0;
+  background: rgb(51, 51, 51);
+  color: #333;
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+}
+
+body > * {
+  width: 100%;
+}
+
+/* main layout */
+#menu {
+  box-shadow: inset -5px -5px 10px -3px rgba(0, 0, 0, 0.30),
+              0px 5px 25px 2px rgba(0, 0, 0, 0.50);
+}
+
+#controls {
+  padding: 1rem;
+  background: #ecf0f1;
+  border-radius: 0 0 10px 0;
+}
+
+#drawingCanvas {
+  display: block;
+  background: transparent;
+  /* responsive canvas */
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* header */
+header {
+  background: darkolivegreen;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
+  padding: 5px;
+}
+
+nav#authBar,
+nav#saveBar {
+  display: flex;
+  gap: 1rem;
+}
+
+/* ui components */
+label {
+  font-weight: bold;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: darkolivegreen;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button:active {
+  opacity: 0.8;
+}
+
+input[type="text"], input[type="number"], input[type="password"], select {
+  text-align: center;
+  padding: 2px 8px;
+  font-size: inherit;
+  color: inherit;
+  border-radius: 500px;
+  border: 1px solid olivedrab;
+  background-color: rgb(170, 186, 137);
+}
+
+input[type="color"] {
+  width: 2rem;
+  height: 2rem;
+  border: transparent;
+  justify-self: center;
+}
+
+input[type="checkbox"] {
+  height: 1.2rem;
+  width: 1.2rem;
+  cursor: pointer;
+  accent-color: darkolivegreen;
+  justify-self: center;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* tabs */
+.tab-header {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.tab-btn {
+  background-color: #aaa; /* tab inattiva */
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.tab-btn.active {
+  background-color: darkolivegreen; /* tab attiva */
+  font-weight: bold;
+  border: 2px solid white;
+}
+
+/* variables container */
+#varsContainer {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: baseline;
+  max-height: 20vh;
+  overflow-y: scroll;
+  padding-right: 10px;
+  margin: 20px 0;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px 2px olive;
+}
+
+#varsHeader {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  align-items: center;
+}
+
+.varConfig {
+  display: grid;
+  grid-template-columns: 5fr 20fr 30fr 10fr 10fr;
+  align-items: center;
+  gap: 5px;
+  justify-items: center;
+}
+
+.varConfig label {
+  text-align: center;
+  font-weight: bold;
+  font-size: inherit;
+}
+
+.varConfig>label::after {
+  content: ":";
+  padding-left: 2px;
+}
+
+.varConfig > * {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.stdContainer > * {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.stdContainer, .btnContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: center;
+  justify-items: stretch;
+}
+
+.btnContainer {
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+  padding-top: 20px;
+}
+
+/* modals */
+.modalBackground {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.362);
+}
+
+main.hidden, .modalBackground.hidden {
+  display: none;
+}
+
+.modalContainer {
+  background-color: beige;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border: 3px solid rgba(245, 245, 220, 0.386);
+}
+
+.modalContainer h2 {
+  border-bottom: 2px solid black;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.modalContainer > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: stretch;
+  width: 100%;
+  gap: 30px 50px;
+}
+
+.modalContainer input[type="checkbox"] {
+  justify-self: center;
+}
+
+#confirmVarBtn { background-color: rgb(0, 139, 0); }
+#discardVarBtn { background-color: darkred; }
+
+/* btn documentazione */
+#help-btn-container {
+  position: fixed;
+  top: 1rem;       
+  right: 2rem;     
+  left: auto;
+  z-index: 999999;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  width: auto; 
+  height: auto;
+}
+
+#help-btn-container a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto; 
+  height: auto;
+  padding: 10px 20px;
+  border-radius: 50px; 
+  background-color: beige;
+  color: darkolivegreen;
+  border: 2px solid darkolivegreen;
+  text-decoration: none;
+  font-family: 'Fira Mono', monospace;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s, background-color 0.2s, color 0.2s;
+}
+
+#help-btn-container a:hover {
+  transform: scale(1.05); 
+  background-color: darkolivegreen;
+  color: beige;
+  border-color: beige;
+  cursor: pointer;
+}
+
+/* lista disegni nel db */
+#drawingListContainer {
+  width: 100%;
+}
+
+#drawingListContainer ul {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 2px solid #556b2f;
+  border-radius: 6px;
+  max-height: 300px;   
+  overflow-y: auto;   
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+}
+
+#drawingListContainer li {
+  display: flex; 
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s;
+}
+
+#drawingListContainer li:last-child {
+  border-bottom: none;
+}
+
+#drawingListContainer li:hover {
+  background-color: #f0f5e5;
+}
+
+.drawing-item-actions {
+  display: flex;
+  gap: 5px; 
+  margin: 0;
+}
+
+.load-item-btn, .delete-item-btn {
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.load-item-btn { background-color: green; }
+.load-item-btn:hover { background-color: darkgreen; }
+
+.delete-item-btn { background-color: red; }
+.delete-item-btn:hover { background-color: darkred; }
+
+/* load modal override */
+#loadModal .modalContainer {
+  width: 400px;     
+  max-width: 90vw; 
+}
+
+#loadModal .modalContainer > div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  grid-template-columns: none; 
+  gap: 15px;
+}

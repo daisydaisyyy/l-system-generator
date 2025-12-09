@@ -1,58 +1,76 @@
-# web_l-system
+# L-System Generator webapp - frontend version
 A web application for procedurally generating and visualizing plant growth using L‑Systems.
+This is the frontend version, without backend.
 
-1. l-system generation
-a l-system is defined by:
+#### 1. how to generate a drawing
+l-systems are defined by 4 parameters:
 - axiom (initial string)
-- production rules (mappings that rewrite each symbol)
-- depth
-- angle
-
-2. graphic renderer
-the user can customize:
-- variables rules, movement and stroke color
-- depth
-- line width
-- starting rotation
-- background color
+- rules (transformation logic for symbols)
+- depth (recursion level)
+- angle (rotation θ between lines)
 
 
-other features:
-- show/hide animation
-- can pause the animation or disable it entirely
-- fullscreen mode
-- auto-centering and auto-scaling the drawing is done by default
-
-Symbols:
-The user can choose custom movement commands to assign to variables.
-Variables must be one alphanumeric character long and can be any character that is not a special command (as defined below)
-
+#### 2. rules and commands
 fixed drawing commands:
 ```
-+: turn right by θ degrees
--: turn left by θ degrees
-[: push current position & angle onto stack
-]: pop position & angle from stack
++: turn left by θ degrees
+-: turn right by θ degrees
+[: save current position and angle (start branch)
+]: restore position and angle (close branch)
 ```
+
+##### custom variables:
+any other alphanumeric character (e.g., F, X, A, f) is a customizable variable.
+you can assign specific movements to each variable:
+- draw line
+- move to (move without drawing)
+- draw dot
+- do nothing
+
+#### 3. graphic settings
+you can customize the drawing appearance:
+- stroke color and width
+- starting rotation
+- canvas background color
+
+#### 4. visualization features
+- auto-centering and auto-scaling
+- animation (show/hide and pause/restore)
+- fullscreen mode (press 'f')
+
 
 #### Structure:
 ```
-web_l-system/
-├── index.html
-├── style.css
-├── script.js
-└── utils/
-    ├── l-system.js
-    └── Movement.js
+l-system-generator/
+├── README.md
+├── css/
+│   ├── style_docs.css
+│   └── style_main.css
+├── html/
+│   ├── docs.html
+│   └── index.html
+└── js/
+    ├── main.js
+    ├── utils.js
+    ├── controllers/
+    │   ├── canvasController.js
+    │   ├── configController.js
+    │   ├── state.js
+    ├── models/
+    │   ├── l-system.js
+    │   └── Variable.js
+    └── views/
+        ├── canvas.js
+        ├── dom.js
+        └── ui.js
+
 ```
 
-This is the front-end version; the backend is still in development and will include additional features.
-
-
-references:
+#### references:
+big kudos to:
 ```
-https://it.wikipedia.org/wiki/Sistema_di_Lindenmayer
-https://en.wikipedia.org/wiki/L-system
 https://github.com/fura2/L-system
 https://fedimser.github.io/l-systems.html
+https://en.wikipedia.org/wiki/L-system
+https://it.wikipedia.org/wiki/Sistema_di_Lindenmayer
 ```

@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>L-system generator</title>
-  <link rel="stylesheet" href="../css/style.css">
-  <script src="../js/script.js"></script>
-  <script src="../js/utils/l-system.js"></script>
-  <script src="../js/utils/Variable.js"></script>
+  <link rel="stylesheet" href="../css/style_main.css">
+  <script type="module" src="../js/main.js"></script>
 </head>
 
 <body>
-  <div>
+  <div id="menu">
     <header>
-      <h2>L-systems generator</h2>
+      <h2>L-systems generator - frontend version</h2>
     </header>
 
     <main>
@@ -48,13 +46,13 @@
           <input id="rotInput" name="rotInput" class="config" type="number" value="0" min="-360" max="360">
 
           <label for="backgroundColorInput">Background color:</label>
-          <input name="backgroundColorInput" id="backgroundColorInput" class="config" type="color" value="#C0AC93">
+          <input name="backgroundColorInput" id="backgroundColorInput" class="config" type="color" value="#fdf6e3">
 
           <label for="showAnimInput">Show Animation: </label>
           <input name="showAnimInput" id="showAnimInput" class="config" type="checkbox" checked>
         </div>
 
-        <p>Press F11 to go in fullscreen!</p>
+        <p>Press f to go in fullscreen!</p>
 
         <div class="btnContainer">
           <button id="startBtn" type="button">Start</button>
@@ -82,7 +80,6 @@
       </div>
     </div>
   </div>
-
 
 </body>
 
