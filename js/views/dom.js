@@ -28,7 +28,7 @@ export function getDOMElements() {
       addVarBtn: document.getElementById('addVarBtn'),
       discardVarBtn: document.getElementById('discardVarBtn'),
       confirmVarBtn: document.getElementById('confirmVarBtn'),
-      showLoginBtn: document.getElementById('showLoginBtn'), // Nota: potrebbe non esistere se loggato
+      showLoginBtn: document.getElementById('showLoginBtn'),
       showRegisterBtn: document.getElementById('showRegisterBtn'),
       showSaveModalBtn: document.getElementById('showSaveModalBtn'),
       showLoadModalBtn: document.getElementById('showLoadModalBtn'),
@@ -44,12 +44,7 @@ export function getDOMElements() {
       loginForm: document.getElementById('loginForm'),
       registerForm: document.getElementById('registerForm'),
       saveForm: document.getElementById('saveForm'),
-  
-      // messages
-      loginError: document.getElementById('loginError'),
-      registerError: document.getElementById('registerError'),
-      saveError: document.getElementById('saveError'),
-      
+
       // form inputs
       registerUser: document.getElementById('registerUser'),
       registerPass: document.getElementById('registerPass'),

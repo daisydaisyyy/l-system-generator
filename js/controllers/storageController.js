@@ -1,4 +1,4 @@
-import { getRandColor } from '../utils.js';
+import { getRandColor, showMsg } from '../utils.js';
 import { renderVarsContainer } from '../views/ui.js';
 import { DrawLine, DrawDot, MoveTo, NoOp } from '../models/Variable.js';
 import * as API from '../api.js';
@@ -112,30 +112,28 @@ export async function onLoadListOpen(state, elems) {
     renderDrawings(listContainer, myDrawings, state.currentUser);
 
   } catch (err) {
-    listContainer.textContent = '';
-    const errorP = document.createElement('p');
-    errorP.className = 'modalError';
-    errorP.textContent = err.message;
-    listContainer.appendChild(errorP);
+    showMsg("Failed to show drawing list.");
   }
 }
 
 export async function onDrawingListClick(e, state, elems, ctx) {
   const target = e.target;
-  
+  const msg = "Action failed";
   if (target.classList.contains('load-item-btn')) {
     try {
       const data = await API.loadDrawing(target.dataset.name, target.dataset.owner);
       loadDrawingData(data, state, elems, ctx);
+      showMsg(target.dataset.name + " loaded!", true);
       elems.loadModal.classList.add('hidden');
-    } catch (err) { alert(err.message); }
+    } catch (err) { showMsg(msg); }
   }
   
   if (target.classList.contains('delete-item-btn')) {
     try {
       await API.deleteDrawing(target.dataset.name);
+      showMsg(target.dataset.name + " deleted!", true);
       onLoadListOpen(state, elems); 
-    } catch (err) { alert(err.message); }
+    } catch (err) { showMsg(msg); }
   }
 }
 
@@ -166,7 +164,6 @@ function loadDrawingData(data, state, elems, ctx) {
 
 export async function onSaveSubmit(e, state, elems) {
   e.preventDefault();
-  elems.saveError.textContent = '';
   const payload = {
     name: elems.drawingNameInput.value,
     axiom: elems.axiomInput.value,
@@ -183,12 +180,14 @@ export async function onSaveSubmit(e, state, elems) {
       color: obj.color || '#000000'
     }))
   };
+  
   try {
     await API.saveDrawing(payload);
-    alert('Saved!');
+    showMsg("Saved!", true);
     elems.saveModal.classList.add('hidden');
     elems.saveForm.reset();
   } catch (err) {
-    elems.saveError.textContent = err.message;
+    showMsg("Failed to save. Drawing already exists or connection failed.");
   }
+
 }

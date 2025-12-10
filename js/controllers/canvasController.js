@@ -2,6 +2,7 @@ import {renderVarsContainer, updateVarsConfigFromDOM } from '../views/ui.js';
 import { resetCanvas, handleBackgroundColor } from '../views/canvas.js';
 import { generateLSystem, autoCenter, animateDrawing } from '../models/l-system.js';
 import { resetAnimationState } from './state.js';
+import { showMsg } from '../utils.js';
 
 // canvas and animation handler
 function setConfigState(disabled) {
@@ -82,7 +83,7 @@ export function onStartClick(state, elems, ctx) {
     }
   } catch (e) {
     finishAnimation(state,elems);
-    alert("Too many instructions. Retry with a lower depth.");
+    showMsg("Drawing too complex for selected depth. Retry with a lower depth.");
   }
 }
 

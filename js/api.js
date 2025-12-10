@@ -6,7 +6,7 @@ export async function register(username, password) {
       body: JSON.stringify({ username, password })
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Registration failed');
+    if (!res.ok) throw new Error();
     return data;
   }
   
@@ -17,7 +17,7 @@ export async function register(username, password) {
       body: JSON.stringify({ username, password })
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Login failed');
+    if (!res.ok) throw new Error();
     return data;
   }
   
@@ -32,28 +32,28 @@ export async function register(username, password) {
       body: JSON.stringify(payload)
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Save failed');
+    if (!res.ok) throw new Error();
     return data;
   }
   
   export async function getDrawingsList() {
     const res = await fetch('../php/list_drawings.php?page=1&per_page=100');
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Failed to load list');
+    if (!res.ok) throw new Error();
     return data;
   }
   
   export async function loadDrawing(name, owner) {
     const res = await fetch(`../php/load_drawing.php?name=${encodeURIComponent(name)}&owner=${encodeURIComponent(owner)}`);
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Failed to load drawing');
+    if (!res.ok) throw new Error();
     return data;
   }
   
   export async function deleteDrawing(name) {
     const res = await fetch(`../php/delete_drawing.php?name=${encodeURIComponent(name)}`);
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Failed to delete drawing');
+    if (!res.ok) throw new Error();
     return data;
   }
   
