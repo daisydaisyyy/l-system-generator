@@ -1,21 +1,28 @@
 import { Variable, DrawLine, MoveTo } from './Variable.js';
+const UPPER_BOUND = 200000;
 
 export function generateLSystem(axiom, varObjList, depth) {
   let cur = axiom;
   for (let i = 0; i < depth; i++) {
     let next = '';
-    for (const ch of cur)
+    for (const ch of cur) {
       // cerca l'oggetto e prende la rule se esiste
       next += (Variable.findByLabel(varObjList, ch)?.rule) || ch;
+    }
 
+    if(next.length > UPPER_BOUND) { // lancio eccezione se si supera il massimo numero di istruzioni consentite
+      throw new Error();
+    }
     cur = next;
   }
   return cur;
 }
 
-
 export function animateDrawing(ctx, stepSize, varObjList, angle, state) {
+
   if (!state.isAnimating || state.curStep >= state.instr.length) {
+    // console.log(`Step ${state.curStep + 1}/${state.instr.length}`);
+
     state.isAnimating = false;
     state.curStep = 0;
     return true;
