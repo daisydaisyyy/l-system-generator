@@ -30,16 +30,14 @@ UI:
 - [?] separated menu sections: l-system setup, drawing settings
 
 - [X] !! manuale utente (20/30 righe), da aggiungere un link alla pagina con il manuale in index.html
-- [?] add drawing name to the page top + point if not saved
 - [X] improve css
 - [X] validate html + css
 - [X] create separated files, organized in folders
 - [X] remove .innerHTML, use createElement
 - [X] refactor in model, controller, view
 
-- [?] improve alert on saved drawing
+- [X] improve alert on saved drawing
 - [X] lower upper bound for instructions number
-- [ ] optimization: batch rendering for instructions
 
 backend:
 - [X] php backend (save/restore drawings, user auth, session)
@@ -47,5 +45,4 @@ backend:
 - [X] FIX SESSION HANDLING + cookies misuse
 - [X] insert default presets/examples into the db
 - [X] separate owner drawings from public ones, make 2 tabs in load modal
-- [?] implement delete user
 - [X] when deleting a drawing, delete its entries in rule table

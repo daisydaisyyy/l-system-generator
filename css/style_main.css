@@ -15,7 +15,7 @@ body {
   background: rgb(51, 51, 51);
   color: #333;
   display: grid;
-  grid-template-columns: 1fr 2.5fr;
+  grid-template-columns: 1fr 2fr;
 }
 
 body > * {
@@ -84,10 +84,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-button:active {
-  opacity: 0.8;
-}
-
 input[type="text"], input[type="number"], input[type="password"], select {
   text-align: center;
   padding: 2px 8px;
@@ -127,14 +123,15 @@ input[type="checkbox"] {
   width: 100%;
 }
 
+
 .tab-btn {
-  background-color: #aaa; /* tab inattiva */
-  flex: 1;
-  font-size: 0.9rem;
+  background-color: darkolivegreen; /* tab inattiva */
+  flex: 1; /* rendi i due bottoni uguali, ognuno occupa meta' dello spazio */
+  opacity: 0.5;
 }
 
 .tab-btn.active {
-  background-color: darkolivegreen; /* tab attiva */
+  opacity: 1; /* tab attiva */
   font-weight: bold;
   border: 2px solid white;
 }
@@ -144,13 +141,11 @@ input[type="checkbox"] {
   display: flex;
   gap: 10px;
   flex-direction: column;
-  align-items: baseline;
   max-height: 20vh;
   overflow-y: scroll;
-  padding-right: 10px;
   margin: 20px 0;
   border-radius: 10px;
-  padding: 20px;
+  padding: 20px 10px 20px 0;
   box-shadow: 0 0 10px 2px olive;
 }
 
@@ -163,7 +158,7 @@ input[type="checkbox"] {
 
 .varConfig {
   display: grid;
-  grid-template-columns: 5fr 20fr 30fr 10fr 10fr;
+  grid-template-columns: 1fr 5fr 3fr 1fr 1fr;
   align-items: center;
   gap: 5px;
   justify-items: center;
@@ -217,6 +212,8 @@ input[type="checkbox"] {
   width: 100vw;
   background-color: rgba(0, 0, 0, 0.362);
 }
+
+
 
 main.hidden, .modalBackground.hidden {
   display: none;
@@ -355,15 +352,41 @@ main.hidden, .modalBackground.hidden {
 .delete-item-btn:hover { background-color: darkred; }
 
 /* load modal override */
+#loadModal {
+  align-items: baseline;
+}
+
 #loadModal .modalContainer {
   width: 400px;     
   max-width: 90vw; 
+  margin-top: 10vh;
 }
 
 #loadModal .modalContainer > div {
   display: flex;
-  flex-direction: column;
   width: 100%;
-  grid-template-columns: none; 
   gap: 15px;
+}
+
+div.statusMsg {
+  opacity: 0.5;
+  color: white;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 9999;
+  font-weight: bold;
+  width: fit-content;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+div.successMsg {
+  background-color: green;
+
+}
+
+div.failMsg {
+  background-color: red;
 }
