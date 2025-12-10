@@ -29,7 +29,6 @@ UI:
 - [X] fix bottom btns layout
 - [?] separated menu sections: l-system setup, drawing settings
 
-- [ ] improve alert??
 - [X] !! manuale utente (20/30 righe), da aggiungere un link alla pagina con il manuale in index.html
 - [?] add drawing name to the page top + point if not saved
 - [X] improve css
@@ -37,6 +36,9 @@ UI:
 - [X] create separated files, organized in folders
 - [X] remove .innerHTML, use createElement
 - [X] refactor in model, controller, view
+
+- [ ] improve alert on saved drawing
+- [ ] resize event on mobile is broken, it happens everytime you click on an input field due to the keyboard spawn
 
 backend:
 - [X] php backend (save/restore drawings, user auth, session)

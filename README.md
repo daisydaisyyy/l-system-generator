@@ -6,7 +6,7 @@ l-systems are defined by 4 parameters:
 - axiom (initial string)
 - rules (transformation logic for symbols)
 - depth (recursion level)
-- angle (rotation θ between lines)
+- angle (rotation between two consecutive lines)
 
 
 #### 2. rules and commands

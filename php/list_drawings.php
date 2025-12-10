@@ -21,7 +21,7 @@ if (isset($_SESSION['username'])) {
     $where_clauses[] = "(is_public = 1 OR owner = ?)";
     $types .= 's';
     $params[] = $_SESSION['username'];
-} else {
+} else { // un utente non loggato vede solo i disegni pubblici
     $where_clauses[] = "(is_public = 1)";
 }
 

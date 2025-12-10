@@ -55,6 +55,8 @@ header {
   text-align: center;
   align-items: center;
   padding: 5px;
+  flex-wrap: wrap; 
+  gap: 1rem;
 }
 
 nav#authBar,
