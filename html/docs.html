@@ -24,17 +24,17 @@
             <p>Gli L-Systems sono definiti da 4 parametri fondamentali:</p>
             <ul>
                 <li><strong>Axiom (assioma):</strong> La stringa iniziale da cui parte la generazione.</li>
-                <li><strong>Rules (regole):</strong> Indicano come trasformare i simboli dell’assioma a ogni iterazione.</li>
-                <li><strong>Depth (Livello di ricorsione):</strong> Il numero di iterazioni delle regole. Figure più complesse si ottengono incrementando questo valore.</li>
-                <li><strong>Angle (θ):</strong> L'angolo di rotazione tra due linee consecutive.</li>
+                <li><strong>Rules (regole):</strong> Indicano come trasformare ciascuna variabile a ogni iterazione dell'algoritmo.</li>
+                <li><strong>Depth (livello di ricorsione):</strong> Il numero di iterazioni delle regole. Figure più complesse e dettagliate si ottengono incrementando questo valore.</li>
+                <li><strong>Angle (angolo):</strong> L'angolo θ di rotazione tra due linee consecutive.</li>
             </ul>
 
             <div class="example-box">
-                <strong>Esempio: Disegno di un albero</strong><br>
+                <strong>Esempio: Disegno di un ramo di un albero</strong><br>
                 Axiom: <code>F</code><br>
-                Regola per F: <code>F[+F]F[-F]F</code><br>
+                Rule: <code>F = F[+F]F[-F]F</code>, <code>Draw Line</code><br>
                 Depth: <code>4</code><br>
-                Angle: <code>25.71</code><br>
+                Angle: <code>25</code><br>
                 Starting Rotation: <code>-90</code>
             </div>
         </section>
@@ -50,15 +50,15 @@
                 <div class="cmd-desc">Gira a <strong>destra</strong> di θ gradi</div>
 
                 <div class="cmd-symbol">[</div>
-                <div class="cmd-desc"><strong>Salva</strong> la posizione e l'angolo correnti (inizia un ramo)</div>
+                <div class="cmd-desc"><strong>Salva</strong> la posizione e l'angolo correnti</div>
 
                 <div class="cmd-symbol">]</div>
-                <div class="cmd-desc"><strong>Ripristina</strong> la posizione e l'angolo salvati (chiude un ramo)</div>
+                <div class="cmd-desc"><strong>Ripristina</strong> la posizione e l'angolo salvati</div>
             </div>
 
             <h3>Variabili Personalizzabili</h3>
-            <p>Qualsiasi altro carattere alfanumerico (es. <code>F</code>, <code>X</code>, <code>A</code>) è una variabile personalizzabile.</p>
-            <p>L'utente può assegnare un comportamento specifico a ciascuna variabile:</p>
+            <p>Qualsiasi altro carattere alfanumerico (es. <code>F</code>, <code>X</code>, <code>A</code>, <code>f</code>) è una variabile personalizzabile.</p>
+            <p>È possibile assegnare un comportamento specifico a ciascuna variabile:</p>
             <ul>
                 <li><strong>Draw Line:</strong> Disegna una linea in avanti.</li>
                 <li><strong>Move To:</strong> Si sposta in avanti senza disegnare (crea spazi vuoti).</li>
@@ -71,10 +71,10 @@
             <h2>3. Impostazioni Grafiche</h2>
             <p>L’applicazione permette di personalizzare l'aspetto del disegno:</p>
             <ul>
-                <li>Movimento associato a ciascuna variabile.</li>
                 <li>Colore e larghezza del tratto.</li>
-                <li>Rotazione iniziale (utile per orientare alberi verso l'alto).</li>
-                <li>Colore di sfondo del canvas.</li>
+                <li>Se adattare la larghezza del tratto proporzionalmente allo zoom applicato al disegno.</li>
+                <li>Rotazione iniziale (per orientare correttamente il disegno, la rotazione segue il senso orario).</li>
+                <li>Colore di sfondo del disegno.</li>
             </ul>
         </section>
 
@@ -90,13 +90,13 @@
         <section>
             <h2>5. Salvataggio e Caricamento</h2>
             <ul>
-                <li><strong>Salvataggio:</strong> Puoi salvare i tuoi disegni in modo permanente.
+                <li><strong>Salvataggio:</strong> Dopo esserti registrato o aver fatto il login, puoi salvare i tuoi disegni in due modalità:
                     <ul>
                         <li><em>Privati:</em> visibili solo a te.</li>
                         <li><em>Pubblici:</em> visibili a tutti gli utenti.</li>
                     </ul>
                 </li>
-                <li><strong>Caricamento:</strong> Puoi caricare i tuoi disegni salvati o i disegni pubblici presenti nel database.</li>
+                <li><strong>Caricamento:</strong> Puoi caricare i disegni privati che hai salvato o i disegni pubblici di altri utenti.</li>
             </ul>
         </section>
 

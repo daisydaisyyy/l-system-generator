@@ -141,7 +141,7 @@ export function updateUserUI(state, elems) {
         elems.userArea.appendChild(logoutBtn);
 
         elems.showSaveModalBtn.disabled = false;
-        elems.showLoadModalBtn.disabled = false;
+        // elems.showLoadModalBtn.disabled = false;
 
     } else {
         const loginBtn = document.createElement('button');
@@ -158,7 +158,7 @@ export function updateUserUI(state, elems) {
         elems.userArea.appendChild(registerBtn);
 
         elems.showSaveModalBtn.disabled = true;
-        elems.showLoadModalBtn.disabled = true;
+        // elems.showLoadModalBtn.disabled = true;
 
         loginBtn.addEventListener('click', () => elems.loginModal.classList.remove('hidden'));
         registerBtn.addEventListener('click', () => elems.registerModal.classList.remove('hidden'));
