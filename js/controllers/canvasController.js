@@ -68,9 +68,11 @@ export function onStartClick(state, elems, ctx) {
       // animation loop
       state.animId = setInterval(() => {
         if (animateDrawing(ctx, state.stepSize, state.varObjList, parseInt(elems.angleInput.value), state)) {
+          
           finishAnimation(state, elems);
         }
       }, 0);
+      
     } else {
       while (!animateDrawing(ctx, state.stepSize, state.varObjList, parseInt(elems.angleInput.value), state)) {
         // continua finché animateDrawing ritorna false 
@@ -79,8 +81,7 @@ export function onStartClick(state, elems, ctx) {
       finishAnimation(state, elems);
     }
   } catch (e) {
-    resetAnimationState(state);
-    console.error(e);
+    finishAnimation(state,elems);
     alert("Too many instructions. Retry with a lower depth.");
   }
 }
