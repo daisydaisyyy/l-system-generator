@@ -15,7 +15,7 @@ body {
   background: rgb(51, 51, 51);
   color: #333;
   display: grid;
-  grid-template-columns: 1fr 2.5fr;
+  grid-template-columns: 1fr 2fr;
 }
 
 body > * {
@@ -55,11 +55,7 @@ header {
   text-align: center;
   align-items: center;
   padding: 5px;
-}
-
-nav#authBar,
-nav#saveBar {
-  display: flex;
+  flex-wrap: wrap; 
   gap: 1rem;
 }
 
@@ -82,11 +78,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
-button:active {
-  opacity: 0.8;
-}
-
-input[type="text"], input[type="number"], input[type="password"], select {
+input[type="text"], input[type="number"], select {
   text-align: center;
   padding: 2px 8px;
   font-size: inherit;
@@ -116,39 +108,16 @@ input[type="checkbox"] {
   pointer-events: none;
 }
 
-/* tabs */
-.tab-header {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 15px;
-  width: 100%;
-}
-
-.tab-btn {
-  background-color: #aaa; /* tab inattiva */
-  flex: 1;
-  font-size: 0.9rem;
-}
-
-.tab-btn.active {
-  background-color: darkolivegreen; /* tab attiva */
-  font-weight: bold;
-  border: 2px solid white;
-}
-
 /* variables container */
 #varsContainer {
   display: flex;
   gap: 10px;
   flex-direction: column;
-  align-items: baseline;
   max-height: 20vh;
   overflow-y: scroll;
-  padding-right: 10px;
   margin: 20px 0;
   border-radius: 10px;
-  padding: 20px;
+  padding: 20px 10px 20px 0;
   box-shadow: 0 0 10px 2px olive;
 }
 
@@ -161,7 +130,7 @@ input[type="checkbox"] {
 
 .varConfig {
   display: grid;
-  grid-template-columns: 5fr 20fr 30fr 10fr 10fr;
+  grid-template-columns: 1fr 5fr 3fr 1fr 1fr;
   align-items: center;
   gap: 5px;
   justify-items: center;
@@ -296,72 +265,25 @@ main.hidden, .modalBackground.hidden {
   cursor: pointer;
 }
 
-/* lista disegni nel db */
-#drawingListContainer {
-  width: 100%;
-}
-
-#drawingListContainer ul {
-  width: 100%;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  background-color: #fff;
-  border: 2px solid #556b2f;
-  border-radius: 6px;
-  max-height: 300px;   
-  overflow-y: auto;   
-  box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-}
-
-#drawingListContainer li {
-  display: flex; 
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 15px;
-  border-bottom: 1px solid #eee;
-  transition: background 0.2s;
-}
-
-#drawingListContainer li:last-child {
-  border-bottom: none;
-}
-
-#drawingListContainer li:hover {
-  background-color: #f0f5e5;
-}
-
-.drawing-item-actions {
-  display: flex;
-  gap: 5px; 
-  margin: 0;
-}
-
-.load-item-btn, .delete-item-btn {
-  padding: 5px 10px;
-  font-size: 0.75rem;
-  border-radius: 4px;
-  text-transform: uppercase;
+div.statusMsg {
+  opacity: 0.5;
+  color: white;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 9999;
   font-weight: bold;
+  width: fit-content;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
 }
 
-.load-item-btn { background-color: green; }
-.load-item-btn:hover { background-color: darkgreen; }
+div.successMsg {
+  background-color: green;
 
-.delete-item-btn { background-color: red; }
-.delete-item-btn:hover { background-color: darkred; }
-
-/* load modal override */
-#loadModal .modalContainer {
-  width: 400px;     
-  max-width: 90vw; 
 }
 
-#loadModal .modalContainer > div {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  grid-template-columns: none; 
-  gap: 15px;
+div.failMsg {
+  background-color: red;
 }

@@ -1,8 +1,8 @@
-import { getRandColor, REGEX } from '../utils.js';
+import { getRandColor, REGEX, showMsg } from '../utils.js';
 import { getVariablesFromDOM, renderVarsContainer, updateVarsConfigFromDOM } from '../views/ui.js';
 import { Variable, DrawLine } from '../models/Variable.js';
 
-// Variables and UI handlers
+// variables and UI handlers
 export function onAxiomInput(state, elems) {
   state.axiom = elems.axiomInput.value;
   handleObjChange(state, elems);
@@ -63,11 +63,11 @@ export function onVarsContainerClick(e, state, elems) {
 export function onConfirmVarClick(state, elems) {
   const label = elems.newVarInput.value.trim();
   if (label.length === 0) {
-    alert("Variable cannot be empty!");
+    showMsg("Variable cannot be empty!");
   } else if (label.match(REGEX)) {
-    alert("Variable cannot be a special character.");
+    showMsg("Variable cannot be a special character.");
   } else if (state.varObjList.map(obj => obj.label).includes(label)) {
-    alert("Variable already exists.");
+    showMsg("Variable already exists.");
   } else {
     state.varObjList.push(new DrawLine(label, "", getRandColor(elems.backgroundColorInput.value)));
     renderVarsContainer(elems.varsContainer, state.varObjList);

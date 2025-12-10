@@ -30,6 +30,10 @@ export function getDOMElements() {
       confirmVarBtn: document.getElementById('confirmVarBtn'),
   
       // modals
+      loginModal: document.getElementById('loginModal'),
+      registerModal: document.getElementById('registerModal'),
+      saveModal: document.getElementById('saveModal'),
+      loadModal: document.getElementById('loadModal'),
       varModal: document.getElementById('varModal'),
     };
   }

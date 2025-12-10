@@ -109,3 +109,58 @@ export function updateVarsConfigFromDOM(varObjList) {
     });
     return configsList;
 }
+
+// user interface helpers
+export function updateUserUI(state, elems) {
+    elems.userArea.textContent = '';
+
+    if (state.currentUser) {
+        const span = document.createElement('span');
+        span.appendChild(document.createTextNode('Welcome, '));
+
+        const strong = document.createElement('strong');
+        strong.style.padding = "2px 6px";
+        strong.style.borderRadius = "4px";
+        strong.textContent = state.currentUser;
+        if (state.currentUser == "admin") {
+            strong.style.backgroundColor = "darkred";
+            strong.style.border = "1px solid #ff4444";
+        } else {
+            strong.style.backgroundColor = "darkgreen";
+            strong.style.border = "1px solid #44ff6d";
+        }
+        
+        span.appendChild(strong);
+
+        const logoutBtn = document.createElement('button');
+        logoutBtn.id = 'logout-btn';
+        logoutBtn.type = 'button';
+        logoutBtn.textContent = 'Logout';
+
+        elems.userArea.appendChild(span);
+        elems.userArea.appendChild(logoutBtn);
+
+        elems.showSaveModalBtn.disabled = false;
+        // elems.showLoadModalBtn.disabled = false;
+
+    } else {
+        const loginBtn = document.createElement('button');
+        loginBtn.id = 'showLoginBtn';
+        loginBtn.type = 'button';
+        loginBtn.textContent = 'Login';
+
+        const registerBtn = document.createElement('button');
+        registerBtn.id = 'showRegisterBtn';
+        registerBtn.type = 'button';
+        registerBtn.textContent = 'Register';
+
+        elems.userArea.appendChild(loginBtn);
+        elems.userArea.appendChild(registerBtn);
+
+        elems.showSaveModalBtn.disabled = true;
+        // elems.showLoadModalBtn.disabled = true;
+
+        loginBtn.addEventListener('click', () => elems.loginModal.classList.remove('hidden'));
+        registerBtn.addEventListener('click', () => elems.registerModal.classList.remove('hidden'));
+    }
+}

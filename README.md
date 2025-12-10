@@ -1,22 +1,22 @@
 # L-System Generator webapp - frontend version
 A web application for procedurally generating and visualizing plant growth using L‑Systems.
-This is the frontend version, without backend.
+This is the frontend version!
 
 #### 1. how to generate a drawing
 l-systems are defined by 4 parameters:
 - axiom (initial string)
 - rules (transformation logic for symbols)
 - depth (recursion level)
-- angle (rotation θ between lines)
+- angle (rotation between two consecutive lines)
 
 
 #### 2. rules and commands
 fixed drawing commands:
 ```
 +: turn left by θ degrees
--: turn right by θ degrees
-[: save current position and angle (start branch)
-]: restore position and angle (close branch)
+-: turn right by θ degrees 
+[: save current position and angle
+]: restore position and angle
 ```
 
 ##### custom variables:
@@ -38,10 +38,11 @@ you can customize the drawing appearance:
 - animation (show/hide and pause/restore)
 - fullscreen mode (press 'f')
 
-
 #### Structure:
 ```
 l-system-generator/
+├── db_script.sql
+├── er_diagram.png
 ├── README.md
 ├── css/
 │   ├── style_docs.css
@@ -55,7 +56,7 @@ l-system-generator/
     ├── controllers/
     │   ├── canvasController.js
     │   ├── configController.js
-    │   ├── state.js
+    │   └── state.js
     ├── models/
     │   ├── l-system.js
     │   └── Variable.js
