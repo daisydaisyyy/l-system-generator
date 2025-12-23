@@ -9,7 +9,7 @@ if (!$input || empty($input['username']) || empty($input['password'])) {
     exit;
 }
 
-$username = trim($input['username']);
+$username = strip_tags($input['username']);
 $password = $input['password'];
 
 if (strlen($username) > 64 || strlen($password) < 6) {

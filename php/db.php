@@ -1,6 +1,16 @@
 <?php
 // db.php
 declare(strict_types=1);
+
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'domain' => '', 
+    'secure' => isset($_SERVER['HTTPS']), // cookie inviati tramite HTTPS se disponibile
+    'httponly' => true,                   // impedisce XSS cookie theft
+    'samesite' => 'Strict'
+]);
+
 session_start();
 
 define('DB_HOST', 'localhost');

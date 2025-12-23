@@ -17,6 +17,7 @@ $where_clauses = [];
 $params = [];
 $types = '';
 
+// check dell'identita' dell'utente
 if (isset($_SESSION['username'])) {
     $where_clauses[] = "(is_public = 1 OR owner = ?)";
     $types .= 's';
@@ -31,7 +32,7 @@ if ($q !== null && $q !== '') {
     $params[] = '%' . $q . '%';
 }
 
-$where = implode(' AND ', $where_clauses);
+$where = implode(' AND ', $where_clauses); # unisci gli elementi per creare la query
 
 $count_sql = "SELECT COUNT(*) AS cnt FROM drawing WHERE $where";
 $cstmt = $mysqli->prepare($count_sql);
