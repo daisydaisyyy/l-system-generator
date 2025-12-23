@@ -60,8 +60,8 @@ if ($res->num_rows === 0) {
 $drawing = $res->fetch_assoc(); 
 $stmt->close();
 
-$rstmt = $mysqli->prepare("SELECT id, variable, replacement, movement_type, color FROM rule WHERE drawing_name = ?");
-$rstmt->bind_param('s', $name);
+$rstmt = $mysqli->prepare("SELECT id, variable, replacement, movement_type, color FROM rule WHERE drawing_name = ? AND owner = ?");
+$rstmt->bind_param('ss', $drawing['name'], $drawing['owner']);
 $rstmt->execute();
 $rres = $rstmt->get_result();
 $rules = [];

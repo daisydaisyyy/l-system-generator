@@ -1,4 +1,3 @@
-
 CREATE TABLE user (
     username VARCHAR(64) PRIMARY KEY,
     password_hash VARCHAR(255) NOT NULL,
@@ -19,23 +18,13 @@ CREATE TABLE drawing (
     PRIMARY KEY(name, owner)
 );
 
-
 CREATE TABLE rule (
     id INT AUTO_INCREMENT PRIMARY KEY,
     variable VARCHAR(8) NOT NULL,
     drawing_name VARCHAR(128) NOT NULL,
+    owner VARCHAR(64) NOT NULL,
     replacement TEXT NOT NULL,
     movement_type VARCHAR(20) NOT NULL DEFAULT 'drawLine',
-    color VARCHAR(7) NOT NULL DEFAULT '#000000' AFTER movement_type
+    color VARCHAR(7) NOT NULL DEFAULT '#000000',
+    FOREIGN KEY (drawing_name, owner) REFERENCES drawing(name, owner) ON DELETE CASCADE
 );
-
-CREATE TABLE drawing_rule (
-    drawing_name VARCHAR(128) NOT NULL,
-    owner VARCHAR(64) NOT NULL,
-    rule INT NOT NULL,
-    FOREIGN KEY (drawing_name, owner) REFERENCES drawing(name, owner) ON DELETE CASCADE,
-    FOREIGN KEY (rule) REFERENCES rule(id) ON DELETE CASCADE,
-    PRIMARY KEY(drawing_name, owner, rule)
-);
-
-
