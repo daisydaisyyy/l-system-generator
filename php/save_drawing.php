@@ -5,13 +5,13 @@ header('Content-Type: application/json');
 $input = json_decode(file_get_contents('php://input'), true);
 if (!$input) {
     http_response_code(400);
-    echo json_encode(['error' => 'JSON non valido']);
+    echo json_encode(['error' => 'JSON not valid']);
     exit;
 }
 
 if (!isset($_SESSION['username'])) {
     http_response_code(401);
-    echo json_encode(['error' => 'Devi essere loggato per salvare un disegno']);
+    echo json_encode(['error' => 'You must be logged in to save a drawing']);
     exit;
 }
 
@@ -30,7 +30,7 @@ $is_public = isset($input['is_public']) ? (int)$input['is_public'] : 0;
 
 if (!$name || mb_strlen($name) > 128) {
     http_response_code(400);
-    echo json_encode(['error' => 'Nome non valido']);
+    echo json_encode(['error' => 'Name not valid']);
     exit;
 }
 
@@ -59,20 +59,13 @@ $stmt->close();
 
 if (!empty($input['rules']) && is_array($input['rules'])) {
     
-    $rstmt = $mysqli->prepare("INSERT INTO rule (variable, drawing_name, replacement, movement_type, color) VALUES (?, ?, ?, ?, ?)");
+    $rstmt = $mysqli->prepare("INSERT INTO rule (variable, drawing_name, owner, replacement, movement_type, color) VALUES (?, ?, ?, ?, ?, ?)");
     if ($rstmt === false) {
         http_response_code(500);
         echo json_encode(['error' => 'DB prepare failed (rule): ' . $mysqli->error]);
         exit;
     }
     
-    $jrstmt = $mysqli->prepare("INSERT INTO drawing_rule (drawing_name, owner, rule) VALUES (?, ?, ?)");
-    if ($jrstmt === false) {
-        http_response_code(500);
-        echo json_encode(['error' => 'DB prepare failed (drawing_rule): ' . $mysqli->error]);
-        exit;
-    }
-
     foreach ($input['rules'] as $rule) {
         // filtro sugli input per evitare XSS nelle rules
         $variable = isset($rule['variable']) ? strip_tags($rule['variable']) : null;
@@ -83,18 +76,13 @@ if (!empty($input['rules']) && is_array($input['rules'])) {
 
         if ($variable === null) continue; // non salvo le regole senza variabile
 
-        $rstmt->bind_param("sssss", $variable, $name, $replacement, $movement_type, $color);
+        $rstmt->bind_param("ssssss", $variable, $name, $owner, $replacement, $movement_type, $color);
         if (!$rstmt->execute()) {
             error_log("Failed to insert rule for variable $variable: " . $rstmt->error);
             continue; 
         }
-        
-        $rule_id = $mysqli->insert_id;
-        $jrstmt->bind_param("ssi", $name, $owner, $rule_id);
-        $jrstmt->execute();
     }
     $rstmt->close();
-    $jrstmt->close();
 }
 
 echo json_encode(['status' => 'ok', 'name' => $name, 'owner' => $owner]);

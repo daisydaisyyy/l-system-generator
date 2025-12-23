@@ -1,13 +1,12 @@
 database:
 
-users (1,1) <-> (0,N) drawing (0,1) <-> (1,N) rules
-one drawing can have 1,N rules, a rule can be assigned to 0,N drawing -> junction table drawing-rule
+users (1,1) <-> (0,N) drawing (1,1) <-> (0,N) rules
+one drawing owns 0,N rules, a rule belongs to exactly 1 drawing -> direct relationship (one-to-many)
 
 
 users(username (pk), password_hash, is_admin)
 drawing(name (pk),  owner(pk,fk), axiom, depth, angle, starting_rot, line_width, scale, is_public)
-rule(id (pk), variable, replacement)
-drawing-rule(drawing_name (pk,fk). owner (pk,fk), rule(pk,fk))
+rule(id (pk), variable, replacement, movement_type, color, drawing_name (fk), owner (fk))
 
 admin user owns default drawing presets
 admin password: adminadmin

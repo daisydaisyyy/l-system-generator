@@ -187,7 +187,7 @@ export async function onSaveSubmit(e, state, elems) {
     elems.saveModal.classList.add('hidden');
     elems.saveForm.reset();
   } catch (err) {
-    showMsg("Failed to save. Drawing already exists or connection failed.");
+    showMsg("Failed to save. You already own a drawing with this name or connection failed.");
   }
 
 }
