@@ -15,10 +15,12 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
-
-$name = isset($input['name']) ? trim($input['name']) : null;
+// sanitize degli input usando strip_tags per evitare Stored XSS
+$name = isset($input['name']) ? strip_tags(trim($input['name'])) : null;
 $owner = $_SESSION['username'];
-$axiom = isset($input['axiom']) ? trim($input['axiom']) : '';
+$axiom = isset($input['axiom']) ? strip_tags(trim($input['axiom'])) : '';
+
+
 $depth = isset($input['depth']) ? (int)$input['depth'] : 0;
 $angle = isset($input['angle']) ? (float)$input['angle'] : 0.0;
 $starting_rot = isset($input['starting_rot']) ? (float)$input['starting_rot'] : 0.0;
@@ -72,10 +74,11 @@ if (!empty($input['rules']) && is_array($input['rules'])) {
     }
 
     foreach ($input['rules'] as $rule) {
-        $variable = isset($rule['variable']) ? $rule['variable'] : null;
-        $replacement = isset($rule['replacement']) ? $rule['replacement'] : ''; // default: stringa vuota
+        // filtro sugli input per evitare XSS nelle rules
+        $variable = isset($rule['variable']) ? strip_tags($rule['variable']) : null;
+        $replacement = isset($rule['replacement']) ? strip_tags($rule['replacement']) : ''; // default: stringa vuota
         
-         $movement_type = isset($rule['movement_type']) ? $rule['movement_type'] : 'noOp';
+        $movement_type = isset($rule['movement_type']) ? $rule['movement_type'] : 'noOp';
         $color = isset($rule['color']) ? $rule['color'] : '#000000'; // se non e' fornito, uso un colore di default
 
         if ($variable === null) continue; // non salvo le regole senza variabile

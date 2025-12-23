@@ -46,3 +46,4 @@ backend:
 - [X] insert default presets/examples into the db
 - [X] separate owner drawings from public ones, make 2 tabs in load modal
 - [X] when deleting a drawing, delete its entries in rule table
+- [X] fix XSS/SQL inj, verify user identity

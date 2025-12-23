@@ -35,5 +35,8 @@ if (!password_verify($password, $hash)) {
     exit;
 }
 
+// protezione di sicurezza da session fixation (l'attaccante potrebbe impostare l'id di sessione dell'utente prima che l'utente faccia login e fargli visitare il sito con l'id dell'attaccante)
+session_regenerate_id(true); // rigenera un nuovo id al login
+
 $_SESSION['username'] = $username;
 echo json_encode(['status' => 'ok', 'username' => $username]);
