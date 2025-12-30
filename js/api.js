@@ -31,8 +31,12 @@ export async function register(username, password) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
+    console.log(res);
+    if (!res.ok){
+     throw new Error();
+    }
     const data = await res.json();
-    if (!res.ok) throw new Error();
+    console.log(data);
     return data;
   }
   

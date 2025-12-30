@@ -164,6 +164,11 @@ function loadDrawingData(data, state, elems, ctx) {
 
 export async function onSaveSubmit(e, state, elems) {
   e.preventDefault();
+  if(!elems.axiomInput.value.trim()) {
+    showMsg("Axiom field can't be empty!");
+    return;
+  }
+  
   const payload = {
     name: elems.drawingNameInput.value,
     axiom: elems.axiomInput.value,
