@@ -49,10 +49,8 @@ you can customize the drawing appearance:
 ```
 l-system-generator/
 ├── db_script.sql
-├── er_diagram.drawio
 ├── er_diagram.png
 ├── README.md
-├── TODO.md
 ├── css/
 │   ├── style_docs.css
 │   └── style_main.css
