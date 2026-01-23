@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0" version="29.2.9">
   <diagram name="Page-1" id="Z6eC-li-tbop61KA8Rwq">
-    <mxGraphModel dx="1418" dy="706" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="978" dy="487" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -101,7 +101,7 @@
         <mxCell id="kGrQqeyhpxTXS7pB8FDM-48" edge="1" parent="1" style="edgeStyle=none;orthogonalLoop=1;jettySize=auto;html=1;rounded=0;endArrow=none;endFill=0;endSize=7;" value="">
           <mxGeometry relative="1" width="100" as="geometry">
             <Array as="points" />
-            <mxPoint x="520" y="300" as="sourcePoint" />
+            <mxPoint x="520" y="290" as="sourcePoint" />
             <mxPoint x="520" y="230" as="targetPoint" />
           </mxGeometry>
         </mxCell>
@@ -175,8 +175,8 @@
         <mxCell id="kGrQqeyhpxTXS7pB8FDM-62" edge="1" parent="1" style="edgeStyle=none;orthogonalLoop=1;jettySize=auto;html=1;rounded=0;endArrow=oval;endFill=0;endSize=7;exitX=0.75;exitY=0;exitDx=0;exitDy=0;" value="">
           <mxGeometry relative="1" width="100" as="geometry">
             <Array as="points" />
-            <mxPoint x="657.5" y="235" as="sourcePoint" />
-            <mxPoint x="658" y="205" as="targetPoint" />
+            <mxPoint x="657.75" y="240" as="sourcePoint" />
+            <mxPoint x="658" y="210" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="kGrQqeyhpxTXS7pB8FDM-63" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="is_public" vertex="1">
@@ -226,15 +226,6 @@
         </mxCell>
         <mxCell id="new-attr-2-text" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;rounded=0;" value="color" vertex="1">
           <mxGeometry height="30" width="60" x="455" y="555" as="geometry" />
-        </mxCell>
-        <mxCell id="new-attr-5-edge" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=1;endSize=7;">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="610" y="240" as="sourcePoint" />
-            <mxPoint x="610" y="210" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="new-attr-5-text" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="owner" vertex="1">
-          <mxGeometry height="30" width="60" x="580" y="170" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

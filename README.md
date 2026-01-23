@@ -49,8 +49,10 @@ you can customize the drawing appearance:
 ```
 l-system-generator/
 ├── db_script.sql
+├── er_diagram.drawio
 ├── er_diagram.png
 ├── README.md
+├── TODO.md
 ├── css/
 │   ├── style_docs.css
 │   └── style_main.css
@@ -86,7 +88,7 @@ l-system-generator/
     └── save_drawing.php
 ```
 
-#### references:
+#### References:
 big kudos to:
 ```
 https://github.com/fura2/L-system
