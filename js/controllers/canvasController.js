@@ -1,7 +1,7 @@
 import {renderVarsContainer, updateVarsConfigFromDOM } from '../views/ui.js';
 import { resetCanvas, handleBackgroundColor } from '../views/canvas.js';
 import { generateLSystem, autoCenter, animateDrawing } from '../models/l-system.js';
-import { resetAnimationState } from './state.js';
+import { resetAnimationState } from '../controllers/state.js';
 import { showMsg } from '../utils.js';
 
 // canvas and animation handler

@@ -4,7 +4,7 @@ import { Variable, DrawLine } from '../models/Variable.js';
 
 // variables and UI handlers
 export function onAxiomInput(state, elems) {
-  state.axiom = elems.axiomInput.value;
+  state.axiom = elems.axiomInput.value.replace(/\s+/g, ""); // rimuovo gli spazi
   handleObjChange(state, elems);
 }
 
@@ -48,7 +48,7 @@ export function onVarsContainerChange(e, state, elems) {
   if (e.target && e.target.tagName === 'INPUT' && e.target.id.startsWith('ruleInput_')) {
     const v = e.target.id.split('_')[1];
     const obj = Variable.findByLabel(state.varObjList, v);
-    if (obj) obj.rule = e.target.value || "";
+    if (obj) obj.rule = e.target.value.replace(/\s+/g, "") || "";
   }
 }
 

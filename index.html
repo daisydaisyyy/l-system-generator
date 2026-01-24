@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L-system generator</title>
+  <link rel="icon" href="./favicon.ico">
+  <link rel="stylesheet" href="./css/style_main.css">
+  <script type="module" src="./js/main.js"></script>
+</head>
+
+<body>
+  <div id="menu">
+    <header>
+      <h2>L-systems generator</h2>
+      <div id="userArea">
+        <button id="showLoginBtn" type="button">Login</button>
+        <button id="showRegisterBtn" type="button">Register</button>
+      </div>
+    </header>
+
+    <main>
+      <div id="controls">
+        <div class="stdContainer">
+          <label for="axiomInput">Axiom:</label>
+          <input id="axiomInput" class="config" type="text">
+        </div>
+
+        <div id="varsHeader">
+          <label>Variables: </label><button id="addVarBtn" type="button">+</button>
+        </div>
+
+        <div id="varsContainer"></div> <!-- div dinamico, aggiunta variabili dinamicamente -->
+
+
+        <div class="stdContainer">
+          <label for="depthInput">Depth: </label>
+          <input name="depthInput" id="depthInput" class="config" type="number" value="1" min="1" max="10">
+
+          <label for="angleInput">Angle: </label>
+          <input name="angleInput" id="angleInput" class="config" type="number" value="0">
+
+          <label for="lineWInput">Line Width: </label>
+          <input name="lineWInput" id="lineWInput" class="config" type="number" value="1" min="1" max="10">
+
+          <label for="scaleLineWInput">Line Width depends on zoom: </label>
+          <input name="scaleLineWInput" id="scaleLineWInput" class="config" type="checkbox" checked>
+
+          <label for="rotInput">Starting rotation:</label>
+          <input id="rotInput" name="rotInput" class="config" type="number" value="0" min="-360" max="360">
+
+          <label for="backgroundColorInput">Background color:</label>
+          <input name="backgroundColorInput" id="backgroundColorInput" class="config" type="color" value="#fdf6e3">
+
+          <label for="showAnimInput">Show Animation: </label>
+          <input name="showAnimInput" id="showAnimInput" class="config" type="checkbox" checked>
+        </div>
+
+        <p>Press f to go in fullscreen!</p>
+
+        <div class="btnContainer">
+          <button id="startBtn" type="button">Start</button>
+          <button id="pauseBtn" type="button">Pause</button>
+          <button id="resetBtn" type="button">Reset</button>
+          <button id="showSaveModalBtn" type="button">Save</button>
+          <button id="showLoadModalBtn" type="button">Load</button>
+        </div>
+
+      </div>
+    </main>
+  </div>
+  <canvas id="drawingCanvas"></canvas>
+
+
+  <!-- modal per aggiunta di variabili manualmente -->
+  <div id="varModal" class="modalBackground hidden">
+    <div class="modalContainer">
+      <h2>New variable</h2>
+      <div>
+        <label for="newVarInput">New variable symbol:</label>
+        <input type="text" name="newVarInput" id="newVarInput">
+
+        <button type="button" id="discardVarBtn">Discard</button>
+        <button type="button" id="confirmVarBtn">Confirm</button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- login modal -->
+  <div id="loginModal" class="modalBackground hidden">
+    <form id="loginForm" class="modalContainer">
+      <h2>Login</h2>
+      <div>
+        <label for="loginUser">Username:</label>
+        <input type="text" id="loginUser" required>
+      </div>
+      <div>
+        <label for="loginPass">Password:</label>
+        <input type="password" id="loginPass" required>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modalDiscardBtn">Cancel</button>
+        <button type="submit">Login</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- modal per registrare un nuovo utente -->
+  <div id="registerModal" class="modalBackground hidden">
+    <form id="registerForm" class="modalContainer">
+      <h2>Register</h2>
+      <div>
+        <label for="registerUser">Username:</label>
+        <input type="text" id="registerUser" required>
+      </div>
+      <div>
+        <label for="registerPass">Password:</label>
+        <input type="password" id="registerPass" minlength="6" required>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modalDiscardBtn">Cancel</button>
+        <button type="submit">Register</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- modal per salvare un disegno -->
+  <div id="saveModal" class="modalBackground hidden">
+    <form id="saveForm" class="modalContainer">
+      <h2>Save Drawing</h2>
+      <div>
+        <label for="drawingNameInput">Drawing Name:</label>
+        <input type="text" id="drawingNameInput" required maxlength="100">
+      </div>
+      <div>
+        <label for="drawingPublicInput">Make Public?</label>
+        <input type="checkbox" id="drawingPublicInput">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modalDiscardBtn">Cancel</button>
+        <button type="submit">Save</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- modal per caricare i disegni -->
+  <div id="loadModal" class="modalBackground hidden">
+    <div class="modalContainer">
+      <h2>Load Drawing</h2>
+
+      <div class="tab-header">
+        <button type="button" id="tabMine" class="tab-btn active">My Drawings</button>
+        <button type="button" id="tabPublic" class="tab-btn">Public Drawings</button>
+      </div>
+
+      <div id="drawingListContainer">
+        <p>Loading drawings...</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modalDiscardBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="help-btn-container">
+    <a href="docs.html" target="_blank" title="Vai alla documentazione">Docs</a>
+  </div>
+</body>
+
+</html>

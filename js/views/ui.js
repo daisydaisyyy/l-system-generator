@@ -97,7 +97,8 @@ export function updateVarsConfigFromDOM(varObjList) {
     varObjList.map(obj => {
         const sel = document.getElementById(`ruleSelect_${obj.label}`).value;
         const color = document.getElementById(`colorInput_${obj.label}`).value;
-        const rule = document.getElementById(`ruleInput_${obj.label}`).value == undefined ? obj.rule : document.getElementById(`ruleInput_${obj.label}`).value;
+        console.log(document.getElementById(`ruleInput_${obj.label}`).value == undefined)
+        const rule = document.getElementById(`ruleInput_${obj.label}`).value == undefined ? obj.rule : document.getElementById(`ruleInput_${obj.label}`).value.replace(/\s+/g, ""); // rimuovo gli spazi
 
         switch (sel) {
             case 'drawLine': configsList.push(new DrawLine(obj.label, rule, color)); break;
@@ -141,7 +142,6 @@ export function updateUserUI(state, elems) {
         elems.userArea.appendChild(logoutBtn);
 
         elems.showSaveModalBtn.disabled = false;
-        // elems.showLoadModalBtn.disabled = false;
 
     } else {
         const loginBtn = document.createElement('button');
@@ -158,7 +158,6 @@ export function updateUserUI(state, elems) {
         elems.userArea.appendChild(registerBtn);
 
         elems.showSaveModalBtn.disabled = true;
-        // elems.showLoadModalBtn.disabled = true;
 
         loginBtn.addEventListener('click', () => elems.loginModal.classList.remove('hidden'));
         registerBtn.addEventListener('click', () => elems.registerModal.classList.remove('hidden'));

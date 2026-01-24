@@ -6,7 +6,7 @@ export function generateLSystem(axiom, varObjList, depth) {
   for (let i = 0; i < depth; i++) {
     let next = '';
     for (const ch of cur) {
-      // cerca l'oggetto e prende la rule se esiste
+      // cerca l'oggetto e prende la rule se esiste, altrimenti la regola diventa la variabile stessa (comportamento di default)
       next += (Variable.findByLabel(varObjList, ch)?.rule) || ch;
     }
 
@@ -21,7 +21,6 @@ export function generateLSystem(axiom, varObjList, depth) {
 export function animateDrawing(ctx, stepSize, varObjList, angle, state) {
 
   if (!state.isAnimating || state.curStep >= state.instr.length) {
-    // console.log(`Step ${state.curStep + 1}/${state.instr.length}`);
 
     state.isAnimating = false;
     state.curStep = 0;
@@ -56,7 +55,6 @@ export function animateDrawing(ctx, stepSize, varObjList, angle, state) {
       }
       break;
   }
-  // console.log(`Step ${state.curStep + 1}/${state.instr.length}: ${cmd}`);
   state.curStep++;
   return false;
 }
@@ -117,7 +115,6 @@ function getBoundingBox(scale = 1, axiom, depth, angle, rotDeg, varObjList) {
     }
   }
 
-  // console.log(`Bounding Box: (${Math.round(minX)}, ${Math.round(minY)}) to (${Math.round(maxX)}, ${Math.round(maxY)})`);
   return [Math.round(minX), Math.round(minY), Math.round(maxX), Math.round(maxY)];
 }
 
@@ -137,7 +134,6 @@ export function autoCenter(scale = 1, axiom, depth, angle, rot, varObjList, canv
 
   let zoom = 1;
   zoom = autoScale(canvasW, canvasH, width, height);
-  // console.log(`Auto Scale: ${zoom}`);
 
   maxX *= zoom;
   maxY *= zoom;
@@ -146,6 +142,5 @@ export function autoCenter(scale = 1, axiom, depth, angle, rot, varObjList, canv
 
   const centerX = (maxX + minX);
   const centerY = (maxY + minY);
-  // console.log(`Auto Center coords: (${-centerX}, ${centerY})`);
   return [Math.round(-centerX), Math.round(-centerY), zoom];
 }

@@ -4,7 +4,7 @@ export class Variable {
     constructor(label, rule = "", color = getRandColor()) {
         this.label = label;
         this.color = color;
-        this.rule = rule;
+        this.rule = rule.replace(/\s+/g, "");  // rimuovo gli spazi
     }
 
     static findByLabel(variables, label) {

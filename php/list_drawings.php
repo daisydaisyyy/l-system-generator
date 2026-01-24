@@ -32,7 +32,7 @@ if ($q !== null && $q !== '') {
     $params[] = '%' . $q . '%';
 }
 
-$where = implode(' AND ', $where_clauses); # unisci gli elementi per creare la query
+$where = implode(' AND ', $where_clauses); // unisci gli elementi per creare la query
 
 $count_sql = "SELECT COUNT(*) AS cnt FROM drawing WHERE $where";
 $cstmt = $mysqli->prepare($count_sql);
