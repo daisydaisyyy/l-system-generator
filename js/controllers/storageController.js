@@ -122,7 +122,6 @@ export async function onDrawingListClick(e, state, elems, ctx) {
   if (target.classList.contains('load-item-btn')) {
     try {
       const data = await API.loadDrawing(target.dataset.name, target.dataset.owner);
-      console.log(data)
       loadDrawingData(data, state, elems, ctx);
       showMsg(target.dataset.name + " loaded!", true);
       elems.loadModal.classList.add('hidden');
@@ -158,8 +157,6 @@ function loadDrawingData(data, state, elems, ctx) {
       default: return new DrawLine(rule.variable, rule.replacement, getRandColor(elems.backgroundColorInput.value));
     }
   });
-
-  console.log(state.varObjList)
 
   renderVarsContainer(elems.varsContainer, state.varObjList);
   handleObjChange(state, elems);
