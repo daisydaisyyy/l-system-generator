@@ -1,8 +1,8 @@
 # L-System Generator webapp
-A web application for procedurally generating and visualizing plant growth using L‑Systems.
+A web application for procedurally generating and visualizing fractals and plant growth using L‑Systems.
 
 
-#### Some examples!
+#### Some examples:
 <p align="center">
 <img src="https://github.com/user-attachments/assets/03957cd9-a305-46a3-9277-dac4ee5f253a" height="180" alt="img4" />
 <img src="https://github.com/user-attachments/assets/ba1c7c9c-727d-4ad8-8b3f-dcf9056f12a3" height="180" alt="img3" />
@@ -12,6 +12,7 @@ A web application for procedurally generating and visualizing plant growth using
 <img height="180" alt="img6" src="https://github.com/user-attachments/assets/ef63844a-fd7c-49ea-a32d-4d12e826dd8c" />
 <img height="180" alt="img7" src="https://github.com/user-attachments/assets/8d0dba89-547d-4ecc-baeb-85e7d56ebcc7" />
 </p>
+
 
 
 #### 1. how to generate a drawing
@@ -58,46 +59,56 @@ you can customize the drawing appearance:
 
 *(note: admin accounts can view all drawings, including private ones owned by other users)*
 
+Import ``db_dump.sql`` and run with your local server!
 
 #### Structure:
 ```
 l-system-generator/
+├── css
+│   ├── style_docs.css
+│   └── style_main.css
+├── db_dump.sql
 ├── db_script.sql
+├── docs.html
 ├── er_diagram.png
-├── README.md
-├── css/
-│   ├── style_docs.css
-│   └── style_main.css
-├── html/
-│   ├── docs.html
-│   └── index.html
-├── js/
-│   ├── api.js
-│   ├── main.js
-│   ├── utils.js
-│   ├── controllers/
-│   │   ├── authController.js
-│   │   ├── canvasController.js
-│   │   ├── configController.js
-│   │   ├── state.js
-│   │   └── storageController.js
-│   ├── models/
-│   │   ├── l-system.js
-│   │   └── Variable.js
-│   └── views/
-│       ├── canvas.js
-│       ├── dom.js
-│       └── ui.js
-└── php/
-    ├── check_session.php
-    ├── db.php
-    ├── delete_drawing.php
-    ├── list_drawings.php
-    ├── load_drawing.php
-    ├── login.php
-    ├── logout.php
-    ├── register.php
-    └── save_drawing.php
+├── favicon.ico
+├── html
+│   ├── docs.html
+│   └── index.html
+├── images
+│   ├── img1.png
+│   ├── img2.png
+│   ├── img3.png
+│   └── img4.png
+├── index.html
+├── js
+│   ├── api.js
+│   ├── controllers
+│   │   ├── authController.js
+│   │   ├── canvasController.js
+│   │   ├── configController.js
+│   │   ├── state.js
+│   │   └── storageController.js
+│   ├── main.js
+│   ├── models
+│   │   ├── l-system.js
+│   │   └── Variable.js
+│   ├── utils.js
+│   └── views
+│       ├── canvas.js
+│       ├── dom.js
+│       └── ui.js
+├── php
+│   ├── check_session.php
+│   ├── db.php
+│   ├── delete_drawing.php
+│   ├── list_drawings.php
+│   ├── load_drawing.php
+│   ├── login.php
+│   ├── logout.php
+│   ├── register.php
+│   └── save_drawing.php
+└── README.md
 ```
 
 #### References:
